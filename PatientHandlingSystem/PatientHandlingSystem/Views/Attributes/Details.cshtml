@@ -1,0 +1,39 @@
+﻿@model PatientHandlingSystem.ViewModels.AttributeViewModel
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Attribute</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.AttributeName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AttributeName)
+        </dd>
+    </dl>
+
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.AttributeValues)
+        </dt>
+
+        <dd>
+            @foreach (var i in Model.AttributeValues)
+            {
+                @i
+                <br />
+            }
+        </dd>
+    </dl>
+</div>
+<p>
+    @*@Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |*@
+    @Html.ActionLink("Back to List", "Index")
+</p>
