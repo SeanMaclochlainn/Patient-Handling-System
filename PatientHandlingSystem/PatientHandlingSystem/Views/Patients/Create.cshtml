@@ -1,4 +1,4 @@
-﻿@model PatientHandlingSystem.Models.Patient
+﻿@model PatientHandlingSystem.ViewModels.PatientViewModel
 
 @{
     ViewBag.Title = "Create";
@@ -15,21 +15,33 @@
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
-            @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Patient.FirstName, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.Patient.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Patient.FirstName, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Patient.LastName, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.Patient.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Patient.LastName, "", new { @class = "text-danger" })
             </div>
         </div>
 
+       <dl class="dl-horizontal">
+            @for(int i=0;i<Model.CompleteAttributes.Count;i++)
+            {
+                <dt>
+                    @Html.LabelFor(x=>x.CompleteAttributes[i].Attribute.Name, Model.CompleteAttributes[i].Attribute.Name)
+                </dt>
+                @Html.HiddenFor(x=>x.CompleteAttributes[i].Attribute.ID)
+                <dd>
+                    @Html.DropDownListFor(x => x.CompleteAttributes[i].SelectedAttributeValue.ID, new SelectList(Model.CompleteAttributes[i].AttributeValues, "ID","Name","0"))
+                </dd>
+            }
+        </dl>
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Create" class="btn btn-default" />
@@ -41,3 +53,4 @@
 <div>
     @Html.ActionLink("Back to List", "Index")
 </div>
+

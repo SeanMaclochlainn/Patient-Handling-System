@@ -124,6 +124,8 @@
     <Compile Include="Models\PatientAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\AttributeViewModel.cs" />
+    <Compile Include="ViewModels\CompleteAttribute.cs" />
+    <Compile Include="ViewModels\PatientViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />
