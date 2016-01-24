@@ -18,9 +18,11 @@
                     <span class="icon-bar"></span>
                 </button>
                 @Html.ActionLink("Patient Handling System", "Index", "Patients", new { area = "" }, new { @class = "navbar-brand" })
+                
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
+                  @Html.ActionLink("Attributes", "Index", "Attributes", new { area = "" }, new { @class = "navbar-brand" })
                 </ul>
             </div>
         </div>

@@ -111,7 +111,14 @@ namespace PatientHandlingSystem.Controllers
             {
                 return HttpNotFound();
             }
-            return View(attribute);
+
+            var attributeValues = db.AttributeValues.Where(i => i.AttributeID == attribute.ID).ToList();
+            var completeAttribute = new CompleteAttribute
+            {
+                Attribute = attribute,
+                AttributeValues = attributeValues
+            };
+            return View(completeAttribute);
         }
 
         // POST: Attributes/Edit/5
@@ -119,8 +126,15 @@ namespace PatientHandlingSystem.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,Name")] Models.Attribute attribute)
+        public ActionResult Edit(CompleteAttribute completeAttribute)
         {
+            var attribute = completeAttribute.Attribute;
+
+            foreach(var av in completeAttribute.AttributeValues)
+            {
+                db.Entry(av).State = EntityState.Modified;
+            }
+            db.SaveChanges();
             if (ModelState.IsValid)
             {
                 db.Entry(attribute).State = EntityState.Modified;
