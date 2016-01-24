@@ -22,69 +22,51 @@ namespace PatientHandlingSystem.Controllers
             return View(db.Patients.ToList());
         }
 
-        // GET: Patients/Details/5
-        //public ActionResult Details(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    Patient patient = db.Patients.Find(id);
-        //    if (patient == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    var selected = false;
-        //    var patientAttributeValueList = db.PatientAttributes.Where(i => i.PatientID == patient.ID).Select(i=>i.AttributeValueID).ToList();
+        public ActionResult Details(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Patient patient = db.Patients.Find(id);
+            if (patient == null)
+            {
+                return HttpNotFound();
+            }
 
-        //    var completeAttributes = new List<CompleteAttribute>();
-        //    foreach(var i in db.Attributes.ToList())
-        //    {
-        //        var attributeValues = new List<SelectListItem>();
-        //        foreach(var j in i.AttributeValues)
-        //        {
-        //            if (patientAttributeValueList.Contains(j.ID))
-        //                selected = true;
-        //            else
-        //                selected = false;
-        //            attributeValues.Add(new SelectListItem { Text = j.Name, Value = j.ID.ToString(), Selected = selected });
-        //        }
+            var completeAttributes = new List<CompleteAttribute>();
+            foreach (var i in db.Attributes.ToList())
+            {
+                var completeAttribute = new CompleteAttribute
+                {
+                    Attribute = i,
+                    AttributeValues = i.AttributeValues,
+                    SelectedAttributeValue = db.AttributeValues.Find(db.PatientAttributes.Single(j => j.AttributeID == i.ID && j.PatientID == patient.ID).AttributeValueID)
+                };
 
-        //        var completeAttribute = new CompleteAttribute
-        //        {
-        //            Attribute = i,
-        //            AttributeValues = attributeValues, 
-        //        };
+                completeAttributes.Add(completeAttribute);
+            }
 
-        //        completeAttributes.Add(completeAttribute);
-        //    }
-
-        //    var patientAttributes = db.PatientAttributes.Where(i => i.PatientID == patient.ID).ToList();
-        //    var patientVM = new PatientViewModel
-        //    {
-        //        Patient = patient,
-        //        CompleteAttributes = completeAttributes
-        //    };
-        //    return View(patientVM);
-        //}
+            var patientAttributes = db.PatientAttributes.Where(i => i.PatientID == patient.ID).ToList();
+            var patientVM = new PatientViewModel
+            {
+                Patient = patient,
+                CompleteAttributes = completeAttributes
+            };
+            return View(patientVM);
+        }
 
         public ActionResult Create()
         {
             var completeAttributes = new List<CompleteAttribute>();
             foreach(var a in db.Attributes)
             {
-                var AttributeValuesSelectList = new List<SelectListItem>();
-                AttributeValuesSelectList.Add(new SelectListItem { Text = "Please Select", Value = "" });
-                foreach(var av in a.AttributeValues)
-                {
-                    AttributeValuesSelectList.Add(new SelectListItem { Text = av.Name, Value = av.ID.ToString() });
-                }
                 var attributeValues = a.AttributeValues;
                 attributeValues.Add(new AttributeValue { ID = 0, Name = "Select Attribute" });
                 var completeAttribute = new CompleteAttribute
                 {
                     Attribute = a,
-                    AttributeValues = attributeValues,/*AttributeValuesSelectList, */
+                    AttributeValues = attributeValues,
                     SelectedAttributeValue = new AttributeValue()
                 };
                 completeAttributes.Add(completeAttribute);

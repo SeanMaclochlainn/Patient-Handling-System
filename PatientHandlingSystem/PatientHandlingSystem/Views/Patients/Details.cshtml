@@ -25,12 +25,19 @@
         <dd>
             @Html.DisplayFor(model => model.Patient.LastName)
         </dd>
-
     </dl>
-    @foreach(var i in Model.CompleteAttributes)
-    {
-        @Html.DropDownList(i.Attribute.Name, i.AttributeValues)
-    }
+    <dl class="dl-horizontal">
+
+        @foreach (var i in Model.CompleteAttributes)
+        {
+            <dt>
+                @i.Attribute.Name
+            </dt>
+            <dd>
+                @i.SelectedAttributeValue.Name
+            </dd>
+        }
+        </dl>
 </div>
 <p>
     @*@Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |*@
