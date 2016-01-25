@@ -37,11 +37,17 @@ namespace PatientHandlingSystem.Controllers
             var completeAttributes = new List<CompleteAttribute>();
             foreach (var i in db.Attributes.ToList())
             {
+                var patientAttribute = db.PatientAttributes.SingleOrDefault(j => j.AttributeID == i.ID && j.PatientID == patient.ID);
+                AttributeValue selectedAttributeValue = null;
+                if (patientAttribute != null)
+                    selectedAttributeValue = db.AttributeValues.Find(patientAttribute.AttributeValueID);
+                else
+                    selectedAttributeValue = new AttributeValue();
                 var completeAttribute = new CompleteAttribute
                 {
                     Attribute = i,
                     AttributeValues = i.AttributeValues,
-                    SelectedAttributeValue = db.AttributeValues.Find(db.PatientAttributes.Single(j => j.AttributeID == i.ID && j.PatientID == patient.ID).AttributeValueID)
+                    SelectedAttributeValue = selectedAttributeValue
                 };
 
                 completeAttributes.Add(completeAttribute);
@@ -131,7 +137,39 @@ namespace PatientHandlingSystem.Controllers
             {
                 return HttpNotFound();
             }
-            return View(patient);
+
+            var completeAttributes = new List<CompleteAttribute>();
+            var patientAttributes = db.PatientAttributes.Where(i => i.PatientID == patient.ID).ToList();
+            var attributes = db.Attributes.ToList();
+            foreach(var a in attributes)
+            {
+                var attributeValues = a.AttributeValues;
+                var selectedAttribute = db.PatientAttributes.SingleOrDefault(i => i.AttributeID == a.ID && i.PatientID == patient.ID);
+                AttributeValue selectedAttributeValue = null;
+                if (selectedAttribute != null)
+                {
+                    selectedAttributeValue = selectedAttribute.AttributeValue;
+                }
+                else
+                {
+                    selectedAttributeValue = new AttributeValue { ID = 0, Name = "Please Select Attribute", AttributeID = a.ID };
+                    attributeValues.Add(new AttributeValue { Name = "Please Select Attribute", ID = 0, AttributeID = a.ID });
+                }
+                var completeAttribute = new CompleteAttribute
+                {
+                    Attribute = a,
+                    AttributeValues = attributeValues,
+                    SelectedAttributeValue = selectedAttributeValue
+                };
+                completeAttributes.Add(completeAttribute);
+            }
+
+            var patientVM = new PatientViewModel
+            {
+                Patient = patient,
+                CompleteAttributes = completeAttributes
+            };
+            return View(patientVM);
         }
 
         // POST: Patients/Edit/5
@@ -139,8 +177,28 @@ namespace PatientHandlingSystem.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,FirstName,LastName")] Patient patient)
+        public ActionResult Edit(PatientViewModel patientVM)
         {
+            var patient = db.Patients.Find(patientVM.Patient.ID);
+            patient.FirstName = patientVM.Patient.FirstName;
+            patient.LastName = patientVM.Patient.LastName;
+            foreach(var ca in patientVM.CompleteAttributes)
+            {
+                var patientAttribute = db.PatientAttributes.SingleOrDefault(i => i.PatientID == patient.ID && i.AttributeID == ca.SelectedAttributeValue.AttributeID);
+
+                //this is null if a new attribute has been added recently
+                if (patientAttribute == null)
+                {
+                    patientAttribute = new PatientAttribute { AttributeID = ca.SelectedAttributeValue.AttributeID, AttributeValueID = ca.SelectedAttributeValue.ID, PatientID = patient.ID };
+                    db.PatientAttributes.Add(patientAttribute);
+                    db.SaveChanges();
+                }
+                else
+                {
+                    patientAttribute.AttributeValueID = ca.SelectedAttributeValue.ID;
+                    db.Entry(patientAttribute).State = EntityState.Modified;
+                }
+            }
             if (ModelState.IsValid)
             {
                 db.Entry(patient).State = EntityState.Modified;
