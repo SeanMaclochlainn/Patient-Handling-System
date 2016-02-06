@@ -5,7 +5,7 @@
 }
 
 <h2>Create</h2>
-
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
 @using (Html.BeginForm()) 
 {
     @Html.AntiForgeryToken()
@@ -20,12 +20,19 @@
                 @Html.EditorFor(model => model.AttributeName, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.AttributeName, "", new { @class = "text-danger" })
             </div>
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.AttributeValues, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.AttributeValues, "", new { @class = "text-danger" })
+        </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.AttributeValues, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.AttributeValues, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.AttributeValues, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        <div class="form-group"  id="attributeValues">
+            <div class=" col-md-offset-3 col-md-9">
+                <button class="btn btn-info" id="addAttribute">Add Attribute</button>
             </div>
         </div>
-
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Create" class="btn btn-default" />
@@ -37,3 +44,13 @@
 <div>
     @Html.ActionLink("Back to List", "Index")
 </div>
+<script>
+    $(document).ready(function () {
+        var count = 1;
+        $("#addAttribute").click(function (e) {
+            e.preventDefault();
+            $("#attributeValues").before("<div class='form-group'><label class='control-label col-md-2' for='AttributeValues'>Attribute Value</label><div class='col-md-10'><input class='form-control text-box single line' id='AttributeValues_"+count+"_' name='AttributeValues["+count+"]' type='text' value='' /><span class='field-validation-valid text-danger' data-valmsg-for='AttributeValues' data-valmsg-replace='true'></span></div></div>");
+            count++;
+        })
+});
+</script>
