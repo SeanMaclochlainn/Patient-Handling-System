@@ -12,6 +12,8 @@ namespace PatientHandlingSystem.Models
 
         [DisplayName("Attribute Name")]
         public string Name { get; set; }
+        public Boolean Numeric { get; set; }
+
         public virtual List<AttributeValue> AttributeValues { get; set; }
     }
 }

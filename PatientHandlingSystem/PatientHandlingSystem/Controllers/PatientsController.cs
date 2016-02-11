@@ -68,7 +68,10 @@ namespace PatientHandlingSystem.Controllers
             foreach(var a in db.Attributes)
             {
                 var attributeValues = a.AttributeValues;
-                attributeValues.Add(new AttributeValue { ID = 0, Name = "Select Attribute" });
+
+                if(!a.Numeric)
+                    attributeValues.Add(new AttributeValue { ID = 0, Name = "Select Attribute" });
+
                 var completeAttribute = new CompleteAttribute
                 {
                     Attribute = a,
@@ -114,6 +117,14 @@ namespace PatientHandlingSystem.Controllers
                     AttributeValueID = a.SelectedAttributeValue.ID,
                     PatientID = patient.ID
                 };
+                if (a.Attribute.Numeric)
+                {
+                    var attributeValue = db.AttributeValues.Find(db.Attributes.Find(a.Attribute.ID).AttributeValues.First().ID);
+                    attributeValue.Name = a.SelectedAttributeValue.Name;
+                    db.Entry(attributeValue).State = EntityState.Modified;
+                    patientAttribute.AttributeValueID = attributeValue.ID; //this value is not carried over from the view if the attribute is numeric
+                }
+
                 patientAttributes.Add(patientAttribute);
             }
             if (ModelState.IsValid)
@@ -184,7 +195,7 @@ namespace PatientHandlingSystem.Controllers
             patient.LastName = patientVM.Patient.LastName;
             foreach(var ca in patientVM.CompleteAttributes)
             {
-                var patientAttribute = db.PatientAttributes.SingleOrDefault(i => i.PatientID == patient.ID && i.AttributeID == ca.SelectedAttributeValue.AttributeID);
+                var patientAttribute = db.PatientAttributes.Include(j=>j.Attribute).SingleOrDefault(i => i.PatientID == patient.ID && i.AttributeID == ca.SelectedAttributeValue.AttributeID);
 
                 //this is null if a new attribute has been added recently
                 if (patientAttribute == null)
@@ -195,8 +206,16 @@ namespace PatientHandlingSystem.Controllers
                 }
                 else
                 {
-                    patientAttribute.AttributeValueID = ca.SelectedAttributeValue.ID;
-                    db.Entry(patientAttribute).State = EntityState.Modified;
+                    if(patientAttribute.Attribute.Numeric)
+                    {
+                        patientAttribute.AttributeValue.Name = ca.SelectedAttributeValue.Name;
+                        db.Entry(patientAttribute).State = EntityState.Modified;
+                    }
+                    else
+                    {
+                        patientAttribute.AttributeValueID = ca.SelectedAttributeValue.ID;
+                        db.Entry(patientAttribute).State = EntityState.Modified;
+                    }
                 }
             }
             if (ModelState.IsValid)

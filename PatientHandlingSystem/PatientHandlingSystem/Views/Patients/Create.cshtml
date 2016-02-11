@@ -30,24 +30,35 @@
             </div>
         </div>
 
-       <dl class="dl-horizontal">
-            @for(int i=0;i<Model.CompleteAttributes.Count;i++)
+            @for (int i = 0; i < Model.CompleteAttributes.Count; i++)
             {
-                <dt>
-                    @Html.LabelFor(x=>x.CompleteAttributes[i].Attribute.Name, Model.CompleteAttributes[i].Attribute.Name)
-                </dt>
-                @Html.HiddenFor(x=>x.CompleteAttributes[i].Attribute.ID)
-                <dd>
-                    @Html.DropDownListFor(x => x.CompleteAttributes[i].SelectedAttributeValue.ID, new SelectList(Model.CompleteAttributes[i].AttributeValues, "ID","Name","0"))
-                </dd>
+                <div class="form-group">
+                    @if (Model.CompleteAttributes[i].Attribute.Numeric)
+                    {
+                        @Html.LabelFor(x => x.CompleteAttributes[i].Attribute.Name, Model.CompleteAttributes[i].Attribute.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                        @Html.HiddenFor(x => x.CompleteAttributes[i].Attribute.ID)
+                        @Html.HiddenFor(x => x.CompleteAttributes[i].Attribute.Numeric)
+                        <div class="col-md-1">
+                            @Html.EditorFor(x => x.CompleteAttributes[i].SelectedAttributeValue.Name, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                        <div class="col-md-9"></div>
+                    }
+                    else
+                    {
+                        @Html.LabelFor(x => x.CompleteAttributes[i].Attribute.Name, Model.CompleteAttributes[i].Attribute.Name, htmlAttributes: new { style = "padding-top:0px", @class = "control-label col-md-2" })
+                        @Html.HiddenFor(x => x.CompleteAttributes[i].Attribute.ID)
+                        <div class="col-md-10">
+                            @Html.DropDownListFor(x => x.CompleteAttributes[i].SelectedAttributeValue.ID, new SelectList(Model.CompleteAttributes[i].AttributeValues, "ID", "Name", "0"), new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                    }
+                </div>
             }
-        </dl>
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Create" class="btn btn-default" />
+                </div>
             </div>
         </div>
-    </div>
 }
 
 <div>

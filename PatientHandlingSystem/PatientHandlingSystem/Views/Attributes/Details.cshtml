@@ -18,10 +18,20 @@
             @Html.DisplayFor(model => model.AttributeName)
         </dd>
     </dl>
-
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.AttributeValues)
+            @Html.DisplayNameFor(model => model.Numeric)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Numeric)
+        </dd>
+    </dl>
+    @if (!Model.Numeric)
+    {
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.LabelFor(model => model.AttributeValues, "Attribute Values")
         </dt>
 
         <dd>
@@ -32,6 +42,7 @@
             }
         </dd>
     </dl>
+    }
 </div>
 <p>
     @*@Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |*@
