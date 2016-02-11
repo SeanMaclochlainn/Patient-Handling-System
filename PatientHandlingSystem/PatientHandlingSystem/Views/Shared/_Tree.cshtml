@@ -1,0 +1,54 @@
+﻿@model IEnumerable<PatientHandlingSystem.Models.Node>
+
+<script src="~/Scripts/vis.min.js"></script>
+<link href="~/Content/vis.min.css" rel="stylesheet" />
+
+<script type="text/javascript">
+    var i;
+    var nodes = new vis.DataSet();
+    @for(int i = Model.ElementAt(0).ID; i < (Model.ElementAt(0).ID + Model.Count()); i++)
+    {
+        @:nodes.add({ id: @i, label: '@Model.ElementAt((i - Model.ElementAt(0).ID)).NodeText()', shape: 'box' });
+    }
+    var edges = new vis.DataSet();
+
+     @for (int j = 1; j < Model.Count(); j++)
+    {
+        @:edges.add({from: @Model.ElementAt(j).ID, to: @Model.ElementAt(j).ParentID, label: '@Model.ElementAt(j).edgeText()' });
+    }
+    // create a network
+    var container = document.getElementById('mynetwork');
+
+    // provide the data in the vis format
+    var data = {
+        nodes: nodes,
+        edges: edges
+    };
+    var options = {
+        layout: {
+            hierarchical: {
+                direction: 'DU',   // UD, DU, LR, RL
+                sortMethod: 'directed' // hubsize, directed
+            }
+        },
+        physics: {
+            enabled: true,
+            hierarchicalRepulsion: {
+                centralGravity: 0.0,
+                springLength: 100,
+                springConstant: 0.01,
+                nodeDistance: 100,
+                damping: 0.09
+            },
+        }
+    };
+
+    // initialize network
+    var network = new vis.Network(container, data, options);
+
+    network.on("selectNode", function (params) {
+        console.log('selectNode Event:', params);
+        $("<input type='hidden' id='ParentNodeID' name='ParentNodeID' value="+params.nodes+">").insertAfter("#button");
+    });
+</script>
+<div id="mynetwork" style="width:900px;height:600px;"></div>

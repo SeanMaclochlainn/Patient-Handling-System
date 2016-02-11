@@ -41,7 +41,8 @@ namespace PatientHandlingSystem.Controllers
             AttributeViewModel attributeVM = new AttributeViewModel
             {
                 AttributeName = attribute.Name,
-                AttributeValues = attributeValues
+                AttributeValues = attributeValues,
+                Numeric = attribute.Numeric
             };
             return View(attributeVM);
         }
@@ -50,8 +51,6 @@ namespace PatientHandlingSystem.Controllers
         public ActionResult Create()
         {
             var attributeList = new List<string>();
-            attributeList.Add("");
-            attributeList.Add("");
             attributeList.Add("");
             var attribute = new AttributeViewModel
             {
@@ -69,7 +68,8 @@ namespace PatientHandlingSystem.Controllers
         {
             Models.Attribute attribute = new Models.Attribute
             {
-                Name = attributevm.AttributeName
+                Name = attributevm.AttributeName, 
+                Numeric = attributevm.Numeric
             };
 
             if (ModelState.IsValid)
@@ -80,9 +80,9 @@ namespace PatientHandlingSystem.Controllers
 
             var attributeValues = new List<AttributeValue>();
 
-            foreach(var i in attributevm.AttributeValues)
+            foreach(var i in attributevm.AttributeValues) 
             {
-                attributeValues.Add(new AttributeValue
+                attributeValues.Add(new AttributeValue //this also creates one empty instance if the attribute is numeric
                 {
                     AttributeID = attribute.ID,
                     Name = i

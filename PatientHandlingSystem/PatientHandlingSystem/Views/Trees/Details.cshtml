@@ -1,0 +1,84 @@
+﻿@model IEnumerable<PatientHandlingSystem.Models.Node>
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+
+<script src="~/Scripts/vis.min.js"></script>
+<link href="~/Content/vis.min.css" rel="stylesheet" />
+<div id="mynetwork" style="width:900px;height:600px;"></div>
+<script type="text/javascript">
+    var i;
+    var nodes = new vis.DataSet();
+    nodes.add({ id: 1, label: 'Weight Bearing Capacity', shape: 'box' });
+    nodes.add({ id: 2, label: 'Assistance Ability ', shape: 'box' });
+    nodes.add({ id: 3, label: '', shape: 'box' });
+    nodes.add({ id: 4, label: 'Sustain Limb Position', shape: 'box' });
+    nodes.add({ id: 5, label: '', shape: 'box' });
+    nodes.add({ id: 6, label: 'Upper Extremity Strength', shape: 'box' });
+    nodes.add({ id: 7, label: '', shape: 'box' });
+    nodes.add({ id: 8, label: '', shape: 'box' });
+    nodes.add({ id: 9, label: '', shape: 'box' });
+    nodes.add({ id: 10, label: '', shape: 'box' });
+    nodes.add({ id: 11, label: 'Bear Weight and Ambulate', shape: 'box' });
+    nodes.add({ id: 12, label: '', shape: 'box' });
+    nodes.add({ id: 13, label: '', shape: 'box' });
+    nodes.add({ id: 14, label: '', shape: 'box' });
+    nodes.add({ id: 15, label: '', shape: 'box' });
+    nodes.add({ id: 16, label: '', shape: 'box' });
+    var edges = new vis.DataSet();
+
+     edges.add({from: 2, to: 1, label: 'Full' });
+        edges.add({from: 3, to: 1, label: 'Partial' });
+        edges.add({from: 4, to: 1, label: 'None' });
+        edges.add({from: 5, to: 2, label: 'Full' });
+        edges.add({from: 6, to: 2, label: 'Partial' });
+        edges.add({from: 7, to: 2, label: 'None' });
+        edges.add({from: 8, to: 6, label: 'Full' });
+        edges.add({from: 9, to: 6, label: 'Partial' });
+        edges.add({from: 10, to: 6, label: 'None' });
+        edges.add({from: 11, to: 4, label: 'Fully' });
+        edges.add({from: 12, to: 4, label: 'Partially' });
+        edges.add({from: 13, to: 4, label: 'No' });
+        edges.add({from: 14, to: 11, label: 'Yes' });
+        edges.add({from: 15, to: 11, label: 'No' });
+        edges.add({from: 16, to: 11, label: 'Partially' });
+    // create a network
+    var container = document.getElementById('mynetwork');
+
+    // provide the data in the vis format
+    var data = {
+        nodes: nodes,
+        edges: edges
+    };
+    var options = {
+        layout: {
+            hierarchical: {
+                direction: 'DU',   // UD, DU, LR, RL
+                sortMethod: 'directed' // hubsize, directed
+            }
+        },
+        physics: {
+            enabled: true,
+            hierarchicalRepulsion: {
+                centralGravity: 0.0,
+                springLength: 100,
+                springConstant: 0.01,
+                nodeDistance: 200,
+                damping: 0.09
+            },
+        }
+    };
+
+    // initialize network
+    var network = new vis.Network(container, data, options);
+
+    network.on("selectNode", function (params) {
+        console.log('selectNode Event:', params);
+        $("<p>test</p><input type='hidden' id='ParentNodeID' name='ParentNodeID' value="+params.nodes+">").insertAfter("#button");
+    });
+    network.on("selectEdge", function (params) {
+        console.log('selectEdge Event:', params);
+        console.log('selectEdge Event#2', params.title)
+        $("<p>test</p><input type='hidden' id='ParentNodeID' name='ParentNodeID' value="+params.nodes+">").insertAfter("#button");
+    });
+</script>

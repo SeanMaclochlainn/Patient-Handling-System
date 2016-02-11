@@ -1,0 +1,26 @@
+﻿@model PatientHandlingSystem.ViewModels.TreeCreatorViewModel
+
+@{
+    ViewBag.Title = "Create";
+}
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+<h2>Create</h2>
+
+<div id="treeDiv" style="width:900px;height:600px;">
+
+</div>
+
+@using (Ajax.BeginForm("UpdateTree", "Trees", new AjaxOptions { HttpMethod = "POST", InsertionMode = InsertionMode.Replace, UpdateTargetId = "treeDiv" }))
+{
+    <div class="row">
+        <div class="col-md-2"></div>
+        @Html.HiddenFor(i => i.Tree.ID)
+        @Html.DropDownListFor(i => Model.SelectedAttribute.ID, new SelectList(Model.Attributes, "ID", "Name"), htmlAttributes: new { @class="col-md-2"})
+        <div class="col-md-1"></div>
+        <button class="btn btn-default col-md-2" id="button">Insert Node</button>
+        <div class="col-md-1"></div>
+        <button class="btn btn-danger col-md-2" name="undoButton" id="undo" value="undo">Undo</button>
+        <div class="col-md-2"></div>
+    </div>
+}
