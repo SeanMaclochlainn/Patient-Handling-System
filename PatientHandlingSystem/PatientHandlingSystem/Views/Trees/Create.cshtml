@@ -13,14 +13,53 @@
 
 @using (Ajax.BeginForm("UpdateTree", "Trees", new AjaxOptions { HttpMethod = "POST", InsertionMode = InsertionMode.Replace, UpdateTargetId = "treeDiv" }))
 {
-    <div class="row">
-        <div class="col-md-2"></div>
+    <div class="container">
+        <div class="row" id="selectionDiv" style="font-weight:bold;">
+            <div class="col-md-2"></div>
+            <div class="col-md-4">
+                @Html.RadioButtonFor(i => i.SolutionInput, true, new { @class = "solutionTab" }) Solution
+                @Html.RadioButtonFor(i => i.SolutionInput, false, new { @class = "attributeTab" }) Attribute
+            </div>
+            <div class="col-md-6"></div>
+        </div>
+        <br />
+        <div class="row" id="attribute">
+            <div class="col-md-2"></div>
+            @Html.HiddenFor(i => i.Tree.ID)
+            @Html.DropDownListFor(i => Model.SelectedAttribute.ID, new SelectList(Model.Attributes, "ID", "Name"), htmlAttributes: new { @class = "col-md-2" })
+            <div class="col-md-1"></div>
+            <button class="btn btn-default col-md-2" id="button">Insert Node</button>
+            <div class="col-md-1"></div>
+            <button class="btn btn-danger col-md-2" name="undoButton" id="undo" value="undo">Undo</button>
+            <div class="col-md-2"></div>
+        </div>
+
         @Html.HiddenFor(i => i.Tree.ID)
-        @Html.DropDownListFor(i => Model.SelectedAttribute.ID, new SelectList(Model.Attributes, "ID", "Name"), htmlAttributes: new { @class="col-md-2"})
-        <div class="col-md-1"></div>
-        <button class="btn btn-default col-md-2" id="button">Insert Node</button>
-        <div class="col-md-1"></div>
-        <button class="btn btn-danger col-md-2" name="undoButton" id="undo" value="undo">Undo</button>
-        <div class="col-md-2"></div>
+        <div id="solution">
+            <div class="form-group">
+                @Html.TextAreaFor(i => i.Solution, new { @rows = "20", @placeholder = "Enter solution", @class = "form-control", style = "min-width:600px" })
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Insert Solution" class="btn btn-default">
+            </div>
+        </div>
     </div>
+    
 }
+<script>
+        $(document).ready(function () {
+            $("#solution").hide();
+            $("#selectionDiv").click(function () {
+                if ($(".attributeTab").is(":checked")) {
+                    $("#attribute").show();
+                    $("#solution").hide();
+                    console.log("attribute");
+                }
+                if ($(".solutionTab").is(":checked")) {
+                    $("#solution").show();
+                    $("#attribute").hide();
+                    console.log("solution");
+                }
+            });
+        });
+</script>

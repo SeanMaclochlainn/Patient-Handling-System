@@ -24,7 +24,7 @@ namespace PatientHandlingSystem.Models
             if (SolutionNode == false)
                 return db.Attributes.Any(i=>i.ID == NodeValue) ? db.Attributes.Find(NodeValue).Name : "";
             else
-                return "solution";
+                return db.Solutions.Find(NodeValue).Content.Substring(0,10)+"...";
         }
 
         public string edgeText()

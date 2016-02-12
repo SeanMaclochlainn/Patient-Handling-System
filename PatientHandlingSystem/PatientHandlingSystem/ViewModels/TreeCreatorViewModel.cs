@@ -12,5 +12,7 @@ namespace PatientHandlingSystem.ViewModels
         public List<Models.Attribute> Attributes { get; set; }
         public Models.Attribute SelectedAttribute { get; set; }
         public string ParentNodeID { get; set; }
+        public string Solution { get; set; }
+        public Boolean SolutionInput { get; set; }
     }
 }

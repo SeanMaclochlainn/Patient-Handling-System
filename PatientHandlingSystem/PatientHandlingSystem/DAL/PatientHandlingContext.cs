@@ -16,6 +16,7 @@ namespace PatientHandlingSystem.DAL
         public DbSet<AttributeValue> AttributeValues { get; set; }
         public DbSet<Node> Nodes { get; set; }
         public DbSet<Tree> Trees { get; set; }
+        public DbSet<Solution> Solutions { get; set; }
 
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

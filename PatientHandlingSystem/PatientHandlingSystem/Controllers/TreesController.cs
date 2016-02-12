@@ -70,6 +70,19 @@ namespace PatientHandlingSystem.Controllers
                 db.Entry(previousParentNode).State = EntityState.Modified;
                 db.SaveChanges();
             }
+            else if(treeCreatorVM.SolutionInput == true)
+            {
+                Solution solution = new Solution { Content = treeCreatorVM.Solution };
+                db.Solutions.Add(solution);
+                db.SaveChanges();
+
+                int parentNodeID = int.Parse(treeCreatorVM.ParentNodeID);
+                var parentNode = db.Nodes.Find(parentNodeID);
+                parentNode.NodeValue = solution.ID;
+                parentNode.SolutionNode = true;
+                db.Entry(parentNode).State = EntityState.Modified;
+                db.SaveChanges();
+            }
             else
             {
                 treeCreatorVM.SelectedAttribute.AttributeValues = db.AttributeValues.Where(i => i.AttributeID == treeCreatorVM.SelectedAttribute.ID).ToList();

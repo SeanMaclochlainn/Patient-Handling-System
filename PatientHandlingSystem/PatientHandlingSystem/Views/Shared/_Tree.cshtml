@@ -45,7 +45,7 @@
 
     // initialize network
     var network = new vis.Network(container, data, options);
-
+    
     network.on("selectNode", function (params) {
         console.log('selectNode Event:', params);
         $("<input type='hidden' id='ParentNodeID' name='ParentNodeID' value="+params.nodes+">").insertAfter("#button");
