@@ -8,14 +8,38 @@
     var nodes = new vis.DataSet();
     @for(int i = Model.ElementAt(0).ID; i < (Model.ElementAt(0).ID + Model.Count()); i++)
     {
-        @:nodes.add({ id: @i, label: '@Model.ElementAt((i - Model.ElementAt(0).ID)).NodeText()', shape: 'box' });
+        string nodeDesign = "";
+        if(Model.ElementAt(i - Model.ElementAt(0).ID).SolutionNode)
+        {
+            nodeDesign = "green";
+        }
+        else if(Model.ElementAt(i - Model.ElementAt(0).ID).NodeValue == 0)
+        {
+            nodeDesign = "red";
+        }
+        else
+        {
+            nodeDesign = "#3280EA";
+        }
+        @:nodes.add({ id: @i, label: insertLineBreaks('@Model.ElementAt((i - Model.ElementAt(0).ID)).NodeText()'), shape: 'ellipse', color:'@nodeDesign' });
+    }
+    function insertLineBreaks(nodeText){
+        if(nodeText.charAt(10) == ' '){
+            return nodeText.slice(0,10)+'\n'+nodeText.slice(11,nodeText.length-1);
+        }
+        else {
+            var spaceIndex = nodeText.indexOf(' ');
+            var result = nodeText.slice(0,spaceIndex) +"\n"+nodeText.slice(spaceIndex+1, nodeText.length)
+            console.log(result);
+            return result;
+        }
     }
     var edges = new vis.DataSet();
 
-     @for (int j = 1; j < Model.Count(); j++)
+    @for (int j = 1; j < Model.Count(); j++)
     {
-        @:edges.add({from: @Model.ElementAt(j).ID, to: @Model.ElementAt(j).ParentID, label: '@Model.ElementAt(j).edgeText()' });
-    }
+        @:edges.add({from: @Model.ElementAt(j).ParentID, to: @Model.ElementAt(j).ID, label: '@Model.ElementAt(j).edgeText()', color: '#3280EA' });
+        }
     // create a network
     var container = document.getElementById('mynetwork');
 
@@ -27,25 +51,19 @@
     var options = {
         layout: {
             hierarchical: {
-                direction: 'DU',   // UD, DU, LR, RL
-                sortMethod: 'directed' // hubsize, directed
+                direction: 'UD',   // UD, DU, LR, RL
+                sortMethod: 'directed', // hubsize, directed
+                nodeSpacing: 100
             }
         },
         physics: {
-            enabled: true,
-            hierarchicalRepulsion: {
-                centralGravity: 0.0,
-                springLength: 100,
-                springConstant: 0.01,
-                nodeDistance: 100,
-                damping: 0.09
-            },
+            enabled: false
         }
     };
 
     // initialize network
     var network = new vis.Network(container, data, options);
-    
+
     network.on("selectNode", function (params) {
         console.log('selectNode Event:', params);
         $("<input type='hidden' id='ParentNodeID' name='ParentNodeID' value="+params.nodes+">").insertAfter("#button");

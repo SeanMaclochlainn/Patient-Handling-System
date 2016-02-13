@@ -16,3 +16,8 @@ textarea {
     max-width: 280px;
 }
 
+.treeEditor{
+    border-color:black;
+    border-style:solid;
+    border-width:thin;
+}
