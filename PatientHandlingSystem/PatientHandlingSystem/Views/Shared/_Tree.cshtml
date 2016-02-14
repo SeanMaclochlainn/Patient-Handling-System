@@ -6,22 +6,25 @@
 <script type="text/javascript">
     var i;
     var nodes = new vis.DataSet();
-    @for(int i = Model.ElementAt(0).ID; i < (Model.ElementAt(0).ID + Model.Count()); i++)
+    @foreach (var node in Model)
     {
-        string nodeDesign = "";
-        if(Model.ElementAt(i - Model.ElementAt(0).ID).SolutionNode)
+        if(node.SolutionNode)
         {
-            nodeDesign = "green";
+            @:nodes.add({ id: @node.ID, label: previewSolution('@node.NodeText()'), shape: 'ellipse', color: 'green' });
         }
-        else if(Model.ElementAt(i - Model.ElementAt(0).ID).NodeValue == 0)
+        else if(node.NodeValue == 0)
         {
-            nodeDesign = "red";
+            @:nodes.add({ id: @node.ID, label: '@node.NodeText()', shape: 'ellipse', color: 'red' });
         }
         else
         {
-            nodeDesign = "#3280EA";
+            @:nodes.add({ id: @node.ID, label: '@node.NodeText()', shape: 'ellipse', color: '#3280EA' });
         }
-        @:nodes.add({ id: @i, label: insertLineBreaks('@Model.ElementAt((i - Model.ElementAt(0).ID)).NodeText()'), shape: 'ellipse', color:'@nodeDesign' });
+    }
+
+
+    function previewSolution(fullText){
+        return fullText.substring(0,10)+"...";
     }
     function insertLineBreaks(nodeText){
         if(nodeText.charAt(10) == ' '){
@@ -36,10 +39,11 @@
     }
     var edges = new vis.DataSet();
 
+
     @for (int j = 1; j < Model.Count(); j++)
     {
         @:edges.add({from: @Model.ElementAt(j).ParentID, to: @Model.ElementAt(j).ID, label: '@Model.ElementAt(j).edgeText()', color: '#3280EA' });
-        }
+                }
     // create a network
     var container = document.getElementById('mynetwork');
 
@@ -64,9 +68,39 @@
     // initialize network
     var network = new vis.Network(container, data, options);
 
+    var solutionNodeIds = [];//"Model.ElementAt(0).solutionNodeIds()";
+    @foreach (var node in Model.Where(i=>i.SolutionNode == true))
+    {
+        @:solutionNodeIds.push({id:@node.ID, text:'@node.NodeText()'});
+                    }
+    console.log("dnids:"+solutionNodeIds);
     network.on("selectNode", function (params) {
-        console.log('selectNode Event:', params);
+        //console.log('selectNode Event:', params);
         $("<input type='hidden' id='ParentNodeID' name='ParentNodeID' value="+params.nodes+">").insertAfter("#button");
+        console.log("checking node");
+        //console.log("params.nodes: "+params.nodes+ "\nsolutionNodeIds: "+solutionNodeIds);
+        //console.log("indexof: "+solutionNodeIds.indexOf(params.nodes));
+        //console.log("params.nodes before for loop: "+params.nodes);
+        for(var i = 0;i<solutionNodeIds.length;i++){
+            //console.log("solution node id: "+ solutionNodeIds[i]+"params.nodes: "+params.nodes);
+            //console.log("params.node before if: "+params.nodes);
+            if(solutionNodeIds[i].id==params.nodes){
+                //console.log("params.nodes in if: "+params.nodes);
+                //console.log("solution node");
+                //console.log("id; "+solutionNodeIds[i].id);
+                //console.log("text"+solutionNodeIds[i].text)
+                console.log("entering text");
+                $("#Solution").val(solutionNodeIds[i].text);
+                if ($(".attributeTab").is(":checked")) {
+                    $("#solution").show();
+                    $("#attribute").hide();
+                    $(".attributeTab").prop('checked', false);
+                    $(".solutionTab").prop('checked', true);
+                }
+            }
+        }
     });
+
+
 </script>
 <div id="mynetwork" style="width:900px;height:600px;"></div>

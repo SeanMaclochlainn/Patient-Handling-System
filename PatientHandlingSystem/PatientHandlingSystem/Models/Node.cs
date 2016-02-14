@@ -22,11 +22,19 @@ namespace PatientHandlingSystem.Models
         public string NodeText()
         {
             if (SolutionNode == false)
-                return db.Attributes.Any(i=>i.ID == NodeValue) ? db.Attributes.Find(NodeValue).Name : "";
+                return db.Attributes.Any(i => i.ID == NodeValue) ? db.Attributes.Find(NodeValue).Name : "";
             else
-                return db.Solutions.Find(NodeValue).Content.Substring(0,10)+"...";
+                return db.Solutions.Find(NodeValue).Content;//.Substring(0,10)+"...";
         }
 
+        public string solutionNodeIds()
+        {
+            return "test";// db.Nodes.Where(i => i.TreeID == TreeID && i.SolutionNode == true).Select(i => i.ID).ToArray();
+        }
+        //public List<int> solutionNodeIds()
+        //{
+        //    return db.Nodes.Where(i => i.TreeID == TreeID && i.SolutionNode == true).Select(i => i.ID).ToList();
+        //}
         public string edgeText()
         {
             return db.AttributeValues.Find(EdgeValue).Name;
