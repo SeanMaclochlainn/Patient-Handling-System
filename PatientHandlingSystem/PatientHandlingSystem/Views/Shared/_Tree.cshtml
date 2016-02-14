@@ -72,7 +72,7 @@
     @foreach (var node in Model.Where(i=>i.SolutionNode == true))
     {
         @:solutionNodeIds.push({id:@node.ID, text:'@node.NodeText()'});
-                    }
+    }
     console.log("dnids:"+solutionNodeIds);
     network.on("selectNode", function (params) {
         //console.log('selectNode Event:', params);

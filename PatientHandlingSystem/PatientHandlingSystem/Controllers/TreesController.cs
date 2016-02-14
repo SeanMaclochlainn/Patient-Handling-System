@@ -45,7 +45,7 @@ namespace PatientHandlingSystem.Controllers
         // GET: Trees/Create
         public ActionResult Create()
         {
-            var tree = new Tree { Name = "Tree" };
+            var tree = new Tree { Name = "" };
             db.Trees.Add(tree);
             db.SaveChanges();
 
@@ -141,16 +141,14 @@ namespace PatientHandlingSystem.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,Name")] Tree tree)
+        public ActionResult Create(TreeCreatorViewModel treeVM)
         {
-            if (ModelState.IsValid)
-            {
-                db.Trees.Add(tree);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
+            var tree = db.Trees.Find(treeVM.Tree.ID);
+            tree.Name = treeVM.Tree.Name;
+            db.Entry(tree).State = EntityState.Modified;
+            db.SaveChanges();
 
-            return View(tree);
+            return RedirectToAction("Index");
         }
 
         // GET: Trees/Edit/5
