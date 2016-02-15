@@ -1,0 +1,77 @@
+﻿@model IEnumerable<PatientHandlingSystem.Models.Node>
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+<script src="~/Scripts/vis.min.js"></script>
+<link href="~/Content/vis.min.css" rel="stylesheet" />
+<h3>
+    @Html.Label((string)ViewBag.TreeName)
+</h3>
+<br />
+<div id="mynetwork" class="treeEditor" style="width:900px;height:600px;"></div>
+
+<script type="text/javascript">
+    var i;
+    var nodes = new vis.DataSet();
+    @foreach (var node in Model)
+    {
+        if(node.SolutionNode)
+        {
+            @:nodes.add({ id: @node.ID, label: previewSolution('@node.NodeText()'), shape: 'ellipse', color: 'green' });
+        }
+        else if(node.NodeValue == 0)
+        {
+            @:nodes.add({ id: @node.ID, label: '@node.NodeText()', shape: 'ellipse', color: 'red' });
+        }
+        else
+        {
+            @:nodes.add({ id: @node.ID, label: '@node.NodeText()', shape: 'ellipse', color: '#3280EA' });
+        }
+    }
+
+
+    function previewSolution(fullText){
+        return fullText.substring(0,10)+"...";
+    }
+    function insertLineBreaks(nodeText){
+        if(nodeText.charAt(10) == ' '){
+            return nodeText.slice(0,10)+'\n'+nodeText.slice(11,nodeText.length-1);
+        }
+        else {
+            var spaceIndex = nodeText.indexOf(' ');
+            var result = nodeText.slice(0,spaceIndex) +"\n"+nodeText.slice(spaceIndex+1, nodeText.length)
+            console.log(result);
+            return result;
+        }
+    }
+    var edges = new vis.DataSet();
+
+
+    @for (int j = 1; j < Model.Count(); j++)
+    {
+        @:edges.add({from: @Model.ElementAt(j).ParentID, to: @Model.ElementAt(j).ID, label: '@Model.ElementAt(j).edgeText()', color: '#3280EA' });
+                }
+    // create a network
+    var container = document.getElementById('mynetwork');
+
+    // provide the data in the vis format
+    var data = {
+        nodes: nodes,
+        edges: edges
+    };
+    var options = {
+        layout: {
+            hierarchical: {
+                direction: 'UD',   // UD, DU, LR, RL
+                sortMethod: 'directed', // hubsize, directed
+                nodeSpacing: 100
+            }
+        },
+        physics: {
+            enabled: false
+        }
+    };
+
+    // initialize network
+    var network = new vis.Network(container, data, options);
+</script>
