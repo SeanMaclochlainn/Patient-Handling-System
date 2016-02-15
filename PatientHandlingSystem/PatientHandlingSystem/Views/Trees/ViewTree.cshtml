@@ -74,4 +74,22 @@
 
     // initialize network
     var network = new vis.Network(container, data, options);
+
+    var solutionNodeIds = [];
+    @foreach (var node in Model.Where(i=>i.SolutionNode == true))
+    {
+        @:solutionNodeIds.push({id:@node.ID, text:'@node.NodeText()'});
+    }
+
+    network.on("selectNode", function (params) {
+        for(var i = 0;i<solutionNodeIds.length;i++){
+            if(solutionNodeIds[i].id==params.nodes){
+                $("#solution").text(solutionNodeIds[i].text);
+            }
+        }
+    });
 </script>
+<br />
+<p id="solution" class="well">
+
+</p>
