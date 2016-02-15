@@ -48,7 +48,7 @@
                         @Html.LabelFor(x => x.CompleteAttributes[i].Attribute.Name, Model.CompleteAttributes[i].Attribute.Name, htmlAttributes: new { style = "padding-top:0px", @class = "control-label col-md-2" })
                         @Html.HiddenFor(x => x.CompleteAttributes[i].Attribute.ID)
                         <div class="col-md-10">
-                            @Html.DropDownListFor(x => x.CompleteAttributes[i].SelectedAttributeValue.ID, new SelectList(Model.CompleteAttributes[i].AttributeValues, "ID", "Name", "0"), new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.DropDownListFor(x => x.CompleteAttributes[i].SelectedAttributeValue.ID, new SelectList(Model.CompleteAttributes[i].AttributeValues, "ID", "Name", "0"), new { @class = "form-control" } )
                         </div>
                     }
                 </div>

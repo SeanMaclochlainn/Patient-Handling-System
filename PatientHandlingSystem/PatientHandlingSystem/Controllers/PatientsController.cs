@@ -19,7 +19,19 @@ namespace PatientHandlingSystem.Controllers
         // GET: Patients
         public ActionResult Index()
         {
-            return View(db.Patients.ToList());
+            List<PatientAndTreesViewModel> patientAndTreesVMs = new List<PatientAndTreesViewModel>();
+            foreach(var patient in db.Patients.ToList())
+            {
+                var patientAndTreesVM = new PatientAndTreesViewModel
+                {
+                    FirstName = patient.FirstName,
+                    LastName = patient.LastName,
+                    ID = patient.ID,
+                    Trees = db.Trees.ToList()
+                };
+                patientAndTreesVMs.Add(patientAndTreesVM);
+            }
+            return View(patientAndTreesVMs);
         }
 
         public ActionResult Details(int? id)
@@ -253,6 +265,74 @@ namespace PatientHandlingSystem.Controllers
             return RedirectToAction("Index");
         }
 
+        public ActionResult HandlingPlan(int patientId, int treeId)
+        {
+            var patient = db.Patients.Find(patientId);
+            var tree = db.Trees.Find(treeId);
+
+            Node selectedNode = db.Nodes.Single(i => i.ParentID < 1 && i.TreeID == tree.ID); //the node with parentID of zero is the root node
+
+            while (db.Nodes.Where(i => i.ParentID == selectedNode.ID).Count() > 0) //basically while the selected node has children
+            {
+                Boolean result = false;
+                List<Node> childNodes = db.Nodes.Where(i => i.ParentID == selectedNode.ID).ToList();
+                int j = 0;
+                while (result != true)
+                {
+                    if (j >= childNodes.Count)
+                        return View(new Solution { Content = "Error"}); // this is the case where the instance cannot be classified, this can happen occasionally with nominal data
+                    Node childNode = childNodes.ElementAt(j);
+                    result = checkBranch(patient, selectedNode, childNode);
+                    if (result == true)
+                    {
+                        selectedNode = childNodes.ElementAt(j);
+                    }
+                    j++;
+                }
+            }
+            return View("Solution", db.Solutions.Find(selectedNode.NodeValue));
+        }
+
+        private Boolean checkBranch(Patient patient, Node parentNode, Node childNode)
+        {
+            var attribute = db.Attributes.Find(parentNode.NodeValue);
+            //string instanceAttributeValue = instance.Attributes.Single(i => i.AttributeName == parentNode.Attribute).AttributeValue;
+            switch (childNode.EdgeOperator)
+            {
+                case "==":
+                    //float n1;
+                    //float n2 = 0;
+                    //Boolean isNumber1 = float.TryParse(instanceAttributeValue, out n1);
+                    //Boolean isNumber2 = float.TryParse(childNode.EdgeValue, out n2);
+                    //if (isNumber1 == true)
+                    var edgeAttributeValue = db.AttributeValues.Find(childNode.EdgeValue);
+                    var patientAttributeValue = db.PatientAttributes.Single(i => i.PatientID == patient.ID && i.AttributeID == attribute.ID).AttributeValue;
+                    if (edgeAttributeValue.ID == patientAttributeValue.ID)
+                        return true;
+                    else
+                        return false;
+                //case "<=":
+                //    float n3 = 0;
+                //    float n4 = 0;
+                //    Boolean isNumber3 = float.TryParse(instanceAttributeValue, out n3);
+                //    Boolean isNumber4 = float.TryParse(childNode.EdgeValue, out n4);
+                //    if (n3 <= n4)
+                //        return true;
+                //    else
+                //        return false;
+                //case ">":
+                //    float n5 = 0;
+                //    float n6 = 0;
+                //    Boolean isNumber5 = float.TryParse(instanceAttributeValue, out n5);
+                //    Boolean isNumber6 = float.TryParse(childNode.EdgeValue, out n6);
+                //    if (n5 > n6)
+                //        return true;
+                //    else
+                //        return false;
+
+            }
+            return true;
+        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)

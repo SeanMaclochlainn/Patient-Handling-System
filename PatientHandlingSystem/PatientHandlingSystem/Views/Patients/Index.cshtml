@@ -1,4 +1,4 @@
-﻿@model IEnumerable<PatientHandlingSystem.Models.Patient>
+﻿@model IEnumerable<PatientHandlingSystem.ViewModels.PatientAndTreesViewModel>
 
 @{
     ViewBag.Title = "Index";
@@ -18,22 +18,41 @@
             @Html.DisplayNameFor(model => model.LastName)
         </th>
         <th></th>
+        <th></th>
     </tr>
 
-@foreach (var item in Model) {
+@for(int i=0;i<Model.Count();i++)
+{
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.FirstName)
+            @Html.DisplayFor(model=>model.ElementAt(i).FirstName)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.LastName)
+            @Html.DisplayFor(model => model.ElementAt(i).LastName)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
+            @Html.ActionLink("Edit", "Edit", new { id = Model.ElementAt(i).ID }) |
+            @Html.ActionLink("Details", "Details", new { id = Model.ElementAt(i).ID }) |
+            @Html.ActionLink("Delete", "Delete", new { id = Model.ElementAt(i).ID }) 
         </td>
-    </tr>
+        <td>
+            
+            <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                    Handling Plan
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    @foreach (var tree in Model.ElementAt(i).Trees)
+                    {
+                        <li>
+                            <a href="@Url.Action("HandlingPlan", new { patientid = Model.ElementAt(i).ID, treeid = tree.ID})">@tree.Name</a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </td>
+        </tr>
 }
 
 </table>

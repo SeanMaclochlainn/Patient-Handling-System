@@ -1,0 +1,19 @@
+﻿@model PatientHandlingSystem.Models.Solution
+
+<div>
+    <h4>Solution</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            Solution
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Content)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -23,23 +23,19 @@ namespace PatientHandlingSystem.Controllers
             return View(db.Trees.ToList());
         }
 
-        // GET: Trees/Details/5
-        //public ActionResult Details(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    Tree tree = db.Trees.Find(id);
-        //    if (tree == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(tree);
-        //}
-        public ActionResult Details()
+        public ActionResult ViewTree(int? id)
         {
-            return View(db.Nodes.Where(i => i.TreeID == 97).ToList());
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Tree tree = db.Trees.Find(id);
+            if (tree == null)
+            {
+                return HttpNotFound();
+            }
+            ViewBag.TreeName = tree.Name;
+            return View(db.Nodes.Where(i=>i.TreeID == tree.ID).ToList());
         }
 
         // GET: Trees/Create
@@ -203,7 +199,9 @@ namespace PatientHandlingSystem.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Tree tree = db.Trees.Find(id);
+            var nodes = db.Nodes.Where(i => i.TreeID == tree.ID).ToList();
             db.Trees.Remove(tree);
+            db.Nodes.RemoveRange(nodes);
             db.SaveChanges();
             return RedirectToAction("Index");
         }
