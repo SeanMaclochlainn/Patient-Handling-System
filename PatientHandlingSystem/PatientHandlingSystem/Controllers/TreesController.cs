@@ -50,7 +50,6 @@ namespace PatientHandlingSystem.Controllers
                 Tree = tree,
                 Attributes = db.Attributes.ToList()
             };
-            PartialView("_Tree", db.Nodes.Where(i => i.TreeID == tree.ID).ToList());
             return View(treeCreator);
         }
 
@@ -159,23 +158,14 @@ namespace PatientHandlingSystem.Controllers
             {
                 return HttpNotFound();
             }
-            return View(tree);
-        }
 
-        // POST: Trees/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,Name")] Tree tree)
-        {
-            if (ModelState.IsValid)
+            var treeCreator = new TreeCreatorViewModel
             {
-                db.Entry(tree).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(tree);
+                Tree = tree,
+                Attributes = db.Attributes.ToList(),
+                Nodes = db.Nodes.Where(i => i.TreeID == tree.ID).ToList()
+            };
+            return View(treeCreator);
         }
 
         // GET: Trees/Delete/5

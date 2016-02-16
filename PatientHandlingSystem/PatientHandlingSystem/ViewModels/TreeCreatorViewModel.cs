@@ -14,5 +14,6 @@ namespace PatientHandlingSystem.ViewModels
         public string ParentNodeID { get; set; }
         public string Solution { get; set; }
         public Boolean SolutionInput { get; set; }
+        public List<Node> Nodes { get; set; }
     }
 }
