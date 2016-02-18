@@ -26,14 +26,23 @@
         <div class="row" id="attribute">
             <div class="col-md-2"></div>
             @Html.HiddenFor(i => i.Tree.ID)
-            @Html.DropDownListFor(i => Model.SelectedAttribute.ID, new SelectList(Model.Attributes, "ID", "Name"), htmlAttributes: new { @class = "col-md-2" })
+            <div class="col-md-3">
+                @Html.DropDownListFor(i => Model.SelectedAttribute.ID, new SelectList(Model.Attributes, "ID", "Name"), htmlAttributes: new { @class = "form-control" })
+            </div>
             <div class="col-md-1"></div>
             <button class="btn btn-default col-md-2" id="button">Insert Node</button>
             <div class="col-md-1"></div>
             <button class="btn btn-danger col-md-2" name="undoButton" id="undo" value="undo">Undo</button>
             <div class="col-md-2"></div>
         </div>
-
+        <br />
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-1">
+                @Html.EditorFor(i => Model.SelectedAttributeValue.Name, new { htmlAttributes = new { @class = "numericInput form-control" } })
+            </div>
+            <div class="col-md-9"></div>
+        </div>
         @Html.HiddenFor(i => i.Tree.ID)
         <div id="solution">
             <div class="form-group">
@@ -78,8 +87,31 @@
                 if ($(".solutionTab").is(":checked")) {
                     $("#solution").show();
                     $("#attribute").hide();
-
+                    $(".numericInput").hide();
                     //console.log("solution");
+                }
+            });
+            var numericIds = [];
+            @foreach (var a in Model.Attributes)
+            {
+                if(a.Numeric)
+                {
+                    @:numericIds.push(@a.ID);
+                            }
+            }
+
+            $(".numericInput").hide();
+            $("#SelectedAttribute_ID").change(function () {
+                for (var i = 0; i < numericIds.length; i++) {
+                    if (numericIds[i] == $(this).val()) {
+                        console.log("numeric");
+                        $(".numericInput").show();
+                        $(this).after("<input id='SelectedAttribute_Numeric' name='SelectedAttribute.Numeric' type='hidden' value='true' />");
+                    }
+                    else {
+                        $(".numericInput").hide();
+                        $("#SelectedAttribute_Numeric").remove();
+                    }
                 }
             });
         });

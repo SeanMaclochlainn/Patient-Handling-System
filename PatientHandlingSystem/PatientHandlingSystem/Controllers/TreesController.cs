@@ -110,19 +110,44 @@ namespace PatientHandlingSystem.Controllers
                 }
 
                 var nodesToAdd = new List<Node>();
-                var attributeValues = db.Attributes.Find(treeCreatorVM.SelectedAttribute.ID).AttributeValues;
-                foreach (var av in attributeValues)
+                if (treeCreatorVM.SelectedAttribute.Numeric)
                 {
-                    if (av.ID == 0)
-                        Debug.WriteLine("test");
-                    var childNode = new Node
+                    var childNodeA = new Node
                     {
                         ParentID = parentNode.ID,
                         TreeID = treeCreatorVM.Tree.ID,
-                        EdgeOperator = "==",
-                        EdgeValue = av.ID
+                        EdgeOperator = "<=",
+                        EdgeValue = int.Parse(treeCreatorVM.SelectedAttributeValue.Name), 
+                        Numeric = true
                     };
-                    nodesToAdd.Add(childNode);
+                    var childNodeB = new Node
+                    {
+                        ParentID = parentNode.ID,
+                        TreeID = treeCreatorVM.Tree.ID,
+                        EdgeOperator = ">",
+                        EdgeValue = int.Parse(treeCreatorVM.SelectedAttributeValue.Name), 
+                        Numeric = true
+                    };
+                    nodesToAdd.Add(childNodeA);
+                    nodesToAdd.Add(childNodeB);
+                }
+                else
+                {
+                    var attributeValues = db.Attributes.Find(treeCreatorVM.SelectedAttribute.ID).AttributeValues;
+                    foreach (var av in attributeValues)
+                    {
+                        if (av.ID == 0)
+                            Debug.WriteLine("test");
+                        var childNode = new Node
+                        {
+                            ParentID = parentNode.ID,
+                            TreeID = treeCreatorVM.Tree.ID,
+                            EdgeOperator = "==",
+                            EdgeValue = av.ID, 
+                            Numeric = false
+                        };
+                        nodesToAdd.Add(childNode);
+                    }
                 }
                 db.Nodes.AddRange(nodesToAdd);
                 db.SaveChanges();

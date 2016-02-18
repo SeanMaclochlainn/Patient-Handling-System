@@ -18,15 +18,15 @@
         if(node.SolutionNode)
         {
             @:nodes.add({ id: @node.ID, label: previewSolution('@node.NodeText()'), shape: 'ellipse', color: 'green' });
-        }
+                }
         else if(node.NodeValue == 0)
         {
             @:nodes.add({ id: @node.ID, label: '@node.NodeText()', shape: 'ellipse', color: 'red' });
-        }
+                }
         else
         {
             @:nodes.add({ id: @node.ID, label: '@node.NodeText()', shape: 'ellipse', color: '#3280EA' });
-        }
+                }
     }
 
 
@@ -49,8 +49,16 @@
 
     @for (int j = 1; j < Model.Count(); j++)
     {
-        @:edges.add({from: @Model.ElementAt(j).ParentID, to: @Model.ElementAt(j).ID, label: '@Model.ElementAt(j).edgeText()', color: '#3280EA' });
-                }
+        if(Model.ElementAt(j).Numeric)
+        {
+            var edgeText = Model.ElementAt(j).EdgeOperator+Model.ElementAt(j).EdgeValue;
+            @:edges.add({from: @Model.ElementAt(j).ParentID, to: @Model.ElementAt(j).ID, label: '@Html.Raw(edgeText)', color: '#3280EA' });
+        }
+        else
+        {
+            @:edges.add({from: @Model.ElementAt(j).ParentID, to: @Model.ElementAt(j).ID, label: '@Model.ElementAt(j).edgeText()', color: '#3280EA' });
+        }
+    }
     // create a network
     var container = document.getElementById('mynetwork');
 
@@ -79,7 +87,7 @@
     @foreach (var node in Model.Where(i=>i.SolutionNode == true))
     {
         @:solutionNodeIds.push({id:@node.ID, text:'@node.NodeText()'});
-    }
+            }
 
     network.on("selectNode", function (params) {
         for(var i = 0;i<solutionNodeIds.length;i++){

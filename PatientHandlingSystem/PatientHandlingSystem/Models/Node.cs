@@ -18,6 +18,7 @@ namespace PatientHandlingSystem.Models
         public string EdgeOperator { get; set; }
         public int TreeID { get; set; }
         public Boolean SolutionNode { get; set; }
+        public Boolean Numeric { get; set; }
 
         public string NodeText()
         {

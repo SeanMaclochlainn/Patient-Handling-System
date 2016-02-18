@@ -296,40 +296,33 @@ namespace PatientHandlingSystem.Controllers
         private Boolean checkBranch(Patient patient, Node parentNode, Node childNode)
         {
             var attribute = db.Attributes.Find(parentNode.NodeValue);
-            //string instanceAttributeValue = instance.Attributes.Single(i => i.AttributeName == parentNode.Attribute).AttributeValue;
+            var patientAttributeValue = db.PatientAttributes.Single(i => i.PatientID == patient.ID && i.AttributeID == attribute.ID).AttributeValue;
+            int number1;
+            int number2;
             switch (childNode.EdgeOperator)
             {
                 case "==":
-                    //float n1;
-                    //float n2 = 0;
-                    //Boolean isNumber1 = float.TryParse(instanceAttributeValue, out n1);
-                    //Boolean isNumber2 = float.TryParse(childNode.EdgeValue, out n2);
-                    //if (isNumber1 == true)
                     var edgeAttributeValue = db.AttributeValues.Find(childNode.EdgeValue);
-                    var patientAttributeValue = db.PatientAttributes.Single(i => i.PatientID == patient.ID && i.AttributeID == attribute.ID).AttributeValue;
                     if (edgeAttributeValue.ID == patientAttributeValue.ID)
                         return true;
                     else
                         return false;
-                //case "<=":
-                //    float n3 = 0;
-                //    float n4 = 0;
-                //    Boolean isNumber3 = float.TryParse(instanceAttributeValue, out n3);
-                //    Boolean isNumber4 = float.TryParse(childNode.EdgeValue, out n4);
-                //    if (n3 <= n4)
-                //        return true;
-                //    else
-                //        return false;
-                //case ">":
-                //    float n5 = 0;
-                //    float n6 = 0;
-                //    Boolean isNumber5 = float.TryParse(instanceAttributeValue, out n5);
-                //    Boolean isNumber6 = float.TryParse(childNode.EdgeValue, out n6);
-                //    if (n5 > n6)
-                //        return true;
-                //    else
-                //        return false;
+                case "<=":
+                    number1 = int.Parse(patientAttributeValue.Name);
+                    number2 = childNode.EdgeValue;
 
+                    if (number1 <= number2)
+                        return true;
+                    else
+                        return false;
+                case ">":
+                    number1 = int.Parse(patientAttributeValue.Name);
+                    number2 = childNode.EdgeValue;
+
+                    if (number1 > number2)
+                        return true;
+                    else
+                        return false;
             }
             return true;
         }
