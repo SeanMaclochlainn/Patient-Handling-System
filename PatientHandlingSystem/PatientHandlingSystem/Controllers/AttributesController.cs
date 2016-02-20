@@ -144,8 +144,23 @@ namespace PatientHandlingSystem.Controllers
             return View(attribute);
         }
 
-        // POST: Attributes/Delete/5
-        public ActionResult Delete(int id)
+        public ActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Models.Attribute attribute = db.Attributes.Find(id);
+            if (attribute == null)
+            {
+                return HttpNotFound();
+            }
+            return View(attribute);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int id)
         {
             Models.Attribute attribute = db.Attributes.Find(id);
             var attributeValues = new List<AttributeValue>();
