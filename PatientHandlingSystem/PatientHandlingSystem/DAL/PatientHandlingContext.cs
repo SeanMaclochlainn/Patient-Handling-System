@@ -12,7 +12,7 @@ namespace PatientHandlingSystem.DAL
     {
         public DbSet<Patient> Patients { get; set; }
         public DbSet<Models.Attribute> Attributes { get; set; }
-        public DbSet<PatientAttribute> PatientAttributes { get; set; }
+        public DbSet<PatientAttribute> PatientsAttributes { get; set; }
         public DbSet<AttributeValue> AttributeValues { get; set; }
         public DbSet<Node> Nodes { get; set; }
         public DbSet<Tree> Trees { get; set; }

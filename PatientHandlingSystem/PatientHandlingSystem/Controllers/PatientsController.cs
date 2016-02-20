@@ -49,7 +49,7 @@ namespace PatientHandlingSystem.Controllers
             var completeAttributes = new List<CompleteAttribute>();
             foreach (var i in db.Attributes.ToList())
             {
-                var patientAttribute = db.PatientAttributes.SingleOrDefault(j => j.AttributeID == i.ID && j.PatientID == patient.ID);
+                var patientAttribute = db.PatientsAttributes.SingleOrDefault(j => j.AttributeID == i.ID && j.PatientID == patient.ID);
                 AttributeValue selectedAttributeValue = null;
                 if (patientAttribute != null)
                     selectedAttributeValue = db.AttributeValues.Find(patientAttribute.AttributeValueID);
@@ -65,7 +65,7 @@ namespace PatientHandlingSystem.Controllers
                 completeAttributes.Add(completeAttribute);
             }
 
-            var patientAttributes = db.PatientAttributes.Where(i => i.PatientID == patient.ID).ToList();
+            var patientsAttributesList = db.PatientsAttributes.Where(i => i.PatientID == patient.ID).ToList();
             var patientVM = new PatientViewModel
             {
                 Patient = patient,
@@ -120,7 +120,7 @@ namespace PatientHandlingSystem.Controllers
                 db.SaveChanges();
             }
 
-            var patientAttributes = new List<PatientAttribute>();
+            var patientsAttributesList = new List<PatientAttribute>();
             foreach(var a in patientVM.CompleteAttributes)
             {
                 var patientAttribute = new PatientAttribute
@@ -137,11 +137,11 @@ namespace PatientHandlingSystem.Controllers
                     patientAttribute.AttributeValueID = attributeValue.ID; //this value is not carried over from the view if the attribute is numeric
                 }
 
-                patientAttributes.Add(patientAttribute);
+                patientsAttributesList.Add(patientAttribute);
             }
             if (ModelState.IsValid)
             {
-                db.PatientAttributes.AddRange(patientAttributes);
+                db.PatientsAttributes.AddRange(patientsAttributesList);
                 db.SaveChanges();
             }
 
@@ -162,12 +162,12 @@ namespace PatientHandlingSystem.Controllers
             }
 
             var completeAttributes = new List<CompleteAttribute>();
-            var patientAttributes = db.PatientAttributes.Where(i => i.PatientID == patient.ID).ToList();
+            var patientsAttributes = db.PatientsAttributes.Where(i => i.PatientID == patient.ID).ToList();
             var attributes = db.Attributes.ToList();
             foreach(var a in attributes)
             {
                 var attributeValues = a.AttributeValues;
-                var selectedAttribute = db.PatientAttributes.SingleOrDefault(i => i.AttributeID == a.ID && i.PatientID == patient.ID);
+                var selectedAttribute = db.PatientsAttributes.SingleOrDefault(i => i.AttributeID == a.ID && i.PatientID == patient.ID);
                 AttributeValue selectedAttributeValue = null;
                 if (selectedAttribute != null)
                 {
@@ -207,13 +207,13 @@ namespace PatientHandlingSystem.Controllers
             patient.LastName = patientVM.Patient.LastName;
             foreach(var ca in patientVM.CompleteAttributes)
             {
-                var patientAttribute = db.PatientAttributes.Include(j=>j.Attribute).SingleOrDefault(i => i.PatientID == patient.ID && i.AttributeID == ca.SelectedAttributeValue.AttributeID);
+                var patientAttribute = db.PatientsAttributes.Include(j=>j.Attribute).SingleOrDefault(i => i.PatientID == patient.ID && i.AttributeID == ca.SelectedAttributeValue.AttributeID);
 
                 //this is null if a new attribute has been added recently
                 if (patientAttribute == null)
                 {
                     patientAttribute = new PatientAttribute { AttributeID = ca.SelectedAttributeValue.AttributeID, AttributeValueID = ca.SelectedAttributeValue.ID, PatientID = patient.ID };
-                    db.PatientAttributes.Add(patientAttribute);
+                    db.PatientsAttributes.Add(patientAttribute);
                     db.SaveChanges();
                 }
                 else
@@ -296,7 +296,7 @@ namespace PatientHandlingSystem.Controllers
         private Boolean checkBranch(Patient patient, Node parentNode, Node childNode)
         {
             var attribute = db.Attributes.Find(parentNode.NodeValue);
-            var patientAttributeValue = db.PatientAttributes.Single(i => i.PatientID == patient.ID && i.AttributeID == attribute.ID).AttributeValue;
+            var patientAttributeValue = db.PatientsAttributes.Single(i => i.PatientID == patient.ID && i.AttributeID == attribute.ID).AttributeValue;
             int number1;
             int number2;
             switch (childNode.EdgeOperator)
