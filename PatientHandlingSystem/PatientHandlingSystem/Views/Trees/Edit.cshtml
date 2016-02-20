@@ -26,7 +26,9 @@
         <div class="row" id="attribute">
             <div class="col-md-2"></div>
             @Html.HiddenFor(i => i.Tree.ID)
-            @Html.DropDownListFor(i => Model.SelectedAttribute.ID, new SelectList(Model.Attributes, "ID", "Name"), htmlAttributes: new { @class = "col-md-2" })
+            <div class="col-md-3">
+                @Html.DropDownListFor(i => Model.SelectedAttribute.ID, new SelectList(Model.Attributes, "ID", "Name"), htmlAttributes: new { @class = "form-control" })
+            </div>
             <div class="col-md-1"></div>
             <button class="btn btn-default col-md-2" id="button">Insert Node</button>
             <div class="col-md-1"></div>
@@ -34,7 +36,6 @@
             <div class="col-md-2"></div>
         </div>
 
-        @Html.HiddenFor(i => i.Tree.ID)
         <div id="solution">
             <div class="form-group">
                 @Html.TextAreaFor(i => i.Solution, new { @rows = "20", @placeholder = "Enter solution", @class = "form-control", style = "min-width:600px" })

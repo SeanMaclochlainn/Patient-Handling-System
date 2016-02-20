@@ -326,6 +326,21 @@ namespace PatientHandlingSystem.Controllers
             }
             return true;
         }
+
+        public int Add(int x, int y)
+        {
+            return x + y;
+        }
+
+        public Boolean testMethod(Node n)
+        {
+            if (n.ID == 1)
+            {
+                return true;
+            }
+            else
+                return false;
+        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)
