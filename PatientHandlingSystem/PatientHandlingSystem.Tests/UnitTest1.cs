@@ -15,6 +15,22 @@ namespace PatientHandlingSystem.Tests
     [TestClass]
     public class UnitTest1
     {
+        PatientHandlingContext patientHandlingContext = new PatientHandlingContext();
+        
+        public UnitTest1()
+        {
+            //patientHandlingContext.Attributes = GetQueryableMockDbSet(new Models.Attribute { ID = 1, Name = "Weight Bearing Capacity", Numeric = true });
+            //patientHandlingContext.AttributeValues = GetQueryableMockDbSet(new AttributeValue { ID = 1, AttributeID = 1, Name = "test val" });
+            //patientHandlingContext.Patients = GetQueryableMockDbSet(new Patient { ID = 1, FirstName = "test", LastName = "testlast" });
+            //patientHandlingContext.Trees = GetQueryableMockDbSet(new Tree { ID = 1, Name = "Test Tree" });
+            //var nodes = new Node[]
+            //{
+            //    new Node { ID = 1, ParentID = 0, NodeValue = 1, EdgeValue = 0, EdgeOperator = null, TreeID = 1, SolutionNode = false, Numeric = false },
+            //    new Node { ID = 2, ParentID = 1, NodeValue = 1, EdgeValue = 0, EdgeOperator = null, TreeID = 1, SolutionNode = false, Numeric = false }
+            //};
+            //patientHandlingContext.Nodes = GetQueryableMockDbSet(nodes);
+        }
+
         private static DbSet<T> GetQueryableMockDbSet<T>(params T[] sourceList) where T : class
         {
             var queryable = sourceList.AsQueryable();
@@ -31,9 +47,9 @@ namespace PatientHandlingSystem.Tests
         [TestMethod]
         public void TestAttributesIndex()
         {
-            PatientHandlingContext phc = new PatientHandlingContext();
-            phc.Attributes = GetQueryableMockDbSet(new Models.Attribute { ID = 1, Name = "est", Numeric = true });
-            var controller = new AttributesController(phc);
+            patientHandlingContext.Attributes = GetQueryableMockDbSet(new Models.Attribute { ID = 1, Name = "Weight Bearing Capacity", Numeric = true });
+
+            var controller = new AttributesController(patientHandlingContext);
 
             var result = (List<Models.Attribute>)controller.Index().Model;
 
@@ -43,45 +59,109 @@ namespace PatientHandlingSystem.Tests
         [TestMethod]
         public void TestAttributesDetailsMethod()
         {
-            PatientHandlingContext phc = new PatientHandlingContext();
+            patientHandlingContext.Attributes = GetQueryableMockDbSet(new Models.Attribute { ID = 1, Name = "Weight Bearing Capacity", Numeric = true });
+            patientHandlingContext.AttributeValues = GetQueryableMockDbSet(new AttributeValue { ID = 1, AttributeID = 1, Name = "test val" });
 
-            //phc.Attributes = GetQueryableMockDbSet(new Models.Attribute { ID = 1, Name = "test", Numeric = true });
-            //phc.AttributeValues = GetQueryableMockDbSet(new AttributeValue { ID = 1, AttributeID = 1, Name = "test val" });
-
-            List<Models.Attribute> attributeList = new List<Models.Attribute>
-            {
-                new Models.Attribute { ID = 1, Name = "test", Numeric = true }
-            };
-
-            IQueryable<Models.Attribute> attributeQueryableList = attributeList.AsQueryable();
-            var attributeMockSet = new Mock<DbSet<Models.Attribute>>();
-
-            attributeMockSet.Setup(m => m.Find(It.IsAny<int>())).Returns<object[]>(ids => attributeQueryableList.FirstOrDefault(u => u.ID == (int)ids[0]));
-            attributeMockSet.As<IQueryable<Models.Attribute>>().Setup(m => m.Provider).Returns(attributeQueryableList.Provider);
-            attributeMockSet.As<IQueryable<Models.Attribute>>().Setup(m => m.Expression).Returns(attributeQueryableList.Expression);
-            attributeMockSet.As<IQueryable<Models.Attribute>>().Setup(m => m.ElementType).Returns(attributeQueryableList.ElementType);
-            attributeMockSet.As<IQueryable<Models.Attribute>>().Setup(m => m.GetEnumerator()).Returns(attributeQueryableList.GetEnumerator());
-
-
-            phc.Attributes = attributeMockSet.Object;
-
-            List<AttributeValue> attributeValueList = new List<AttributeValue>
-            {
-                new AttributeValue { ID = 1, AttributeID = 1, Name = "test val" }
-            };
-            IQueryable<AttributeValue> attributeValueQueryableList = attributeValueList.AsQueryable();
-            var attributeValueMockSet = new Mock<DbSet<AttributeValue>>();
-            attributeValueMockSet.As<IQueryable<AttributeValue>>().Setup(m => m.Provider).Returns(attributeValueQueryableList.Provider);
-            attributeValueMockSet.As<IQueryable<AttributeValue>>().Setup(m => m.Expression).Returns(attributeValueQueryableList.Expression);
-            attributeValueMockSet.As<IQueryable<AttributeValue>>().Setup(m => m.ElementType).Returns(attributeValueQueryableList.ElementType);
-            attributeValueMockSet.As<IQueryable<AttributeValue>>().Setup(m => m.GetEnumerator()).Returns(attributeValueQueryableList.GetEnumerator());
-            phc.AttributeValues = attributeValueMockSet.Object;
-
-            var controller = new AttributesController(phc); 
+            var controller = new AttributesController(patientHandlingContext); 
             var result = ((ViewResult)controller.Details(1)).Model;
             Assert.IsInstanceOfType(result, typeof(AttributeViewModel));
 
         }
+
+        [TestMethod]
+        public void TestAttributeCreateVM() //tests to see if it has created the correct viewmodel
+        {
+            AttributesController attributesController = new AttributesController();
+            var result = ((ViewResult)attributesController.Create()).Model;
+            Assert.IsInstanceOfType(result, typeof(AttributeViewModel));
+            var attributeList = new List<string> { "" };
+            var attribute = new AttributeViewModel
+            {
+                AttributeValues = attributeList
+            };
+
+            Assert.AreEqual(((AttributeViewModel)result).AttributeValues.Count, attribute.AttributeValues.Count);
+        }
+
+        [TestMethod]
+        public void IterateThroughNominalTree()
+        {
+            patientHandlingContext.Attributes = GetQueryableMockDbSet(
+                new Models.Attribute { ID = 1, Name = "Weight Bearing Capacity", Numeric = true },
+                new Models.Attribute { ID = 2, Name = "Injured", Numeric = true }
+            );
+
+            patientHandlingContext.AttributeValues = GetQueryableMockDbSet(
+                new AttributeValue { ID = 1, AttributeID = 1, Name = "Full" },
+                new AttributeValue { ID = 2, AttributeID = 1, Name = "None" },
+                new AttributeValue { ID = 3, AttributeID = 2, Name = "Yes" },
+                new AttributeValue { ID = 4, AttributeID = 2, Name = "No" }
+                );
+
+            patientHandlingContext.Patients = GetQueryableMockDbSet(new Patient { ID = 1, FirstName = "test", LastName = "testlast" });
+
+            patientHandlingContext.PatientsAttributes = GetQueryableMockDbSet(
+                new PatientAttribute { ID = 1, PatientID = 1, AttributeID = 1, AttributeValueID = 1, AttributeValue = patientHandlingContext.AttributeValues.Single(i=>i.ID == 1) },
+                new PatientAttribute { ID = 2, PatientID = 1, AttributeID = 2, AttributeValueID = 3, AttributeValue = patientHandlingContext.AttributeValues.Single(i=>i.ID == 3) }
+                );
+
+            patientHandlingContext.Solutions = GetQueryableMockDbSet(
+                new Solution { ID = 1, Content = "Solution 1" }
+                );
+
+            patientHandlingContext.Trees = GetQueryableMockDbSet(new Tree { ID = 1, Name = "Test Tree" });
+
+            patientHandlingContext.Nodes = GetQueryableMockDbSet(
+                new Node { ID = 1, ParentID = 0, NodeValue = 1, EdgeValue = 0, EdgeOperator = null, TreeID = 1, SolutionNode = false, Numeric = false },
+                new Node { ID = 2, ParentID = 1, NodeValue = 2, EdgeValue = 1, EdgeOperator = "==", TreeID = 1, SolutionNode = false, Numeric = false },
+                new Node { ID = 3, ParentID = 2, NodeValue = 1, EdgeValue = 3, EdgeOperator = "==", TreeID = 1, SolutionNode = true, Numeric = false}
+
+                );
+
+            PatientsController patientsController = new PatientsController(patientHandlingContext);
+            var result = ((ViewResult)patientsController.HandlingPlan(1, 1)).Model;
+            Assert.AreEqual(((Solution)result).Content, "Solution 1");
+            
+        }
+
+        //[TestMethod]
+        //public void IterateThroughNumericalTree()
+        //{
+        //    patientHandlingContext.Attributes = GetQueryableMockDbSet(
+        //        new Models.Attribute { ID = 1, Name = "Weight Bearing Capacity", Numeric = true },
+        //        new Models.Attribute { ID = 2, Name = "Co-operation", Numeric = true }
+        //    );
+
+        //    patientHandlingContext.AttributeValues = GetQueryableMockDbSet(
+        //        new AttributeValue { ID = 1, AttributeID = 1, Name = "Full" },
+        //        new AttributeValue { ID = 2, AttributeID = 1, Name = "None" },
+        //        new AttributeValue { ID = 3, AttributeID = 2, Name = "Fully" },
+        //        new AttributeValue { ID = 4, AttributeID = 2, Name = "Partial" }
+        //        );
+
+        //    patientHandlingContext.Patients = GetQueryableMockDbSet(new Patient { ID = 1, FirstName = "test", LastName = "testlast" });
+
+        //    patientHandlingContext.PatientsAttributes = GetQueryableMockDbSet(
+        //        new PatientAttribute { ID = 1, PatientID = 1, AttributeID = 1, AttributeValueID = 1, AttributeValue = patientHandlingContext.AttributeValues.Single(i => i.ID == 1) },
+        //        new PatientAttribute { ID = 2, PatientID = 1, AttributeID = 2, AttributeValueID = 3 }
+        //        );
+
+        //    patientHandlingContext.Solutions = GetQueryableMockDbSet(
+        //        new Solution { ID = 1, Content = "Solution 1" }
+        //        );
+
+        //    patientHandlingContext.Trees = GetQueryableMockDbSet(new Tree { ID = 1, Name = "Test Tree" });
+
+        //    patientHandlingContext.Nodes = GetQueryableMockDbSet(
+        //        new Node { ID = 1, ParentID = 0, NodeValue = 1, EdgeValue = 0, EdgeOperator = null, TreeID = 1, SolutionNode = false, Numeric = false },
+        //        new Node { ID = 2, ParentID = 1, NodeValue = 1, EdgeValue = 1, EdgeOperator = "==", TreeID = 1, SolutionNode = true, Numeric = false }
+        //        );
+
+        //    PatientsController patientsController = new PatientsController(patientHandlingContext);
+        //    var result = ((ViewResult)patientsController.HandlingPlan(1, 1)).Model;
+        //    Assert.AreEqual(((Solution)result).Content, "Solution 1");
+
+        //}
         [TestMethod]
         public void simpleTest()
         {

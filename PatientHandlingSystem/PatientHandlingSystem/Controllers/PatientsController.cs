@@ -14,8 +14,17 @@ namespace PatientHandlingSystem.Controllers
 {
     public class PatientsController : Controller
     {
-        private PatientHandlingContext db = new PatientHandlingContext();
+        private PatientHandlingContext db;
 
+        public PatientsController()
+        {
+            db = new PatientHandlingContext();
+        }
+
+        public PatientsController(PatientHandlingContext context)
+        {
+            db = context;
+        }
         // GET: Patients
         public ActionResult Index()
         {
@@ -267,8 +276,8 @@ namespace PatientHandlingSystem.Controllers
 
         public ActionResult HandlingPlan(int patientId, int treeId)
         {
-            var patient = db.Patients.Find(patientId);
-            var tree = db.Trees.Find(treeId);
+            var patient = db.Patients.Single(i=>i.ID == patientId);
+            var tree = db.Trees.Single(i=>i.ID == treeId);
 
             Node selectedNode = db.Nodes.Single(i => i.ParentID < 1 && i.TreeID == tree.ID); //the node with parentID of zero is the root node
 
@@ -290,19 +299,19 @@ namespace PatientHandlingSystem.Controllers
                     j++;
                 }
             }
-            return View("Solution", db.Solutions.Find(selectedNode.NodeValue));
+            return View("Solution", db.Solutions.Single(i=>i.ID == selectedNode.NodeValue));
         }
 
         private Boolean checkBranch(Patient patient, Node parentNode, Node childNode)
         {
-            var attribute = db.Attributes.Find(parentNode.NodeValue);
+            var attribute = db.Attributes.Single(i=>i.ID ==parentNode.NodeValue);
             var patientAttributeValue = db.PatientsAttributes.Single(i => i.PatientID == patient.ID && i.AttributeID == attribute.ID).AttributeValue;
             int number1;
             int number2;
             switch (childNode.EdgeOperator)
             {
                 case "==":
-                    var edgeAttributeValue = db.AttributeValues.Find(childNode.EdgeValue);
+                    var edgeAttributeValue = db.AttributeValues.Single(i=>i.ID == childNode.EdgeValue);
                     if (edgeAttributeValue.ID == patientAttributeValue.ID)
                         return true;
                     else
