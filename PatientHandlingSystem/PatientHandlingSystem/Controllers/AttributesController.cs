@@ -9,15 +9,25 @@ using System.Web.Mvc;
 using PatientHandlingSystem.DAL;
 using PatientHandlingSystem.Models;
 using PatientHandlingSystem.ViewModels;
+using System.Diagnostics;
 
 namespace PatientHandlingSystem.Controllers
 {
     public class AttributesController : Controller
     {
-        private PatientHandlingContext db = new PatientHandlingContext();
+        private PatientHandlingContext db;
 
+        public AttributesController()
+        {
+            db = new PatientHandlingContext();
+        }
+
+        public AttributesController(PatientHandlingContext context)
+        {
+            db = context;
+        }
         // GET: Attributes
-        public ActionResult Index()
+        public ViewResult Index()
         {
             return View(db.Attributes.ToList());
         }
@@ -29,8 +39,8 @@ namespace PatientHandlingSystem.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-           
-            Models.Attribute attribute = db.Attributes.Find(id);
+
+            var attribute = db.Attributes.Single(i=>i.ID == id);
             if (attribute == null)
             {
                 return HttpNotFound();
