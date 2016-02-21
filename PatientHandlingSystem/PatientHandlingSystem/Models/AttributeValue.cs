@@ -12,7 +12,7 @@ namespace PatientHandlingSystem.Models
         public int AttributeID { get; set; }
 
         [DisplayName("Attribute Value")]
-        public string Name { get; set; }
+        public string Value { get; set; }
 
         public virtual Attribute Attribute { get; set; }
     }

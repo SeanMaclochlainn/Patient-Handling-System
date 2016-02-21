@@ -91,7 +91,7 @@ namespace PatientHandlingSystem.Controllers
                 var attributeValues = a.AttributeValues;
 
                 if(!a.Numeric)
-                    attributeValues.Add(new AttributeValue { ID = 0, Name = "Select Attribute" });
+                    attributeValues.Add(new AttributeValue { ID = 0, Value = "Select Attribute" });
 
                 var completeAttribute = new CompleteAttribute
                 {
@@ -141,7 +141,7 @@ namespace PatientHandlingSystem.Controllers
                 if (a.Attribute.Numeric)
                 {
                     var attributeValue = db.AttributeValues.Find(db.Attributes.Find(a.Attribute.ID).AttributeValues.First().ID);
-                    attributeValue.Name = a.SelectedAttributeValue.Name;
+                    attributeValue.Value = a.SelectedAttributeValue.Value;
                     db.Entry(attributeValue).State = EntityState.Modified;
                     patientAttribute.AttributeValueID = attributeValue.ID; //this value is not carried over from the view if the attribute is numeric
                 }
@@ -184,8 +184,8 @@ namespace PatientHandlingSystem.Controllers
                 }
                 else
                 {
-                    selectedAttributeValue = new AttributeValue { ID = 0, Name = "Please Select Attribute", AttributeID = a.ID };
-                    attributeValues.Add(new AttributeValue { Name = "Please Select Attribute", ID = 0, AttributeID = a.ID });
+                    selectedAttributeValue = new AttributeValue { ID = 0, Value = "Please Select Attribute", AttributeID = a.ID };
+                    attributeValues.Add(new AttributeValue { Value = "Please Select Attribute", ID = 0, AttributeID = a.ID });
                 }
                 var completeAttribute = new CompleteAttribute
                 {
@@ -229,7 +229,7 @@ namespace PatientHandlingSystem.Controllers
                 {
                     if(patientAttribute.Attribute.Numeric)
                     {
-                        patientAttribute.AttributeValue.Name = ca.SelectedAttributeValue.Name;
+                        patientAttribute.AttributeValue.Value = ca.SelectedAttributeValue.Value;
                         db.Entry(patientAttribute).State = EntityState.Modified;
                     }
                     else
@@ -317,7 +317,7 @@ namespace PatientHandlingSystem.Controllers
                     else
                         return false;
                 case "<=":
-                    number1 = int.Parse(patientAttributeValue.Name);
+                    number1 = int.Parse(patientAttributeValue.Value);
                     number2 = childNode.EdgeValue;
 
                     if (number1 <= number2)
@@ -325,7 +325,7 @@ namespace PatientHandlingSystem.Controllers
                     else
                         return false;
                 case ">":
-                    number1 = int.Parse(patientAttributeValue.Name);
+                    number1 = int.Parse(patientAttributeValue.Value);
                     number2 = childNode.EdgeValue;
 
                     if (number1 > number2)

@@ -46,7 +46,7 @@ namespace PatientHandlingSystem.Controllers
                 return HttpNotFound();
             }
 
-            var attributeValues = db.AttributeValues.Where(i => i.AttributeID == attribute.ID).Select(i=>i.Name).ToList();
+            var attributeValues = db.AttributeValues.Where(i => i.AttributeID == attribute.ID).Select(i=>i.Value).ToList();
 
             AttributeViewModel attributeVM = new AttributeViewModel
             {
@@ -95,7 +95,7 @@ namespace PatientHandlingSystem.Controllers
                 attributeValues.Add(new AttributeValue //this also creates one empty instance if the attribute is numeric
                 {
                     AttributeID = attribute.ID,
-                    Name = i
+                    Value = i
                 });
             }
             

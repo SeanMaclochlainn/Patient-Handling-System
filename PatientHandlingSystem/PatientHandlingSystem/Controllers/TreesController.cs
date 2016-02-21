@@ -117,7 +117,7 @@ namespace PatientHandlingSystem.Controllers
                         ParentID = parentNode.ID,
                         TreeID = treeCreatorVM.Tree.ID,
                         EdgeOperator = "<=",
-                        EdgeValue = int.Parse(treeCreatorVM.SelectedAttributeValue.Name), 
+                        EdgeValue = int.Parse(treeCreatorVM.SelectedAttributeValue.Value), 
                         Numeric = true
                     };
                     var childNodeB = new Node
@@ -125,7 +125,7 @@ namespace PatientHandlingSystem.Controllers
                         ParentID = parentNode.ID,
                         TreeID = treeCreatorVM.Tree.ID,
                         EdgeOperator = ">",
-                        EdgeValue = int.Parse(treeCreatorVM.SelectedAttributeValue.Name), 
+                        EdgeValue = int.Parse(treeCreatorVM.SelectedAttributeValue.Value), 
                         Numeric = true
                     };
                     nodesToAdd.Add(childNodeA);

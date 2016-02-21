@@ -60,7 +60,7 @@ namespace PatientHandlingSystem.Tests
         public void TestAttributesDetailsMethod()
         {
             patientHandlingContext.Attributes = GetQueryableMockDbSet(new Models.Attribute { ID = 1, Name = "Weight Bearing Capacity", Numeric = true });
-            patientHandlingContext.AttributeValues = GetQueryableMockDbSet(new AttributeValue { ID = 1, AttributeID = 1, Name = "test val" });
+            patientHandlingContext.AttributeValues = GetQueryableMockDbSet(new AttributeValue { ID = 1, AttributeID = 1, Value = "test val" });
 
             var controller = new AttributesController(patientHandlingContext); 
             var result = ((ViewResult)controller.Details(1)).Model;
@@ -92,10 +92,10 @@ namespace PatientHandlingSystem.Tests
             );
 
             patientHandlingContext.AttributeValues = GetQueryableMockDbSet(
-                new AttributeValue { ID = 1, AttributeID = 1, Name = "Full" },
-                new AttributeValue { ID = 2, AttributeID = 1, Name = "None" },
-                new AttributeValue { ID = 3, AttributeID = 2, Name = "Yes" },
-                new AttributeValue { ID = 4, AttributeID = 2, Name = "No" }
+                new AttributeValue { ID = 1, AttributeID = 1, Value = "Full" },
+                new AttributeValue { ID = 2, AttributeID = 1, Value = "None" },
+                new AttributeValue { ID = 3, AttributeID = 2, Value = "Yes" },
+                new AttributeValue { ID = 4, AttributeID = 2, Value = "No" }
                 );
 
             patientHandlingContext.Patients = GetQueryableMockDbSet(new Patient { ID = 1, FirstName = "test", LastName = "testlast" });
