@@ -9,5 +9,6 @@ namespace PatientHandlingSystem.Models
     {
         public int ID { get; set; }
         public string Content { get; set; }
+        public int TreeID { get; set; }
     }
 }

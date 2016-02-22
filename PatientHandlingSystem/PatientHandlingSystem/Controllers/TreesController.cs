@@ -15,9 +15,18 @@ namespace PatientHandlingSystem.Controllers
 {
     public class TreesController : Controller
     {
-        private PatientHandlingContext db = new PatientHandlingContext();
+        private PatientHandlingContext db;
 
-        // GET: Trees
+        public TreesController()
+        {
+            db = new PatientHandlingContext();
+        }
+
+        public TreesController(PatientHandlingContext context)
+        {
+            db = context;
+        }
+
         public ActionResult Index()
         {
             return View(db.Trees.ToList());
@@ -67,7 +76,7 @@ namespace PatientHandlingSystem.Controllers
             }
             else if(treeCreatorVM.SolutionInput == true)
             {
-                Solution solution = new Solution { Content = treeCreatorVM.Solution };
+                Solution solution = new Solution { Content = treeCreatorVM.Solution, TreeID = treeCreatorVM.Tree.ID };
                 db.Solutions.Add(solution);
                 db.SaveChanges();
 
@@ -213,10 +222,14 @@ namespace PatientHandlingSystem.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Tree tree = db.Trees.Find(id);
+            Tree tree = db.Trees.Single(i=>i.ID ==id);
             var nodes = db.Nodes.Where(i => i.TreeID == tree.ID).ToList();
+            var solutions = db.Solutions.Where(i => i.TreeID == tree.ID).ToList();
+
             db.Trees.Remove(tree);
             db.Nodes.RemoveRange(nodes);
+            db.Solutions.RemoveRange(solutions);
+
             db.SaveChanges();
             return RedirectToAction("Index");
         }
