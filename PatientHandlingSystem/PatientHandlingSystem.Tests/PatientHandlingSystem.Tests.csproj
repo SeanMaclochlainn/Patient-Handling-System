@@ -88,6 +88,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AttributeControllerTests.cs" />
+    <Compile Include="MockDatabase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PatientControllerTests.cs" />
     <Compile Include="TreesControllerTests.cs" />

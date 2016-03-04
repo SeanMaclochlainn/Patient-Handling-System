@@ -14,7 +14,14 @@ namespace PatientHandlingSystem.Tests
     [TestClass]
     public class TreesControllerTests
     {
-        PatientHandlingContext patientHandlingContext = new PatientHandlingContext();
+        Mock<PatientHandlingContext> patientHandlingContext;
+
+        public TreesControllerTests()
+        {
+            patientHandlingContext = new Mock<PatientHandlingContext>();
+        }
+
+        //PatientHandlingContext patientHandlingContext = new PatientHandlingContext();
 
         private static DbSet<T> GetQueryableMockDbSet<T>(List<T> sourceList) where T : class
         {
@@ -38,29 +45,33 @@ namespace PatientHandlingSystem.Tests
         [TestMethod]
         public void DeleteConfirmedDeletesAllParts()
         {
-            patientHandlingContext.Solutions = GetQueryableMockDbSet(new List<Solution> {
+            patientHandlingContext = MockDatabase.GetSolutionMockDbSet(new List<Solution> {
                 new Solution { ID = 1, Content = "Solution 1", TreeID = 1 },
                 new Solution { ID = 2, Content = "Numeric solution 1", TreeID = 1 },
                 new Solution { ID = 3, Content = "Numeric solution 2", TreeID = 1 }
-            });
+            }, patientHandlingContext);
 
-            patientHandlingContext.Trees = GetQueryableMockDbSet(new List<Tree> { new Tree { ID = 1, Name = "Test Tree" } });
 
-            patientHandlingContext.Nodes = GetQueryableMockDbSet( new List<Node> {
+            patientHandlingContext = MockDatabase.GetTreeMockDbSet(new List<Tree> { new Tree { ID = 1, Name = "Test Tree" } }, patientHandlingContext);
+
+            patientHandlingContext = MockDatabase.GetNodeMockDbSet(new List<Node> {
                 new Node { ID = 1, ParentID = 0, NodeValue = 1, EdgeValue = 0, EdgeOperator = null, TreeID = 1, SolutionNode = false, Numeric = false },
                 new Node { ID = 2, ParentID = 1, NodeValue = 2, EdgeValue = 1, EdgeOperator = "==", TreeID = 1, SolutionNode = false, Numeric = true },
                 new Node { ID = 3, ParentID = 2, NodeValue = 2, EdgeValue = 200, EdgeOperator = "<=", TreeID = 1, SolutionNode = true, Numeric = false },
                 new Node { ID = 4, ParentID = 2, NodeValue = 3, EdgeValue = 200, EdgeOperator = ">", TreeID = 1, SolutionNode = true, Numeric = false }
-                });
+                }, patientHandlingContext);
+            
 
-            TreesController treesController = new TreesController(patientHandlingContext);
-            int treesCount = patientHandlingContext.Trees.Count();
-            int nodeCount = patientHandlingContext.Nodes.Count();
-            int solutionCount = patientHandlingContext.Solutions.Count();
+            TreesController treesController = new TreesController(patientHandlingContext.Object);
+            
+            int treesCount = patientHandlingContext.Object.Trees.Count();
+            int nodeCount = patientHandlingContext.Object.Nodes.Count();
+            int solutionCount = patientHandlingContext.Object.Solutions.Count();
             treesController.DeleteConfirmed(1);
-            Assert.AreEqual(treesCount - 1, patientHandlingContext.Trees.Count(), "Trees deletion error");
-            Assert.AreEqual(nodeCount - 4, patientHandlingContext.Nodes.Count(), "Nodes deletion error");
-            Assert.AreEqual(solutionCount - 3, patientHandlingContext.Solutions.Count(), "Solutions deletion error");
+            Assert.AreEqual(treesCount - 1, patientHandlingContext.Object.Trees.Count(), "Trees deletion error");
+            Assert.AreEqual(nodeCount - 4, patientHandlingContext.Object.Nodes.Count(), "Nodes deletion error");
+            Assert.AreEqual(solutionCount - 3, patientHandlingContext.Object.Solutions.Count(), "Solutions deletion error");
         }
+
     }
 }

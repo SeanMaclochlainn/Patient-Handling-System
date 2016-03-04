@@ -6,7 +6,8 @@
 <script src="~/Scripts/jquery-1.10.2.min.js"></script>
 <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
 
-<h2>Create</h2>
+<h1><span id="title">@Model.Tree.Name</span> <button class="btn btn-sm" id="editName">Edit Name</button></h1>
+       
 <div id="treeDiv" class="treeEditor" style="width:900px;height:600px;">
     @Html.Partial("_Tree", Model.Nodes)
 </div>
@@ -65,5 +66,12 @@
                     //console.log("solution");
                 }
             });
+
+            //edit name of tree
+            $("#editName").click(function () {
+                var tree_Name = prompt("Enter tree name", '@Model.Tree.Name');
+                $.post("/Trees/EditTreeName", { "ID": @Model.Tree.ID, "Name": tree_Name });
+                $("#title").text(tree_Name)
+            })
         });
 </script>

@@ -181,6 +181,13 @@ namespace PatientHandlingSystem.Controllers
             return RedirectToAction("Index");
         }
 
+        public void EditTreeName(Tree postedTree)
+        {
+            var tree = db.Trees.Find(postedTree.ID);
+            tree.Name = postedTree.Name;
+            db.Entry(tree).State = EntityState.Modified;
+            db.SaveChanges();
+        }
         // GET: Trees/Edit/5
         public ActionResult Edit(int? id)
         {
