@@ -18,12 +18,13 @@ namespace PatientHandlingSystem.DAL
         public virtual DbSet<Tree> Trees { get; set; }
         public virtual DbSet<Solution> Solutions { get; set; }
 
-
+        
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             Database.SetInitializer<PatientHandlingContext>(null);
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
         }
 
+        public System.Data.Entity.DbSet<PatientHandlingSystem.Models.Equipment> Equipments { get; set; }
     }
 }

@@ -134,6 +134,7 @@
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AttributesController.cs" />
+    <Compile Include="Controllers\EquipmentsController.cs" />
     <Compile Include="Controllers\PatientsController.cs" />
     <Compile Include="Controllers\TreesController.cs" />
     <Compile Include="DAL\PatientHandlingContext.cs" />
@@ -142,6 +143,8 @@
     </Compile>
     <Compile Include="Models\Attribute.cs" />
     <Compile Include="Models\AttributeValue.cs" />
+    <Compile Include="Models\DataService.cs" />
+    <Compile Include="Models\Equipment.cs" />
     <Compile Include="Models\Node.cs" />
     <Compile Include="Models\Patient.cs" />
     <Compile Include="Models\PatientAttribute.cs" />
@@ -176,6 +179,11 @@
     <Content Include="Views\Shared\_Tree.cshtml" />
     <Content Include="Views\Patients\HandlingPlan.cshtml" />
     <Content Include="Views\Patients\Solution.cshtml" />
+    <Content Include="Views\Equipments\Create.cshtml" />
+    <Content Include="Views\Equipments\Delete.cshtml" />
+    <Content Include="Views\Equipments\Details.cshtml" />
+    <Content Include="Views\Equipments\Edit.cshtml" />
+    <Content Include="Views\Equipments\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

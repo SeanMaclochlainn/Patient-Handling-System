@@ -88,23 +88,34 @@ namespace PatientHandlingSystem.Controllers
                 db.SaveChanges();
             }
 
-            var attributeValues = new List<AttributeValue>();
+            //no attribute values are added if the attribute is numeric
+            if (!attribute.Numeric)
+            {
+                var attributeValues = new List<AttributeValue>();
 
-            foreach(var i in attributevm.AttributeValues) 
-            {
-                attributeValues.Add(new AttributeValue //this also creates one empty instance if the attribute is numeric
+                foreach (var i in attributevm.AttributeValues)
                 {
-                    AttributeID = attribute.ID,
-                    Value = i
-                });
+                    attributeValues.Add(new AttributeValue
+                    {
+                        AttributeID = attribute.ID,
+                        Value = i
+                    });
+                }
+
+                if (ModelState.IsValid)
+                {
+                    db.AttributeValues.AddRange(attributeValues);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
             }
-            
-            if(ModelState.IsValid)
+
+            else
             {
-                db.AttributeValues.AddRange(attributeValues);
-                db.SaveChanges();
                 return RedirectToAction("Index");
             }
+                
+            
 
             return View(attribute);
         }

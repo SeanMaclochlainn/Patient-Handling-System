@@ -39,7 +39,7 @@
                         @Html.HiddenFor(x => x.CompleteAttributes[i].Attribute.ID)
                         @Html.HiddenFor(x => x.CompleteAttributes[i].Attribute.Numeric)
                         <div class="col-md-1">
-                            @Html.EditorFor(x => x.CompleteAttributes[i].SelectedAttributeValue.Name, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.EditorFor(x => x.CompleteAttributes[i].SelectedAttributeValue.Value, new { htmlAttributes = new { @class = "form-control" } })
                         </div>
                         <div class="col-md-9"></div>
                     }
@@ -48,7 +48,7 @@
                         @Html.LabelFor(x => x.CompleteAttributes[i].Attribute.Name, Model.CompleteAttributes[i].Attribute.Name, htmlAttributes: new { style = "padding-top:0px", @class = "control-label col-md-2" })
                         @Html.HiddenFor(x => x.CompleteAttributes[i].Attribute.ID)
                         <div class="col-md-10">
-                            @Html.DropDownListFor(x => x.CompleteAttributes[i].SelectedAttributeValue.ID, new SelectList(Model.CompleteAttributes[i].AttributeValues, "ID", "Name", "0"), new { @class = "form-control" } )
+                            @Html.DropDownListFor(x => x.CompleteAttributes[i].SelectedAttributeValue.ID, new SelectList(Model.CompleteAttributes[i].AttributeValues, "ID", "Value", "0"), new { @class = "form-control" } )
                         </div>
                     }
                 </div>

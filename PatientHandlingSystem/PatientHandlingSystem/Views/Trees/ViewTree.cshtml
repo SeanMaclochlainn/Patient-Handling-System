@@ -31,7 +31,7 @@
 
 
     function previewSolution(fullText){
-        return fullText.substring(0,10)+"...";
+        return fullText.replace("_break_", "\n").substring(0,10)+"...";
     }
     function insertLineBreaks(nodeText){
         if(nodeText.charAt(10) == ' '){

@@ -165,15 +165,16 @@ namespace PatientHandlingSystem.Controllers
             var nodes = db.Nodes.Where(i => i.TreeID == treeCreatorVM.Tree.ID).ToList();
             return PartialView("_Tree", nodes);
         }
+
         // POST: Trees/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(TreeCreatorViewModel treeVM)
+        //[ValidateAntiForgeryToken] this has to be removed because of the ajax call
+        public ActionResult AddTreeName(string treeName)
         {
-            var tree = db.Trees.Find(treeVM.Tree.ID);
-            tree.Name = treeVM.Tree.Name;
+            var tree = db.Trees.Single(i=>i.ID == db.Trees.Max(j=>j.ID));
+            tree.Name = treeName;
             db.Entry(tree).State = EntityState.Modified;
             db.SaveChanges();
 

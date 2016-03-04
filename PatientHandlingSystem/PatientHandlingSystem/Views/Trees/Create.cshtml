@@ -56,25 +56,7 @@
     
 }
 <br />
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
-<div class="form-horizontal">
-    <div class="form-group">
-        @Html.LabelFor(model => model.Tree.Name, htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="col-md-10">
-            @Html.HiddenFor(model => model.Tree.ID)
-            @Html.EditorFor(model => model.Tree.Name, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Tree.Name, "", new { @class = "text-danger" })
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Create" class="btn btn-default" />
-        </div>
-    </div>
-</div>
-}
+
     <script>
         $(document).ready(function () {
             $("#solution").hide();
@@ -97,7 +79,7 @@
                 if(a.Numeric)
                 {
                     @:numericIds.push(@a.ID);
-                            }
+                }
             }
 
             $(".numericInput").hide();
@@ -114,5 +96,7 @@
                     }
                 }
             });
+            var tree_Name = prompt("Enter tree name");
+            $.post("/Trees/AddTreeName", { "treeName": tree_Name });
         });
     </script>
