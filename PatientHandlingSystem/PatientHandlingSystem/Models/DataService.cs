@@ -33,5 +33,22 @@ namespace PatientHandlingSystem.Models
             }
             return attributeValues;
         }
+
+        public Boolean IsLeafNode(int nodeId, int treeId)
+        {
+            var selectedNode = db.Nodes.Find(nodeId);
+            var nodes = db.Nodes.Where(i => i.TreeID == treeId).ToList();
+            foreach(var node in nodes)
+            {
+                if (node.ParentID == selectedNode.ID)
+                    return false;
+            }
+            return true;
+        }
+
+        public void deleteNode(int treeId, int nodeId)
+        {
+
+        }
     }
 }

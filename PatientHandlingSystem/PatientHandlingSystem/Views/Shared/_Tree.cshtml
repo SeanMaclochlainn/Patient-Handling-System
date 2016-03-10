@@ -3,7 +3,8 @@
 
 <script src="~/Scripts/vis.min.js"></script>
 <link href="~/Content/vis.min.css" rel="stylesheet" />
-<div id="mynetwork" style="width:900px;height:600px;"></div>
+@*<div id="mynetwork" style="width:900px;height:600px;"></div>*@
+<div id="mynetwork" class="treeEditor" style="height:600px;"></div>
 <script type="text/javascript">
     var i;
     var nodes = new vis.DataSet();
@@ -46,11 +47,11 @@
         if(Model.ElementAt(j).Numeric)
         {
             var edgeText = Model.ElementAt(j).EdgeOperator+Model.ElementAt(j).EdgeValue;
-            @:edges.add({from: @Model.ElementAt(j).ParentID, to: @Model.ElementAt(j).ID, label: '@Html.Raw(edgeText)', color: '#3280EA' });
+            @:edges.add({from: @Model.ElementAt(j).ParentID, to: @Model.ElementAt(j).ID, label: '@Html.Raw(edgeText)', color: '#3280EA', arrows:'to' });
         }
         else
         {
-            @:edges.add({from: @Model.ElementAt(j).ParentID, to: @Model.ElementAt(j).ID, label: '@Model.ElementAt(j).edgeText()', color: '#3280EA' });
+            @:edges.add({from: @Model.ElementAt(j).ParentID, to: @Model.ElementAt(j).ID, label: '@Model.ElementAt(j).edgeText()', color: '#3280EA', arrows:'to' });
         }
     }
     // create a network
@@ -77,32 +78,26 @@
     // initialize network
     var network = new vis.Network(container, data, options);
 
-    var solutionNodeIds = [];//"Model.ElementAt(0).solutionNodeIds()";
+    //put all of the solution ids in the tree into an array
+    var solutionNodeIds = [];
     @foreach (var node in Model.Where(i=>i.SolutionNode == true))
     {
         @:solutionNodeIds.push({id:@node.ID, text:'@node.NodeText()'});
-            }
-    console.log("dnids:"+solutionNodeIds);
+    }
+
+
     network.on("selectNode", function (params) {
-        //console.log('selectNode Event:', params);
+    //insert a hidden element for parent node id when the parent node is selected
         $("<input type='hidden' id='ParentNodeID' name='ParentNodeID' value="+params.nodes+">").insertAfter("#button");
-        console.log("checking node");
-        //console.log("params.nodes: "+params.nodes+ "\nsolutionNodeIds: "+solutionNodeIds);
-        //console.log("indexof: "+solutionNodeIds.indexOf(params.nodes));
-        //console.log("params.nodes before for loop: "+params.nodes);
+        
+    //enter the nodes text into the solution text area when it is clicked
         for(var i = 0;i<solutionNodeIds.length;i++){
-            //console.log("solution node id: "+ solutionNodeIds[i]+"params.nodes: "+params.nodes);
-            //console.log("params.node before if: "+params.nodes);
             if(solutionNodeIds[i].id==params.nodes){
-                //console.log("params.nodes in if: "+params.nodes);
-                //console.log("solution node");
-                //console.log("id; "+solutionNodeIds[i].id);
-                //console.log("text"+solutionNodeIds[i].text)
                 console.log("entering text");
                 $("#Solution").val(solutionNodeIds[i].text);
                 if ($(".attributeTab").is(":checked")) {
-                    $("#solution").show();
-                    $("#attribute").hide();
+                    $(".solution").show();
+                    $(".attribute").hide();
                     $(".attributeTab").prop('checked', false);
                     $(".solutionTab").prop('checked', true);
                 }

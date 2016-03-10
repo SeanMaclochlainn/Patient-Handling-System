@@ -21,3 +21,7 @@ textarea {
     border-style:solid;
     border-width:thin;
 }
+
+.top-buffer { 
+    margin-top:20px;
+}

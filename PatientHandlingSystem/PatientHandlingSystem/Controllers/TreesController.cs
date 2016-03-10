@@ -57,7 +57,8 @@ namespace PatientHandlingSystem.Controllers
             var treeCreator = new TreeCreatorViewModel
             {
                 Tree = tree,
-                Attributes = db.Attributes.ToList()
+                Attributes = db.Attributes.ToList(),
+                Nodes = new List<Node>()
             };
             return View(treeCreator);
         }
@@ -164,6 +165,13 @@ namespace PatientHandlingSystem.Controllers
             
             var nodes = db.Nodes.Where(i => i.TreeID == treeCreatorVM.Tree.ID).ToList();
             return PartialView("_Tree", nodes);
+        }
+
+        public PartialViewResult DeleteNode(int nodeId, int treeId)
+        {
+            var dataService = new DataService(db);
+            dataService.IsLeafNode(nodeId, treeId);
+            return PartialView("_Tree", db.Nodes.Where(i => i.TreeID == treeId).ToList());
         }
 
         // POST: Trees/Create
