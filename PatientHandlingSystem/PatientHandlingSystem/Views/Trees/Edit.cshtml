@@ -27,6 +27,11 @@
                             @Html.DropDownListFor(i => Model.SelectedAttribute.ID, new SelectList(Model.Attributes, "ID", "Name"), htmlAttributes: new { @class = "form-control" })
                         </div>
                     </div>
+                    <div class="row numericInput attribute top-buffer">
+                        <div class="col-md-12">
+                            @Html.EditorFor(i => Model.SelectedAttributeValue.Value, new { htmlAttributes = new { @class = "numericInput form-control" } })
+                        </div>
+                    </div>
                     <div class="row attribute top-buffer">
                         <div class="col-md-12">
                             <button class="btn btn-default" id="button">Insert Node</button>
@@ -57,7 +62,8 @@
 </div>
 @Html.ActionLink("Back to List","Index")
 <script>
-        $(document).ready(function () {
+    $(document).ready(function () {
+        //show or hide the attribute or solution tab depending on the radio button that is selected
             $(".solution").hide();
             $("#selectionDiv").click(function () {
                 if ($(".attributeTab").is(":checked")) {
@@ -68,9 +74,40 @@
                 if ($(".solutionTab").is(":checked")) {
                     $(".solution").show();
                     $(".attribute").hide();
-
+                    $(".numericInput").hide();
                     //console.log("solution");
                 }
+            });
+
+        //add all numeric ids to an array
+            var numericIds = [];
+            @foreach (var a in Model.Attributes)
+            {
+                if(a.Numeric)
+                {
+                    @:numericIds.push(@a.ID);
+                }
+            }
+
+
+            $(".numericInput").hide();
+
+        //when a different dropdownlist selection is made, check to see if it is a numeric attribute, and if it is, display the numeric input box
+            $("#SelectedAttribute_ID").change(function () {
+                var numericAttribute = false;
+                for (var i = 0; i < numericIds.length; i++) {
+                    if (numericIds[i] == $(this).val()) {
+                        console.log("numeric");
+                        $(".numericInput").show();
+                        $(this).after("<input id='SelectedAttribute_Numeric' name='SelectedAttribute.Numeric' type='hidden' value='true' />");
+                        numericAttribute = true;
+                    }
+                }
+                if(numericAttribute == false) {
+                    $(".numericInput").hide();
+                    $("#SelectedAttribute_Numeric").remove();
+                }
+                
             });
 
             //edit name of tree
