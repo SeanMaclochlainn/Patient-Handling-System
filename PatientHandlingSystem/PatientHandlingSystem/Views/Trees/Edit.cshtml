@@ -1,4 +1,4 @@
-﻿@model PatientHandlingSystem.ViewModels.TreeCreatorViewModel
+﻿@model PatientHandlingSystem.ViewModels.TreeEditorViewModel
 
 @{
     ViewBag.Title = "Edit";
@@ -29,7 +29,7 @@
                     </div>
                     <div class="row numericInput attribute top-buffer">
                         <div class="col-md-12">
-                            @Html.EditorFor(i => Model.SelectedAttributeValue.Value, new { htmlAttributes = new { @class = "numericInput form-control" } })
+                            @Html.EditorFor(i => Model.SelectedAttributeNumericValue.Value, new { htmlAttributes = new { @class = "numericInput form-control" } })
                         </div>
                     </div>
                     <div class="row attribute top-buffer">
@@ -39,7 +39,7 @@
                     </div>
                     <div class="row attribute top-buffer">
                         <div class="col-md-12">
-                            <button class="btn btn-default" id="button">Undo</button>
+                            <button class="btn btn-danger" id="button" name ="deleteButton" value="true">Delete</button>
                         </div>
                     </div>
                     <div class="row solution top-buffer">

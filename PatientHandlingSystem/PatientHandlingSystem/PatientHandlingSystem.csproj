@@ -155,7 +155,7 @@
     <Compile Include="ViewModels\CompleteAttribute.cs" />
     <Compile Include="ViewModels\PatientAndTreesViewModel.cs" />
     <Compile Include="ViewModels\PatientViewModel.cs" />
-    <Compile Include="ViewModels\TreeCreatorViewModel.cs" />
+    <Compile Include="ViewModels\TreeEditorViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />

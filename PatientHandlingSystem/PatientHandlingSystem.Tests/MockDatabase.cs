@@ -119,6 +119,8 @@ namespace PatientHandlingSystem.Tests
                 foreach (var t in ts) { data.Remove(t); }
             });
 
+            mockContext.Setup(i => i.Trees).Returns(mockSet.Object);
+
             return mockContext;
         }
 

@@ -54,7 +54,7 @@ namespace PatientHandlingSystem.Controllers
             db.Trees.Add(tree);
             db.SaveChanges();
 
-            var treeCreator = new TreeCreatorViewModel
+            var treeCreator = new TreeEditorViewModel
             {
                 Tree = tree,
                 Attributes = db.Attributes.ToList(),
@@ -63,104 +63,20 @@ namespace PatientHandlingSystem.Controllers
             return View(treeCreator);
         }
 
-        public PartialViewResult UpdateTree(TreeCreatorViewModel treeCreatorVM, string undoButton)
+        public PartialViewResult UpdateTree(TreeEditorViewModel treeCreatorVM, string deleteButton)
         {
-            if (undoButton == "undo")
+            DataService dataService = new DataService(db);
+            if(deleteButton == "true")
             {
-                var previousParentNodeId = db.Nodes.ToList().Last().ParentID;
-                var previousParentNode = db.Nodes.Find(previousParentNodeId);
-                var previousChildNodes = db.Nodes.Where(i => i.ParentID == previousParentNode.ID).ToList();
-                db.Nodes.RemoveRange(previousChildNodes);
-                previousParentNode.NodeValue = 0;
-                db.Entry(previousParentNode).State = EntityState.Modified;
-                db.SaveChanges();
+                dataService.DeleteNode(treeCreatorVM.Tree.ID, treeCreatorVM.ParentNodeID);
             }
             else if(treeCreatorVM.SolutionInput == true)
             {
-                Solution solution = new Solution { Content = treeCreatorVM.Solution, TreeID = treeCreatorVM.Tree.ID };
-                db.Solutions.Add(solution);
-                db.SaveChanges();
-
-                int parentNodeID = int.Parse(treeCreatorVM.ParentNodeID);
-                var parentNode = db.Nodes.Find(parentNodeID);
-                parentNode.NodeValue = solution.ID;
-                parentNode.SolutionNode = true;
-                db.Entry(parentNode).State = EntityState.Modified;
-                db.SaveChanges();
+                dataService.EnterSolutionNode(treeCreatorVM.ParentNodeID, treeCreatorVM.Tree.ID, treeCreatorVM.Solution);
             }
             else
             {
-                treeCreatorVM.SelectedAttribute.AttributeValues = db.AttributeValues.Where(i => i.AttributeID == treeCreatorVM.SelectedAttribute.ID).ToList();
-
-                //ParentNodeID is the ID of the node that was selected by the user. It is named ParentNodeID, as it is about to become a parent node
-                int parentID = 0;
-                Boolean parentNodeExists = int.TryParse(treeCreatorVM.ParentNodeID, out parentID);
-                var parentNode = new Node();
-
-                //this if statement only runs when the first node is inserted
-                if (!parentNodeExists)
-                {
-                    parentID = 0;
-                    parentNode = new Node
-                    {
-                        NodeValue = treeCreatorVM.SelectedAttribute.ID,
-                        ParentID = parentID,
-                        TreeID = treeCreatorVM.Tree.ID
-                    };
-                    db.Nodes.Add(parentNode);
-                    db.SaveChanges();
-                    Debug.WriteLine("Added Node. Attribute Name: " + parentNode.NodeText() + " This is the first node in the tree. ");
-                }
-                else
-                {
-                    parentNode = db.Nodes.Find(parentID);
-                    parentNode.NodeValue = treeCreatorVM.SelectedAttribute.ID;
-                    db.Entry(parentNode).State = EntityState.Modified;
-                    db.SaveChanges();
-                }
-
-                var nodesToAdd = new List<Node>();
-                if (treeCreatorVM.SelectedAttribute.Numeric)
-                {
-                    var childNodeA = new Node
-                    {
-                        ParentID = parentNode.ID,
-                        TreeID = treeCreatorVM.Tree.ID,
-                        EdgeOperator = "<=",
-                        EdgeValue = int.Parse(treeCreatorVM.SelectedAttributeValue.Value), 
-                        Numeric = true
-                    };
-                    var childNodeB = new Node
-                    {
-                        ParentID = parentNode.ID,
-                        TreeID = treeCreatorVM.Tree.ID,
-                        EdgeOperator = ">",
-                        EdgeValue = int.Parse(treeCreatorVM.SelectedAttributeValue.Value), 
-                        Numeric = true
-                    };
-                    nodesToAdd.Add(childNodeA);
-                    nodesToAdd.Add(childNodeB);
-                }
-                else
-                {
-                    var attributeValues = db.Attributes.Find(treeCreatorVM.SelectedAttribute.ID).AttributeValues;
-                    foreach (var av in attributeValues)
-                    {
-                        if (av.ID == 0)
-                            Debug.WriteLine("test");
-                        var childNode = new Node
-                        {
-                            ParentID = parentNode.ID,
-                            TreeID = treeCreatorVM.Tree.ID,
-                            EdgeOperator = "==",
-                            EdgeValue = av.ID, 
-                            Numeric = false
-                        };
-                        nodesToAdd.Add(childNode);
-                    }
-                }
-                db.Nodes.AddRange(nodesToAdd);
-                db.SaveChanges();
+                dataService.EnterAttributeNode(treeCreatorVM.ParentNodeID, treeCreatorVM.SelectedAttribute.ID, treeCreatorVM.Tree.ID, treeCreatorVM.SelectedAttribute.Numeric, treeCreatorVM.SelectedAttributeNumericValue.Value);
             }
             
             var nodes = db.Nodes.Where(i => i.TreeID == treeCreatorVM.Tree.ID).ToList();
@@ -209,7 +125,7 @@ namespace PatientHandlingSystem.Controllers
                 return HttpNotFound();
             }
 
-            var treeCreator = new TreeCreatorViewModel
+            var treeCreator = new TreeEditorViewModel
             {
                 Tree = tree,
                 Attributes = db.Attributes.ToList(),

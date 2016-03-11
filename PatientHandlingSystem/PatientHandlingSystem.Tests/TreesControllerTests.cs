@@ -41,7 +41,7 @@ namespace PatientHandlingSystem.Tests
             return dbSet.Object;
         }
 
-
+        //Ensures when deleting a tree that the solutions and nodes associated with the tree, and the tree itself, is deleted
         [TestMethod]
         public void DeleteConfirmedDeletesAllParts()
         {

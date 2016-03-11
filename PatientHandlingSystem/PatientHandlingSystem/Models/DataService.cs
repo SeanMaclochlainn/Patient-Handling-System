@@ -1,6 +1,7 @@
 ﻿using PatientHandlingSystem.DAL;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 
@@ -34,6 +35,91 @@ namespace PatientHandlingSystem.Models
             return attributeValues;
         }
 
+        //Tree Methods
+        public void EnterAttributeNode(string parentNodeId, int selectedAttributeId, int treeId, Boolean selectedAttributeNumeric, string selectedAttributeNumericValue)
+        {
+            //ParentNodeID is the ID of the node that was selected by the user. It is named ParentNodeID, as it is about to become a parent node
+            int parentID = 0;
+            Boolean parentNodeExists = int.TryParse(parentNodeId, out parentID);
+            var parentNode = new Node();
+
+            //this if statement only runs when the first node is inserted
+            if (!parentNodeExists)
+            {
+                parentID = 0;
+                parentNode = new Node
+                {
+                    NodeValue = selectedAttributeId,
+                    ParentID = parentID,
+                    TreeID = treeId
+                };
+                db.Nodes.Add(parentNode);
+                db.SaveChanges();
+            }
+            else
+            {
+                parentNode = db.Nodes.Find(parentID);
+                parentNode.NodeValue = selectedAttributeId;
+                db.Entry(parentNode).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+
+            var nodesToAdd = new List<Node>();
+            if (selectedAttributeNumeric)
+            {
+                var childNodeA = new Node
+                {
+                    ParentID = parentNode.ID,
+                    TreeID = treeId,
+                    EdgeOperator = "<=",
+                    EdgeValue = int.Parse(selectedAttributeNumericValue),
+                    Numeric = true
+                };
+                var childNodeB = new Node
+                {
+                    ParentID = parentNode.ID,
+                    TreeID = treeId,
+                    EdgeOperator = ">",
+                    EdgeValue = int.Parse(selectedAttributeNumericValue),
+                    Numeric = true
+                };
+                nodesToAdd.Add(childNodeA);
+                nodesToAdd.Add(childNodeB);
+            }
+            else
+            {
+                var attributeValues = db.Attributes.Find(selectedAttributeId).AttributeValues;
+                foreach (var av in attributeValues)
+                {
+                    var childNode = new Node
+                    {
+                        ParentID = parentNode.ID,
+                        TreeID = treeId,
+                        EdgeOperator = "==",
+                        EdgeValue = av.ID,
+                        Numeric = false
+                    };
+                    nodesToAdd.Add(childNode);
+                }
+            }
+            db.Nodes.AddRange(nodesToAdd);
+            db.SaveChanges();
+        }
+
+        public void EnterSolutionNode(string parentNodeIdStr, int treeId, string solutionContent)
+        {
+            int parentNodeId = int.Parse(parentNodeIdStr);
+            Solution solution = new Solution { Content = solutionContent, TreeID = treeId };
+            db.Solutions.Add(solution);
+            db.SaveChanges();
+
+            var parentNode = db.Nodes.Find(parentNodeId);
+            parentNode.NodeValue = solution.ID;
+            parentNode.SolutionNode = true;
+            db.Entry(parentNode).State = EntityState.Modified;
+            db.SaveChanges();
+        }
+        
         public Boolean IsLeafNode(int nodeId, int treeId)
         {
             var selectedNode = db.Nodes.Find(nodeId);
@@ -46,9 +132,17 @@ namespace PatientHandlingSystem.Models
             return true;
         }
 
-        public void deleteNode(int treeId, int nodeId)
+        //this doesn't actually delete the node in question, it only deletes its child nodes, and changes its node value to 0
+        public void DeleteNode(int treeId, string nodeIdStr)
         {
+            int nodeId = int.Parse(nodeIdStr);
+            var childNodes = db.Nodes.Where(i => i.ParentID == nodeId).ToList();
+            db.Nodes.RemoveRange(childNodes);
 
+            var node = db.Nodes.Single(i => i.ID == nodeId);
+            node.NodeValue = 0;
+            db.Entry(node).State = EntityState.Modified;
+            db.SaveChanges();
         }
     }
 }
