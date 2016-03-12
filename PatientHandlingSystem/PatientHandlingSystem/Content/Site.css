@@ -25,3 +25,9 @@ textarea {
 .top-buffer { 
     margin-top:20px;
 }
+
+.validation-summary-errors {
+    color: red;
+    font-weight:bold;
+}
+

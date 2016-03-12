@@ -137,13 +137,14 @@
     <Compile Include="Controllers\EquipmentsController.cs" />
     <Compile Include="Controllers\PatientsController.cs" />
     <Compile Include="Controllers\TreesController.cs" />
+    <Compile Include="DAL\IDataService.cs" />
     <Compile Include="DAL\PatientHandlingContext.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Attribute.cs" />
     <Compile Include="Models\AttributeValue.cs" />
-    <Compile Include="Models\DataService.cs" />
+    <Compile Include="DAL\DataService.cs" />
     <Compile Include="Models\Equipment.cs" />
     <Compile Include="Models\Node.cs" />
     <Compile Include="Models\Patient.cs" />

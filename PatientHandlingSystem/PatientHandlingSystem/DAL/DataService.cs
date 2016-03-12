@@ -7,7 +7,7 @@ using System.Web;
 
 namespace PatientHandlingSystem.Models
 {
-    public class DataService
+    public class DataService :IDataService
     {
         private PatientHandlingContext db;
 
@@ -132,17 +132,37 @@ namespace PatientHandlingSystem.Models
             return true;
         }
 
-        //this doesn't actually delete the node in question, it only deletes its child nodes, and changes its node value to 0
-        public void DeleteNode(int treeId, string nodeIdStr)
+        public void DeleteRegularNode(int treeId, string nodeIdStr)
+        {
+            //get parent and child nodes
+            int nodeId = int.Parse(nodeIdStr);
+            var parentNode = db.Nodes.Single(i => i.ID == nodeId);
+            var childNodes = db.Nodes.Where(i => i.ParentID == nodeId).ToList();
+
+            //if there is only one parent node in the tree, delete all nodes, otherwise, delete the child nodes and make the parent node into a stub node
+            if(parentNode.ParentID == 0) 
+            {
+                db.Nodes.Remove(parentNode);
+                db.Nodes.RemoveRange(childNodes);
+            }
+            else 
+            {
+                db.Nodes.RemoveRange(childNodes);
+                var node = db.Nodes.Single(i => i.ID == nodeId);
+                node.NodeValue = 0;
+                db.Entry(node).State = EntityState.Modified;
+            }
+            db.SaveChanges();
+
+        }
+
+        public void DeleteSolutionNode(int treeId, string nodeIdStr)
         {
             int nodeId = int.Parse(nodeIdStr);
-            var childNodes = db.Nodes.Where(i => i.ParentID == nodeId).ToList();
-            db.Nodes.RemoveRange(childNodes);
-
             var node = db.Nodes.Single(i => i.ID == nodeId);
+            node.SolutionNode = false;
             node.NodeValue = 0;
             db.Entry(node).State = EntityState.Modified;
-            db.SaveChanges();
         }
     }
 }

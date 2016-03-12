@@ -1,9 +1,10 @@
 ﻿@model IEnumerable<PatientHandlingSystem.Models.Node>
 
-
+<link href="~/Content/Site.css" rel="stylesheet" />
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
 <script src="~/Scripts/vis.min.js"></script>
 <link href="~/Content/vis.min.css" rel="stylesheet" />
-@*<div id="mynetwork" style="width:900px;height:600px;"></div>*@
+@Html.ValidationSummary()
 <div id="mynetwork" class="treeEditor" style="height:600px;"></div>
 <script type="text/javascript">
     var i;
@@ -85,9 +86,11 @@
         @:solutionNodeIds.push({id:@node.ID, text:'@node.NodeText()'});
     }
 
+    //remove any parent node ids that may still be there from previous ajax call
+    $("[name='ParentNodeID']").remove();
 
     network.on("selectNode", function (params) {
-    //insert a hidden element for parent node id when the parent node is selected
+        //Insert currently selected nodes id as a hidden element
         $("<input type='hidden' id='ParentNodeID' name='ParentNodeID' value="+params.nodes+">").insertAfter("#button");
         
     //enter the nodes text into the solution text area when it is clicked

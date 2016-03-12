@@ -16,15 +16,23 @@ namespace PatientHandlingSystem.Controllers
     public class TreesController : Controller
     {
         private PatientHandlingContext db;
+        private IDataService dataService;
 
         public TreesController()
         {
             db = new PatientHandlingContext();
+            dataService = new DataService(db);
         }
 
-        public TreesController(PatientHandlingContext context)
+        //public TreesController(PatientHandlingContext context)
+        //{
+        //    db = context;
+        //}
+
+        public TreesController(PatientHandlingContext context, IDataService dataService)
         {
             db = context;
+            this.dataService = dataService;
         }
 
         public ActionResult Index()
@@ -65,21 +73,45 @@ namespace PatientHandlingSystem.Controllers
 
         public PartialViewResult UpdateTree(TreeEditorViewModel treeCreatorVM, string deleteButton)
         {
-            DataService dataService = new DataService(db);
-            if(deleteButton == "true")
+            List<Node> originalNodes = db.Nodes.Where(i => i.TreeID == treeCreatorVM.Tree.ID).ToList(); ;
+
+            //check if a node is selected
+            if(treeCreatorVM.ParentNodeID == null && deleteButton == "true")
             {
-                dataService.DeleteNode(treeCreatorVM.Tree.ID, treeCreatorVM.ParentNodeID);
+                ModelState.AddModelError("NoNodeSelected", "Please select a parent node");
+                return PartialView("_Tree", originalNodes);
             }
-            else if(treeCreatorVM.SolutionInput == true)
+            //check if users is trying to delete a node and a stub node is selected
+            else if (deleteButton == "true" && originalNodes.SingleOrDefault(i => i.ID == int.Parse(treeCreatorVM.ParentNodeID)).NodeValue == 0)
+            {
+                ModelState.AddModelError("StubNodeSelected", "Cannot delete a stub node");
+                return PartialView("_Tree", originalNodes);
+            }
+
+
+            if (deleteButton == "true")//when delete button is pressed
+            {
+                var node = originalNodes.Single(i => i.ID == int.Parse(treeCreatorVM.ParentNodeID));
+                if(node.SolutionNode)
+                {
+                    dataService.DeleteSolutionNode(treeCreatorVM.Tree.ID, treeCreatorVM.ParentNodeID);
+                }
+                else
+                {
+                    dataService.DeleteRegularNode(treeCreatorVM.Tree.ID, treeCreatorVM.ParentNodeID);
+                }
+            }
+            else if(treeCreatorVM.SolutionInput == true)//when user is trying to input a solution node
             {
                 dataService.EnterSolutionNode(treeCreatorVM.ParentNodeID, treeCreatorVM.Tree.ID, treeCreatorVM.Solution);
             }
-            else
+            else //when user is trying to input a regular node, numeric or otherwise
             {
                 dataService.EnterAttributeNode(treeCreatorVM.ParentNodeID, treeCreatorVM.SelectedAttribute.ID, treeCreatorVM.Tree.ID, treeCreatorVM.SelectedAttribute.Numeric, treeCreatorVM.SelectedAttributeNumericValue.Value);
             }
-            
-            var nodes = db.Nodes.Where(i => i.TreeID == treeCreatorVM.Tree.ID).ToList();
+
+            List<Node> nodes = db.Nodes.Where(i => i.TreeID == treeCreatorVM.Tree.ID).ToList(); ;
+
             return PartialView("_Tree", nodes);
         }
 
