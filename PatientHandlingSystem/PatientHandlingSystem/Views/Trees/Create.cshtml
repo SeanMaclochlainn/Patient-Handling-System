@@ -25,7 +25,7 @@
                             @Html.DropDownListFor(i => Model.SelectedAttribute.ID, new SelectList(Model.Attributes, "ID", "Name"), htmlAttributes: new { @class = "form-control" })
                         </div>
                     </div>
-                    <div class="row numericInput attribute top-buffer">
+                    <div class="row numericInput top-buffer">
                         <div class="col-md-12">
                             @Html.EditorFor(i => Model.SelectedAttributeNumericValue.Value, new { htmlAttributes = new { @class = "numericInput form-control" } })
                         </div>
@@ -35,19 +35,19 @@
                             <button class="btn btn-default" id="button">Insert Node</button>
                         </div>
                     </div>
-                    <div class="row attribute top-buffer">
-                        <div class="col-md-12">
-                            <button class="btn btn-danger" id="button" name ="deleteButton" value="true">Delete</button>
-                        </div>
-                    </div>
                     <div class="row solution top-buffer">
                         <div class="col-md-12 form-group">
                             @Html.TextAreaFor(i => i.Solution, new { @rows = "20", @placeholder = "Enter solution", @class = "form-control", style = "" })
                         </div>
                     </div>
-                    <div class="row solution top-buffer">
-                        <div class="col-md-12 form-group">
+                    <div class="row solution">
+                        <div class="col-md-12">
                             <input type="submit" value="Insert Solution" class="btn btn-default">
+                        </div>
+                    </div>
+                    <div class="row top-buffer">
+                        <div class="col-md-12">
+                            <button class="btn btn-danger" id="button" name="deleteButton" value="true">Delete</button>
                         </div>
                     </div>
                 </div>
