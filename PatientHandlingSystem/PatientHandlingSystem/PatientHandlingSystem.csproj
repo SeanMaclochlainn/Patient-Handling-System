@@ -134,9 +134,10 @@
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AttributesController.cs" />
-    <Compile Include="Controllers\EquipmentsController.cs" />
+    <Compile Include="Controllers\EquipmentController.cs" />
     <Compile Include="Controllers\PatientsController.cs" />
     <Compile Include="Controllers\TreesController.cs" />
+    <Compile Include="DAL\EquipmentRepository.cs" />
     <Compile Include="DAL\IDataService.cs" />
     <Compile Include="DAL\PatientHandlingContext.cs" />
     <Compile Include="Global.asax.cs">
@@ -146,6 +147,8 @@
     <Compile Include="Models\AttributeValue.cs" />
     <Compile Include="DAL\DataService.cs" />
     <Compile Include="Models\Equipment.cs" />
+    <Compile Include="Models\EquipmentAttribute.cs" />
+    <Compile Include="Models\EquipmentAttributeValue.cs" />
     <Compile Include="Models\Node.cs" />
     <Compile Include="Models\Patient.cs" />
     <Compile Include="Models\PatientAttribute.cs" />
@@ -154,6 +157,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\AttributeViewModel.cs" />
     <Compile Include="ViewModels\CompleteAttribute.cs" />
+    <Compile Include="ViewModels\CompleteEquipmentAttribute.cs" />
+    <Compile Include="ViewModels\EquipmentViewModel.cs" />
     <Compile Include="ViewModels\PatientAndTreesViewModel.cs" />
     <Compile Include="ViewModels\PatientViewModel.cs" />
     <Compile Include="ViewModels\TreeEditorViewModel.cs" />
@@ -180,11 +185,11 @@
     <Content Include="Views\Shared\_Tree.cshtml" />
     <Content Include="Views\Patients\HandlingPlan.cshtml" />
     <Content Include="Views\Patients\Solution.cshtml" />
-    <Content Include="Views\Equipments\Create.cshtml" />
-    <Content Include="Views\Equipments\Delete.cshtml" />
-    <Content Include="Views\Equipments\Details.cshtml" />
-    <Content Include="Views\Equipments\Edit.cshtml" />
-    <Content Include="Views\Equipments\Index.cshtml" />
+    <Content Include="Views\Equipment\Create.cshtml" />
+    <Content Include="Views\Equipment\Delete.cshtml" />
+    <Content Include="Views\Equipment\Details.cshtml" />
+    <Content Include="Views\Equipment\Edit.cshtml" />
+    <Content Include="Views\Equipment\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

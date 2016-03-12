@@ -17,6 +17,7 @@ namespace PatientHandlingSystem.DAL
         public virtual DbSet<Node> Nodes { get; set; }
         public virtual DbSet<Tree> Trees { get; set; }
         public virtual DbSet<Solution> Solutions { get; set; }
+        public virtual DbSet<Equipment> Equipment { get; set; }
 
         
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -25,6 +26,5 @@ namespace PatientHandlingSystem.DAL
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
         }
 
-        public System.Data.Entity.DbSet<PatientHandlingSystem.Models.Equipment> Equipments { get; set; }
     }
 }

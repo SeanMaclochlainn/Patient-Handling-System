@@ -8,27 +8,34 @@ using System.Web;
 using System.Web.Mvc;
 using PatientHandlingSystem.DAL;
 using PatientHandlingSystem.Models;
+using PatientHandlingSystem.ViewModels;
 
 namespace PatientHandlingSystem.Controllers
 {
-    public class EquipmentsController : Controller
+    public class EquipmentController : Controller
     {
-        private PatientHandlingContext db = new PatientHandlingContext();
+        private PatientHandlingContext db;
+        private EquipmentRepository equipmentRepository;
 
-        // GET: Equipments
+        public EquipmentController()
+        {
+            db = new PatientHandlingContext();
+            equipmentRepository = new EquipmentRepository(db);
+        }
+        // GET: Equipment
         public ActionResult Index()
         {
-            return View(db.Equipments.ToList());
+            return View(db.Equipment.ToList());
         }
 
-        // GET: Equipments/Details/5
+        // GET: Equipment/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Equipment equipment = db.Equipments.Find(id);
+            Equipment equipment = db.Equipment.Find(id);
             if (equipment == null)
             {
                 return HttpNotFound();
@@ -36,37 +43,38 @@ namespace PatientHandlingSystem.Controllers
             return View(equipment);
         }
 
-        // GET: Equipments/Create
+        // GET: Equipment/Create
         public ActionResult Create()
         {
-            return View();
+            var equipmentVM = new EquipmentViewModel { Equipment = new Equipment(), CompleteEquipmentAttributes = new List<CompleteEquipmentAttribute>() };
+            return View(equipmentVM);
         }
 
-        // POST: Equipments/Create
+        // POST: Equipment/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,Name,Available")] Equipment equipment)
+        public ActionResult Create(EquipmentViewModel equipmentVM)
         {
             if (ModelState.IsValid)
             {
-                db.Equipments.Add(equipment);
-                db.SaveChanges();
+                equipmentRepository.AddEquipmentItem(equipmentVM);
+                equipmentRepository.Save();
                 return RedirectToAction("Index");
             }
 
-            return View(equipment);
+            return View(equipmentVM);
         }
 
-        // GET: Equipments/Edit/5
+        // GET: Equipment/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Equipment equipment = db.Equipments.Find(id);
+            Equipment equipment = db.Equipment.Find(id);
             if (equipment == null)
             {
                 return HttpNotFound();
@@ -74,12 +82,12 @@ namespace PatientHandlingSystem.Controllers
             return View(equipment);
         }
 
-        // POST: Equipments/Edit/5
+        // POST: Equipment/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,Name,Available")] Equipment equipment)
+        public ActionResult Edit([Bind(Include = "ID,Name")] Equipment equipment)
         {
             if (ModelState.IsValid)
             {
@@ -90,14 +98,14 @@ namespace PatientHandlingSystem.Controllers
             return View(equipment);
         }
 
-        // GET: Equipments/Delete/5
+        // GET: Equipment/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Equipment equipment = db.Equipments.Find(id);
+            Equipment equipment = db.Equipment.Find(id);
             if (equipment == null)
             {
                 return HttpNotFound();
@@ -105,14 +113,13 @@ namespace PatientHandlingSystem.Controllers
             return View(equipment);
         }
 
-        // POST: Equipments/Delete/5
+        // POST: Equipment/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Equipment equipment = db.Equipments.Find(id);
-            db.Equipments.Remove(equipment);
-            db.SaveChanges();
+            equipmentRepository.DeleteEquipmentItem(id);
+            equipmentRepository.Save();
             return RedirectToAction("Index");
         }
 

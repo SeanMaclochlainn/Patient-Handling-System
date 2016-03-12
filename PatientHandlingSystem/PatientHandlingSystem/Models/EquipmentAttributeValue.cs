@@ -5,9 +5,10 @@ using System.Web;
 
 namespace PatientHandlingSystem.Models
 {
-    public class Equipment
+    public class EquipmentAttributeValue
     {
         public int ID { get; set; }
+        public int EquipmentAttributeID { get; set; }
         public string Name { get; set; }
     }
 }
