@@ -18,6 +18,8 @@ namespace PatientHandlingSystem.DAL
         public virtual DbSet<Tree> Trees { get; set; }
         public virtual DbSet<Solution> Solutions { get; set; }
         public virtual DbSet<Equipment> Equipment { get; set; }
+        public virtual DbSet<EquipmentAttribute> EquipmentAttributes { get; set; }
+        public virtual DbSet<EquipmentAttributeValue> EquipmentAttributeValues { get; set; }
 
         
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

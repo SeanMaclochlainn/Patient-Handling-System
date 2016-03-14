@@ -46,7 +46,8 @@ namespace PatientHandlingSystem.Controllers
         // GET: Equipment/Create
         public ActionResult Create()
         {
-            var equipmentVM = new EquipmentViewModel { Equipment = new Equipment(), CompleteEquipmentAttributes = new List<CompleteEquipmentAttribute>() };
+            var ce = new List<CompleteEquipmentAttribute> { new CompleteEquipmentAttribute { EquipmentAttribute = new EquipmentAttribute() } };
+            var equipmentVM = new EquipmentViewModel { Equipment = new Equipment(), CompleteEquipmentAttributes = ce };
             return View(equipmentVM);
         }
 
