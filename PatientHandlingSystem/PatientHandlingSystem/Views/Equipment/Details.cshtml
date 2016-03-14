@@ -1,4 +1,4 @@
-﻿@model PatientHandlingSystem.Models.Equipment
+﻿@model PatientHandlingSystem.ViewModels.EquipmentViewModel
 
 @{
     ViewBag.Title = "Details";
@@ -11,16 +11,42 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Name)
+            @Html.DisplayNameFor(model => model.Equipment.Name)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Name)
+            @Html.DisplayFor(model => model.Equipment.Name)
         </dd>
 
     </dl>
+    
+   
+    @for (int i = 0; i < Model.CompleteEquipmentAttributes.Count; i++)
+    {
+        <dl class="dl-horizontal col-md-offset-1">
+            <dt>
+                @Html.DisplayNameFor(model => model.CompleteEquipmentAttributes[i].EquipmentAttribute.Name)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.CompleteEquipmentAttributes[i].EquipmentAttribute.Name)
+            </dd>
+        </dl>
+
+        for (int j = 0; j < Model.CompleteEquipmentAttributes[i].EquipmentAttributeValues.Count; j++)
+        {
+            <dl class="dl-horizontal col-md-offset-2">
+                <dt>
+                    @Html.DisplayNameFor(model => model.CompleteEquipmentAttributes[i].EquipmentAttributeValues[j].Name)
+                </dt>
+                <dd>
+                    @Html.DisplayNameFor(model => model.CompleteEquipmentAttributes[i].EquipmentAttributeValues[j].Name)
+                </dd>
+            </dl>
+        }
+    }
+   
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Equipment.ID }) |
     @Html.ActionLink("Back to List", "Index")
 </p>

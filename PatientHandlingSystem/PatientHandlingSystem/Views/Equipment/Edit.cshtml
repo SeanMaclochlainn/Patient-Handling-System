@@ -1,4 +1,4 @@
-﻿@model PatientHandlingSystem.Models.Equipment
+﻿@model PatientHandlingSystem.ViewModels.EquipmentViewModel
 
 @{
     ViewBag.Title = "Edit";
@@ -14,16 +14,40 @@
         <h4>Equipment</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.ID)
+        @Html.HiddenFor(model => model.Equipment.ID)
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Equipment.Name, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.Equipment.Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Equipment.Name, "", new { @class = "text-danger" })
             </div>
         </div>
 
+        @for (int i = 0; i < Model.CompleteEquipmentAttributes.Count; i++)
+        {
+        <div class='form-group'>
+            @Html.LabelFor(model => model.CompleteEquipmentAttributes[i].EquipmentAttribute, htmlAttributes: new { @class = "control-label col-md-offset-1 col-md-2" })
+            <div class='col-md-3'>
+                @Html.HiddenFor(model => model.CompleteEquipmentAttributes[i].EquipmentAttribute.ID)
+                @Html.HiddenFor(model => model.CompleteEquipmentAttributes[i].EquipmentAttribute.EquipmentID)
+                @Html.EditorFor(model => model.CompleteEquipmentAttributes[i].EquipmentAttribute.Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.CompleteEquipmentAttributes[i].EquipmentAttribute.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+            for (int j = 0; j < Model.CompleteEquipmentAttributes[i].EquipmentAttributeValues.Count; j++)
+            {
+            <div class='form-group'>
+                @Html.LabelFor(model => model.CompleteEquipmentAttributes[i].EquipmentAttributeValues[j].Name, htmlAttributes: new { @class = "control-label col-md-2 col-md-offset-2" })
+               <div class='col-md-6'>
+                   @Html.HiddenFor(model => model.CompleteEquipmentAttributes[i].EquipmentAttributeValues[j].ID)
+                   @Html.HiddenFor(model => model.CompleteEquipmentAttributes[i].EquipmentAttributeValues[j].EquipmentAttributeID)
+                   @Html.EditorFor(model => model.CompleteEquipmentAttributes[i].EquipmentAttributeValues[j].Name, new { htmlAttributes = new { @class = "form-control" } })
+                   @Html.ValidationMessageFor(model => model.CompleteEquipmentAttributes[i].EquipmentAttributeValues[j].Name, "", new { @class = "text-danger" })
+               </div>
+            </div>
+            }
+        }
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Save" class="btn btn-default" />

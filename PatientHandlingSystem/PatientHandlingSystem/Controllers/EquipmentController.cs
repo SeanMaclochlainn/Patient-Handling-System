@@ -40,14 +40,14 @@ namespace PatientHandlingSystem.Controllers
             {
                 return HttpNotFound();
             }
-            return View(equipment);
+            var equipmentVM = equipmentRepository.GetEquipmentViewModel(equipment.ID);
+            return View(equipmentVM);
         }
 
         // GET: Equipment/Create
         public ActionResult Create()
         {
-            var ce = new List<CompleteEquipmentAttribute> { new CompleteEquipmentAttribute { EquipmentAttribute = new EquipmentAttribute() } };
-            var equipmentVM = new EquipmentViewModel { Equipment = new Equipment(), CompleteEquipmentAttributes = ce };
+            var equipmentVM = new EquipmentViewModel { Equipment = new Equipment(), CompleteEquipmentAttributes = new List<CompleteEquipmentAttribute>() };
             return View(equipmentVM);
         }
 
@@ -80,7 +80,8 @@ namespace PatientHandlingSystem.Controllers
             {
                 return HttpNotFound();
             }
-            return View(equipment);
+            var equipmentVM = equipmentRepository.GetEquipmentViewModel(equipment.ID);
+            return View(equipmentVM);
         }
 
         // POST: Equipment/Edit/5
@@ -88,15 +89,14 @@ namespace PatientHandlingSystem.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,Name")] Equipment equipment)
+        public ActionResult Edit(EquipmentViewModel equipmentVM)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(equipment).State = EntityState.Modified;
-                db.SaveChanges();
+                equipmentRepository.UpdateEquipmentItem(equipmentVM);
                 return RedirectToAction("Index");
             }
-            return View(equipment);
+            return View(equipmentVM);
         }
 
         // GET: Equipment/Delete/5
