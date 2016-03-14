@@ -3,33 +3,131 @@
 @{
     ViewBag.Title = "Create";
 }
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
 
 <h2>Create</h2>
-
 @using (Html.BeginForm()) 
 {
     @Html.AntiForgeryToken()
+
     
-    <div class="form-horizontal">
         <h4>Equipment</h4>
         <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.LabelFor(model => model.Equipment.Name, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Equipment.Name, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Equipment.Name, "", new { @class = "text-danger" })
+        <div class="form-horizontal">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(model => model.Equipment.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Equipment.Name, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Equipment.Name, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            @*<div class="form-group">
+                    @Html.LabelFor(model => model.CompleteEquipmentAttributes[0].EquipmentAttributeValues[0].Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.CompleteEquipmentAttributes[0].EquipmentAttributeValues[0].Name, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.CompleteEquipmentAttributes[0].EquipmentAttributeValues[0].Name, "", new { @class = "text-danger" })
+                    </div>
+                </div>*@
+            <div class="form-group addAttributeDiv" >
+                <div class="col-md-2"></div>
+                <div class="col-md-10">
+                    <button class="btn addAttributeButton">Add Attribute</button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Create" class="btn btn-default" />
+                </div>
             </div>
         </div>
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
-        </div>
-    </div>
 }
 
 <div>
     @Html.ActionLink("Back to List", "Index")
 </div>
+<div class="testing">test1</div>
+<div class="testing">test2</div>
+<script>
+    $(document).ready(function () {
+        //when addAttributeButton is clicked, add in a form for another attribute behind #addAttributeDiv
+        var attributeCount = 0;
+
+        $(".addAttributeButton").click(function (e) {
+            e.preventDefault();
+            $(".addAttributeDiv").before(
+                    "<div class='form-group'>" +
+                        "<label class='control-label col-md-offset-1 col-md-2' for='CompleteEquipmentAttributes_" + attributeCount + "__EquipmentAttribute_Name'>Attribute Name</label>" +
+                        "<div class='col-md-3'>" +
+                            "<input class ='form-control' id='CompleteEquipmentAttributes_" + attributeCount + "__EquipmentAttribute_Name' name='CompleteEquipmentAttributes[" + attributeCount + "].EquipmentAttribute.Name' type='text' value='' />" +
+                            "<span class ='field-validation-valid text-danger' data-valmsg-for='CompleteEquipmentAttributes[" + attributeCount + "].EquipmentAttribute.Name' data-valmsg-replace='true'></span>" +
+                        "</div>" +
+                        "<button type = 'submit' class ='btn addAttributeValue'>Add Attribute Value</button>" +
+                     "</div>");
+            attributeCount++;
+        });
+
+        //When addAttributeValue is clicked, add in the attribute value inputs with the correct counts
+        $(document).on('click', '.addAttributeValue', function (e) {
+            e.preventDefault();
+
+            //get the attribute count
+            var stringContainingThisAttributeCount = $(this).prev().children()[0];
+            var stringContainingThisAttributeCount = $(stringContainingThisAttributeCount).attr('id');
+            var thisAttributeCount = stringContainingThisAttributeCount.substring(28, (stringContainingThisAttributeCount.length - 25));
+
+            //if this is the first attribute value, then set attributeValueCount to 0, otherwise, increment it from the last value
+            var attributeValueCount = 0;
+            var nextInputIdValue = $(this).parent().next().find("div").find("input").attr('id');
+            console.log("if: " +nextInputIdValue +"!= ''");
+            if (nextInputIdValue === undefined)
+            {
+                console.log("first");
+            }
+            else
+            {
+                console.log("not first");
+                attributeValueCount = nextInputIdValue.substring(56, nextInputIdValue.length - 6);
+                attributeValueCount++;
+                console.log("attrvalcount: " + attributeValueCount);
+            }
+            //var secondFormGroup = $(".addAttributeValue").parent().next(); //get the input above
+            //var colPart = secondFormGroup.children()[1];
+            //var inputDiv = $(colPart).children()[0];
+            //var divId = $(inputDiv).attr('id')
+            //if (divId == "CompleteEquipmentAttributes_"+thisAttributeCount+"__EquipmentAttribute_Name")
+            //{
+            //    console.log("thisAttributecount: " + thisAttributeCount);
+            //    console.log("id: " + divId);
+            //    console.log("first attribute value");
+            //}
+            //else
+            //{
+            //    console.log("thisAttributecount: " + thisAttributeCount);
+            //    console.log("id: " + divId);
+            //    console.log("second value");
+            //}
+
+            //insert the attribute value input 
+            $(this).parent().after(
+                "<div class='form-group'>" +
+            "<label class='control-label col-md-2 col-md-offset-2' for='CompleteEquipmentAttributes_" + thisAttributeCount + "__EquipmentAttributeValues_" + attributeValueCount + "__Name'>Attribute Value Name</label>" +
+            "<div class='col-md-6'>" +
+                "<input class='form-control text-box single-line' id='CompleteEquipmentAttributes_" + thisAttributeCount + "__EquipmentAttributeValues_" + attributeValueCount + "__Name' name='CompleteEquipmentAttributes[" + thisAttributeCount + "].EquipmentAttributeValues[" + attributeValueCount + "].Name' type='text' value='' />" +
+                "<span class='field-validation-valid text-danger' data-valmsg-for='CompleteEquipmentAttributes[" + thisAttributeCount + "].EquipmentAttributeValues[" + attributeValueCount + "].Name' data-valmsg-replace='true'></span>" +
+            "</div>" +
+        "</div>"
+                );
+            attributeValueCount++;
+        });
+
+
+        $(document).on('click', '.testing', function (e) {
+            e.preventDefault();
+            $(this).html("this is a test");
+        });
+    });
+</script>
