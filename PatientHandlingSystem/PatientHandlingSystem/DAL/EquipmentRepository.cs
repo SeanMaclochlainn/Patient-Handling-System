@@ -65,6 +65,14 @@ namespace PatientHandlingSystem.DAL
         {
             var equipmentItem = db.Equipment.Find(equipmentId);
             db.Equipment.Remove(equipmentItem);
+            var equipmentAttributes = db.EquipmentAttributes.Where(i => i.EquipmentID == equipmentItem.ID).ToList();
+            db.EquipmentAttributes.RemoveRange(equipmentAttributes);
+            var equipmentAttributesAttributeValues = new List<EquipmentAttributeValue>();
+            foreach(var equipmentAttribute in equipmentAttributes)
+            {
+                equipmentAttributesAttributeValues.AddRange(db.EquipmentAttributeValues.Where(i => i.EquipmentAttributeID == equipmentAttribute.ID).ToList());
+            }
+            db.EquipmentAttributeValues.RemoveRange(equipmentAttributesAttributeValues);
         }
 
         public EquipmentViewModel GetEquipmentViewModel(int equipmentId)
