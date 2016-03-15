@@ -31,18 +31,16 @@
                 @Html.DisplayFor(model => model.CompleteEquipmentAttributes[i].EquipmentAttribute.Name)
             </dd>
         </dl>
-
-        for (int j = 0; j < Model.CompleteEquipmentAttributes[i].EquipmentAttributeValues.Count; j++)
-        {
-            <dl class="dl-horizontal col-md-offset-2">
-                <dt>
-                    @Html.DisplayNameFor(model => model.CompleteEquipmentAttributes[i].EquipmentAttributeValues[j].Name)
-                </dt>
-                <dd>
-                    @Html.DisplayNameFor(model => model.CompleteEquipmentAttributes[i].EquipmentAttributeValues[j].Name)
-                </dd>
-            </dl>
-        }
+        
+        <dl class="dl-horizontal col-md-offset-2">
+            <dt>
+                @Html.DisplayNameFor(model => model.CompleteEquipmentAttributes[i].EquipmentAttribute.CurrentEquipmentAttribute.Name)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.CompleteEquipmentAttributes[i].EquipmentAttribute.CurrentEquipmentAttribute.Name)
+            </dd>
+        </dl>
+        
     }
    
 </div>

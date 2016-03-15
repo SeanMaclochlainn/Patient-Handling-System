@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PatientHandlingSystem.DAL;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -17,5 +18,14 @@ namespace PatientHandlingSystem.Models
 
         public virtual List<EquipmentAttributeValue> EquipmentAttributeValues { get; set; }
 
+        PatientHandlingContext db = new PatientHandlingContext();
+
+        [DisplayName("Attribute Name")]
+        public EquipmentAttributeValue CurrentEquipmentAttribute
+        {
+            get { return db.EquipmentAttributeValues.Single(i => i.ID == ID); }
+        }
+
     }
+
 }
