@@ -138,14 +138,14 @@
     <Compile Include="Controllers\PatientsController.cs" />
     <Compile Include="Controllers\TreesController.cs" />
     <Compile Include="DAL\EquipmentRepository.cs" />
-    <Compile Include="DAL\IDataService.cs" />
+    <Compile Include="DAL\ITreeRepository.cs" />
     <Compile Include="DAL\PatientHandlingContext.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Attribute.cs" />
     <Compile Include="Models\AttributeValue.cs" />
-    <Compile Include="DAL\DataService.cs" />
+    <Compile Include="DAL\TreeRepository.cs" />
     <Compile Include="Models\Equipment.cs" />
     <Compile Include="Models\EquipmentAttribute.cs" />
     <Compile Include="Models\EquipmentAttributeValue.cs" />

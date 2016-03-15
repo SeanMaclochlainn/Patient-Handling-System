@@ -16,23 +16,18 @@ namespace PatientHandlingSystem.Controllers
     public class TreesController : Controller
     {
         private PatientHandlingContext db;
-        private IDataService dataService;
+        private ITreeRepository treeRepository;
 
         public TreesController()
         {
             db = new PatientHandlingContext();
-            dataService = new DataService(db);
+            treeRepository = new TreeRepository(db);
         }
 
-        //public TreesController(PatientHandlingContext context)
-        //{
-        //    db = context;
-        //}
-
-        public TreesController(PatientHandlingContext context, IDataService dataService)
+        public TreesController(PatientHandlingContext context, ITreeRepository dataService)
         {
             db = context;
-            this.dataService = dataService;
+            this.treeRepository = dataService;
         }
 
         public ActionResult Index()
@@ -94,20 +89,20 @@ namespace PatientHandlingSystem.Controllers
                 var node = originalNodes.Single(i => i.ID == int.Parse(treeCreatorVM.ParentNodeID));
                 if(node.SolutionNode)
                 {
-                    dataService.DeleteSolutionNode(treeCreatorVM.Tree.ID, treeCreatorVM.ParentNodeID);
+                    treeRepository.DeleteSolutionNode(treeCreatorVM.Tree.ID, treeCreatorVM.ParentNodeID);
                 }
                 else
                 {
-                    dataService.DeleteRegularNode(treeCreatorVM.Tree.ID, treeCreatorVM.ParentNodeID);
+                    treeRepository.DeleteRegularNode(treeCreatorVM.Tree.ID, treeCreatorVM.ParentNodeID);
                 }
             }
             else if(treeCreatorVM.NodeType == "Solution")//when user is trying to input a solution node
             {
-                dataService.EnterSolutionNode(treeCreatorVM.ParentNodeID, treeCreatorVM.Tree.ID, treeCreatorVM.Solution);
+                treeRepository.EnterSolutionNode(treeCreatorVM.ParentNodeID, treeCreatorVM.Tree.ID, treeCreatorVM.Solution);
             }
             else //when user is trying to input a regular node, numeric or otherwise
             {
-                dataService.EnterAttributeNode(treeCreatorVM.ParentNodeID, treeCreatorVM.SelectedAttribute.ID, treeCreatorVM.Tree.ID, treeCreatorVM.SelectedAttribute.Numeric, treeCreatorVM.SelectedAttributeNumericValue.Value);
+                treeRepository.EnterAttributeNode(treeCreatorVM.ParentNodeID, treeCreatorVM.SelectedAttribute.ID, treeCreatorVM.Tree.ID, treeCreatorVM.SelectedAttribute.Numeric, treeCreatorVM.SelectedAttributeNumericValue.Value);
             }
 
             List<Node> nodes = db.Nodes.Where(i => i.TreeID == treeCreatorVM.Tree.ID).ToList(); ;
@@ -117,7 +112,7 @@ namespace PatientHandlingSystem.Controllers
 
         public PartialViewResult DeleteNode(int nodeId, int treeId)
         {
-            var dataService = new DataService(db);
+            var dataService = new TreeRepository(db);
             dataService.IsLeafNode(nodeId, treeId);
             return PartialView("_Tree", db.Nodes.Where(i => i.TreeID == treeId).ToList());
         }

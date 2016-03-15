@@ -16,14 +16,14 @@ namespace PatientHandlingSystem.Models
         public string Name { get; set; }
         public int CurrentEquipmentAttributeValueID { get; set; }
 
+        public virtual Equipment Equipment { get; set; }
         public virtual List<EquipmentAttributeValue> EquipmentAttributeValues { get; set; }
 
         PatientHandlingContext db = new PatientHandlingContext();
 
-        [DisplayName("Attribute Name")]
         public EquipmentAttributeValue CurrentEquipmentAttribute
         {
-            get { return db.EquipmentAttributeValues.Single(i => i.ID == ID); }
+            get { return db.EquipmentAttributeValues.Single(i => i.ID == CurrentEquipmentAttributeValueID); }
         }
 
     }

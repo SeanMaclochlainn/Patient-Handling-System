@@ -5,7 +5,7 @@ using System.Web;
 
 namespace PatientHandlingSystem.DAL
 {
-    public interface IDataService
+    public interface ITreeRepository
     {
         void DeleteRegularNode(int treeId, string nodeIdStr);
         void DeleteSolutionNode(int treeId, string nodeIdStr);

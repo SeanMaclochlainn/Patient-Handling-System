@@ -7,11 +7,11 @@ using System.Web;
 
 namespace PatientHandlingSystem.Models
 {
-    public class DataService :IDataService
+    public class TreeRepository :ITreeRepository
     {
         private PatientHandlingContext db;
 
-        public DataService(PatientHandlingContext context)
+        public TreeRepository(PatientHandlingContext context)
         {
             db = context;
         }

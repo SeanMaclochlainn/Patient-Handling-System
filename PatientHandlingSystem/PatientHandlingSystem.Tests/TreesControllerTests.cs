@@ -83,7 +83,7 @@ namespace PatientHandlingSystem.Tests
                 new Node { ID = 3, ParentID = 1, NodeValue = 2, EdgeValue = 2, EdgeOperator = "==", TreeID = 1, SolutionNode = false, Numeric = false },
                 new Node { ID = 4, ParentID = 3, NodeValue = 1, EdgeValue = 3, EdgeOperator = "==", TreeID = 1, SolutionNode = true, Numeric = false }
                 }, patientHandlingContext);
-            var mock = new Mock<IDataService>();
+            var mock = new Mock<ITreeRepository>();
             mock.Setup(i => i.DeleteRegularNode(It.IsAny<int>(), It.IsAny<string>()));
             mock.Setup(i => i.EnterSolutionNode(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<string>()));
 
@@ -133,7 +133,7 @@ namespace PatientHandlingSystem.Tests
 
             //test for when a solution node is entered
             //arrange
-            treeEditorVM.SolutionInput = true;
+            treeEditorVM.NodeType = "Solution";
 
             //act
             treesController.UpdateTree(treeEditorVM, null);
@@ -143,7 +143,7 @@ namespace PatientHandlingSystem.Tests
 
             //test for when an attribute node was entered
             //arrange
-            treeEditorVM.SolutionInput = false;
+            treeEditorVM.NodeType = "Solution";
             treeEditorVM.SelectedAttribute = new Models.Attribute();
             treeEditorVM.SelectedAttributeNumericValue = new AttributeValue();
 
