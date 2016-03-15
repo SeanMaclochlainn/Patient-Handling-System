@@ -68,7 +68,7 @@ namespace PatientHandlingSystem.Controllers
                 Attributes = db.Attributes.ToList(),
                 Nodes = new List<Node>()
             };
-            return View(treeCreator);
+            return View("Create", "_TreeEditor", treeCreator);
         }
 
         public PartialViewResult UpdateTree(TreeEditorViewModel treeCreatorVM, string deleteButton)
@@ -163,7 +163,7 @@ namespace PatientHandlingSystem.Controllers
                 Attributes = db.Attributes.ToList(),
                 Nodes = db.Nodes.Where(i => i.TreeID == tree.ID).ToList()
             };
-            return View(treeCreator);
+            return View("Edit", "_TreeEditor", treeCreator);
         }
 
         // GET: Trees/Delete/5

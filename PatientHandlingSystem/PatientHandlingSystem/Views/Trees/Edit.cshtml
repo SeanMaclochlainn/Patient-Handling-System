@@ -6,10 +6,10 @@
 <script src="~/Scripts/jquery-1.10.2.min.js"></script>
 <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
 
-<h2 style="text-align:center"><span id="title">@Model.Tree.Name</span> <button class="btn btn-sm" id="editName">Edit Name</button></h2>
+<h2 class="text-center"><span id="title">@Model.Tree.Name</span> <button class="btn btn-sm" id="editName">Edit Name</button></h2>
 
 <br />
-<div class="container">
+<div class="container-fluid">
     <div class="row">
         <div class="col-md-3">
             @using (Ajax.BeginForm("UpdateTree", "Trees", new AjaxOptions { HttpMethod = "POST", InsertionMode = InsertionMode.Replace, UpdateTargetId = "treeDiv" }))
@@ -60,7 +60,6 @@
         </div>
     </div>
 </div>
-@Html.ActionLink("Back to List","Index")
 <script>
     $(document).ready(function () {
         //show or hide the attribute or solution tab depending on the radio button that is selected
