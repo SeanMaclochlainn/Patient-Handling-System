@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace PatientHandlingSystem.DAL
 {
@@ -51,12 +52,6 @@ namespace PatientHandlingSystem.DAL
             {
                 var equipmentAttribute = completeEquipmentAttribute.EquipmentAttribute;
                 db.Entry(equipmentAttribute).State = EntityState.Modified;
-
-                foreach (var equipmentAttributeValue in completeEquipmentAttribute.EquipmentAttributeValues)
-                {
-                    var thisEquipmentAttributeValue = equipmentAttributeValue;
-                    db.Entry(thisEquipmentAttributeValue).State = EntityState.Modified;
-                }
             }
             db.SaveChanges();
         }
@@ -78,9 +73,26 @@ namespace PatientHandlingSystem.DAL
         public EquipmentViewModel GetEquipmentViewModel(int equipmentId)
         {
             var completeEquipmentAttributes = new List<CompleteEquipmentAttribute>();
+            
             foreach(var equipmentAttribute in db.EquipmentAttributes.Where(i => i.EquipmentID == equipmentId).ToList())
             {
-                var completeEquipmentAttribute = new CompleteEquipmentAttribute { EquipmentAttribute = equipmentAttribute, EquipmentAttributeValues = equipmentAttribute.EquipmentAttributeValues };
+                //generate selectlist of equipment attribute values for each equipment attribute
+                var equipmentAttributeValuesSelectList = new List<SelectListItem>();
+                if(equipmentAttribute.CurrentEquipmentAttributeValueID == 0)
+                {
+                    equipmentAttributeValuesSelectList.Add(new SelectListItem { Text = "Please select...", Selected = true, Value = "" });
+                }
+                Boolean selected = false;
+                foreach (var equipmentAttributeValue in equipmentAttribute.EquipmentAttributeValues)
+                {
+                    if (equipmentAttributeValue.EquipmentAttribute.CurrentEquipmentAttributeValueID == equipmentAttributeValue.ID)
+                        selected = true;
+                    else
+                        selected = false;
+                    equipmentAttributeValuesSelectList.Add(new SelectListItem { Text = equipmentAttributeValue.Name, Value = equipmentAttributeValue.ID.ToString(), Selected = selected });
+                }
+
+                var completeEquipmentAttribute = new CompleteEquipmentAttribute { EquipmentAttribute = equipmentAttribute, EquipmentAttributeValues = equipmentAttribute.EquipmentAttributeValues, EquipmentAttributeValuesSelectList = equipmentAttributeValuesSelectList };
                 completeEquipmentAttributes.Add(completeEquipmentAttribute);
             }
             var equipmentVM = new EquipmentViewModel { Equipment = db.Equipment.Find(equipmentId), CompleteEquipmentAttributes = completeEquipmentAttributes };

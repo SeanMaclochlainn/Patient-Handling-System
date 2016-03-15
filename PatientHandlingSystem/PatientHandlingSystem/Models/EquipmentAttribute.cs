@@ -13,7 +13,7 @@ namespace PatientHandlingSystem.Models
 
         [DisplayName("Attribute Name")]
         public string Name { get; set; }
-        public int CurrentEquipmentValueID { get; set; }
+        public int CurrentEquipmentAttributeValueID { get; set; }
 
         public virtual List<EquipmentAttributeValue> EquipmentAttributeValues { get; set; }
 
