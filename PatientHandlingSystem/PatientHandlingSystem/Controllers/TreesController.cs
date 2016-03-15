@@ -101,7 +101,7 @@ namespace PatientHandlingSystem.Controllers
                     dataService.DeleteRegularNode(treeCreatorVM.Tree.ID, treeCreatorVM.ParentNodeID);
                 }
             }
-            else if(treeCreatorVM.SolutionInput == true)//when user is trying to input a solution node
+            else if(treeCreatorVM.NodeType == "Solution")//when user is trying to input a solution node
             {
                 dataService.EnterSolutionNode(treeCreatorVM.ParentNodeID, treeCreatorVM.Tree.ID, treeCreatorVM.Solution);
             }

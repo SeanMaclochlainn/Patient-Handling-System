@@ -49,8 +49,7 @@
 <div>
     @Html.ActionLink("Back to List", "Index")
 </div>
-<div class="testing">test1</div>
-<div class="testing">test2</div>
+
 <script>
     $(document).ready(function () {
         //when addAttributeButton is clicked, add in a form for another attribute behind #addAttributeDiv
@@ -94,22 +93,6 @@
                 attributeValueCount++;
                 console.log("attrvalcount: " + attributeValueCount);
             }
-            //var secondFormGroup = $(".addAttributeValue").parent().next(); //get the input above
-            //var colPart = secondFormGroup.children()[1];
-            //var inputDiv = $(colPart).children()[0];
-            //var divId = $(inputDiv).attr('id')
-            //if (divId == "CompleteEquipmentAttributes_"+thisAttributeCount+"__EquipmentAttribute_Name")
-            //{
-            //    console.log("thisAttributecount: " + thisAttributeCount);
-            //    console.log("id: " + divId);
-            //    console.log("first attribute value");
-            //}
-            //else
-            //{
-            //    console.log("thisAttributecount: " + thisAttributeCount);
-            //    console.log("id: " + divId);
-            //    console.log("second value");
-            //}
 
             //insert the attribute value input 
             $(this).parent().after(
@@ -122,12 +105,6 @@
         "</div>"
                 );
             attributeValueCount++;
-        });
-
-
-        $(document).on('click', '.testing', function (e) {
-            e.preventDefault();
-            $(this).html("this is a test");
         });
     });
 </script>
