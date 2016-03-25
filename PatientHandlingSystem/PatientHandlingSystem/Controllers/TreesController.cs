@@ -68,18 +68,24 @@ namespace PatientHandlingSystem.Controllers
 
         public PartialViewResult UpdateTree(TreeEditorViewModel treeCreatorVM, string deleteButton)
         {
-            List<Node> originalNodes = db.Nodes.Where(i => i.TreeID == treeCreatorVM.Tree.ID).ToList();
-
+            List<Node> originalNodes = db.Nodes.Where(i => i.TreeID == treeCreatorVM.Tree.ID).OrderBy(j=>j.ID).ToList();
+            Boolean leafNode = treeRepository.IsLeafNode(int.Parse(treeCreatorVM.ParentNodeID), treeCreatorVM.Tree.ID);
             //check if a node is selected
-            if(treeCreatorVM.ParentNodeID == null && deleteButton == "true")
+            if(treeCreatorVM.ParentNodeID == null)
             {
-                ModelState.AddModelError("NoNodeSelected", "Please select a parent node");
+                ModelState.AddModelError("NoNodeSelected", "Please select a node");
                 return PartialView("_Tree", originalNodes);
             }
             //check if users is trying to delete a node and a stub node is selected
             else if (deleteButton == "true" && originalNodes.SingleOrDefault(i => i.ID == int.Parse(treeCreatorVM.ParentNodeID)).NodeValue == 0)
             {
                 ModelState.AddModelError("StubNodeSelected", "Cannot delete a stub node");
+                return PartialView("_Tree", originalNodes);
+            }
+            //check if user has clicked on a parent node and is trying to submit a node
+            else if(deleteButton == null && leafNode == false)
+            {
+                ModelState.AddModelError("StubNodeSelected", "Cannot insert a node in selected location");
                 return PartialView("_Tree", originalNodes);
             }
 

@@ -14,5 +14,6 @@ namespace PatientHandlingSystem.DAL
         void EnterSolutionNode(string parentNodeIdStr, int treeId, string solutionContent, string solutionTitle);
         TreeEditorViewModel GetTreeEditorViewModel(int treeId);
         void Save();
+        Boolean IsLeafNode(int nodeId, int treeId);
     }
 }
