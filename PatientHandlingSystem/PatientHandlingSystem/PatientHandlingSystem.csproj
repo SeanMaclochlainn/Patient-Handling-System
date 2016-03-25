@@ -112,7 +112,9 @@
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="packages.config" />
+    <None Include="Properties\PublishProfiles\melodyplayer.pubxml" />
     <None Include="Properties\PublishProfiles\NUIG Lugh4.pubxml" />
+    <None Include="Properties\PublishProfiles\patienthandlingapp.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />

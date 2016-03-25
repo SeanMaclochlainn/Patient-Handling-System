@@ -47,7 +47,7 @@ namespace PatientHandlingSystem.Controllers
                 return HttpNotFound();
             }
             ViewBag.TreeName = tree.Name;
-            return View(db.Nodes.Where(i=>i.TreeID == tree.ID).ToList());
+            return View("ViewTree", "_TreeEditor", db.Nodes.Where(i=>i.TreeID == tree.ID).ToList());
         }
 
         // GET: Trees/Create
@@ -98,7 +98,7 @@ namespace PatientHandlingSystem.Controllers
             }
             else if(treeCreatorVM.NodeType == "Solution")//when user is trying to input a solution node
             {
-                treeRepository.EnterSolutionNode(treeCreatorVM.ParentNodeID, treeCreatorVM.Tree.ID, treeCreatorVM.Solution);
+                treeRepository.EnterSolutionNode(treeCreatorVM.ParentNodeID, treeCreatorVM.Tree.ID, treeCreatorVM.Solution, treeCreatorVM.SolutionTitle);
             }
             else //when user is trying to input a regular node, numeric or otherwise
             {
@@ -152,13 +152,8 @@ namespace PatientHandlingSystem.Controllers
                 return HttpNotFound();
             }
 
-            var treeCreator = new TreeEditorViewModel
-            {
-                Tree = tree,
-                Attributes = db.Attributes.ToList(),
-                Nodes = db.Nodes.Where(i => i.TreeID == tree.ID).ToList()
-            };
-            return View("Edit", "_TreeEditor", treeCreator);
+            var treeEditorVM = treeRepository.GetTreeEditorViewModel(tree.ID);
+            return View("Edit", "_TreeEditor", treeEditorVM);
         }
 
         // GET: Trees/Delete/5

@@ -1,4 +1,5 @@
 ﻿using PatientHandlingSystem.DAL;
+using PatientHandlingSystem.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -106,10 +107,10 @@ namespace PatientHandlingSystem.Models
             db.SaveChanges();
         }
 
-        public void EnterSolutionNode(string parentNodeIdStr, int treeId, string solutionContent)
+        public void EnterSolutionNode(string parentNodeIdStr, int treeId, string solutionContent, string solutionTitle)
         {
             int parentNodeId = int.Parse(parentNodeIdStr);
-            Solution solution = new Solution { Content = solutionContent, TreeID = treeId };
+            Solution solution = new Solution { Content = solutionContent, TreeID = treeId, Title = solutionTitle };
             db.Solutions.Add(solution);
             db.SaveChanges();
 
@@ -163,6 +164,19 @@ namespace PatientHandlingSystem.Models
             node.SolutionNode = false;
             node.NodeValue = 0;
             db.Entry(node).State = EntityState.Modified;
+        }
+
+        public TreeEditorViewModel GetTreeEditorViewModel(int treeId)
+        {
+            var treeCreator = new TreeEditorViewModel
+            {
+                Tree = db.Trees.Find(treeId),
+                Attributes = db.Attributes.ToList(),
+                Nodes = db.Nodes.Where(i => i.TreeID == treeId).ToList(),
+                EquipmentAttributes = db.EquipmentAttributes.ToList(),
+                Equipment = db.Equipment.ToList()
+            };
+            return treeCreator;
         }
     }
 }

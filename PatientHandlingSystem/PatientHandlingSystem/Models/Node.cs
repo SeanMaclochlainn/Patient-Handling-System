@@ -25,9 +25,12 @@ namespace PatientHandlingSystem.Models
             if (SolutionNode == false)
                 return db.Attributes.Any(i => i.ID == NodeValue) ? db.Attributes.Find(NodeValue).Name : "";
             else
-                return db.Solutions.Find(NodeValue).Content;//.Substring(0,10)+"...";
+                return db.Solutions.Find(NodeValue).Title;//.Substring(0,10)+"...";
         }
-
+        public string SolutionContent()
+        {
+            return db.Solutions.Find(NodeValue).Content;
+        }
         public string solutionNodeIds()
         {
             return "test";// db.Nodes.Where(i => i.TreeID == TreeID && i.SolutionNode == true).Select(i => i.ID).ToArray();

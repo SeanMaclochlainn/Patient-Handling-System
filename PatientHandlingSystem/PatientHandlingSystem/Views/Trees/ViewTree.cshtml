@@ -8,7 +8,7 @@
     @Html.Label((string)ViewBag.TreeName)
 </h3>
 <br />
-<div id="mynetwork" class="treeEditor" style="width:900px;height:600px;"></div>
+<div id="mynetwork" class="treeEditor" style="height:500px;"></div>
 
 <script type="text/javascript">
     var i;
@@ -17,15 +17,15 @@
     {
         if(node.SolutionNode)
         {
-            @:nodes.add({ id: @node.ID, label: previewSolution('@node.NodeText()'), shape: 'ellipse', color: 'green' });
+            @:nodes.add({ id: @node.ID, label: '@node.NodeText()', shape: 'box', color: 'green' });
                 }
         else if(node.NodeValue == 0)
         {
-            @:nodes.add({ id: @node.ID, label: '@node.NodeText()', shape: 'ellipse', color: 'red' });
+            @:nodes.add({ id: @node.ID, label: '@node.NodeText()', shape: 'box', color: 'red' });
                 }
         else
         {
-            @:nodes.add({ id: @node.ID, label: '@node.NodeText()', shape: 'ellipse', color: '#3280EA' });
+            @:nodes.add({ id: @node.ID, label: '@node.NodeText()', shape: 'box', color: '#3280EA' });
                 }
     }
 
@@ -52,11 +52,11 @@
         if(Model.ElementAt(j).Numeric)
         {
             var edgeText = Model.ElementAt(j).EdgeOperator+Model.ElementAt(j).EdgeValue;
-            @:edges.add({from: @Model.ElementAt(j).ParentID, to: @Model.ElementAt(j).ID, label: '@Html.Raw(edgeText)', color: '#3280EA' });
+            @:edges.add({from: @Model.ElementAt(j).ParentID, to: @Model.ElementAt(j).ID, label: '@Html.Raw(edgeText)', color: '#3280EA', arrows:'to' });
         }
         else
         {
-            @:edges.add({from: @Model.ElementAt(j).ParentID, to: @Model.ElementAt(j).ID, label: '@Model.ElementAt(j).edgeText()', color: '#3280EA' });
+            @:edges.add({from: @Model.ElementAt(j).ParentID, to: @Model.ElementAt(j).ID, label: '@Model.ElementAt(j).edgeText()', color: '#3280EA', arrows:'to' });
         }
     }
     // create a network
@@ -72,7 +72,7 @@
             hierarchical: {
                 direction: 'UD',   // UD, DU, LR, RL
                 sortMethod: 'directed', // hubsize, directed
-                nodeSpacing: 100
+                nodeSpacing: 220
             }
         },
         physics: {
@@ -83,17 +83,28 @@
     // initialize network
     var network = new vis.Network(container, data, options);
 
+    //put all of the solution ids in the tree into an array
     var solutionNodeIds = [];
     @foreach (var node in Model.Where(i=>i.SolutionNode == true))
     {
-        @:solutionNodeIds.push({id:@node.ID, text:'@node.NodeText()'});
+        var nodeText = node.SolutionContent().Replace("\r\n", "|break|");
+        @:solutionNodeIds.push({id:@node.ID, text: '@nodeText', title:'@node.NodeText()'});
             }
 
     network.on("selectNode", function (params) {
         for(var i = 0;i<solutionNodeIds.length;i++){
             if(solutionNodeIds[i].id==params.nodes){
-                $("#solution").text(solutionNodeIds[i].text);
+                $("#solution").html(enterLineBreaks(solutionNodeIds[i].text));
+                $("#SolutionTitle").val(solutionNodeIds[i].title);
             }
+        }
+        function enterLineBreaks(str){
+            //replace all instances of |break| with \r\n
+            while(str.split("|break|").length>1)
+            {
+                str = str.split("|break|").join("<br />");
+            }
+            return str;
         }
     });
 </script>

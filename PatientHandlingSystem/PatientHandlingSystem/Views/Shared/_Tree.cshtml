@@ -13,15 +13,15 @@
     {
         if(node.SolutionNode)
         {
-            @:nodes.add({ id: @node.ID, label: previewSolution('@node.NodeText()'), shape: 'ellipse', color: 'green' });
+            @:nodes.add({ id: @node.ID, label: '@node.NodeText()', shape: 'box', color: 'green' });
                 }
         else if(node.NodeValue == 0)
         {
-            @:nodes.add({ id: @node.ID, label: '@node.NodeText()', shape: 'ellipse', color: 'red' });
+            @:nodes.add({ id: @node.ID, label: '@node.NodeText()', shape: 'box', color: 'red' });
                 }
         else
         {
-            @:nodes.add({ id: @node.ID, label: '@node.NodeText()', shape: 'ellipse', color: '#3280EA' });
+            @:nodes.add({ id: @node.ID, label: '@node.NodeText()', shape: 'box', color: '#3280EA' });
                 }
     }
 
@@ -68,7 +68,7 @@
             hierarchical: {
                 direction: 'UD',   // UD, DU, LR, RL
                 sortMethod: 'directed', // hubsize, directed
-                nodeSpacing: 100
+                nodeSpacing: 220
             }
         },
         physics: {
@@ -83,7 +83,8 @@
     var solutionNodeIds = [];
     @foreach (var node in Model.Where(i=>i.SolutionNode == true))
     {
-        @:solutionNodeIds.push({id:@node.ID, text:'@node.NodeText()'});
+        var nodeText = node.SolutionContent().Replace("\r\n", "|break|");
+        @:solutionNodeIds.push({id:@node.ID, text:'@nodeText', title: '@node.NodeText()'});
     }
 
     //remove any parent node ids that may still be there from previous ajax call
@@ -92,12 +93,13 @@
     network.on("selectNode", function (params) {
         //Insert currently selected nodes id as a hidden element
         $("<input type='hidden' id='ParentNodeID' name='ParentNodeID' value="+params.nodes+">").insertAfter("#button");
-        
+
     //enter the nodes text into the solution text area when it is clicked
         for(var i = 0;i<solutionNodeIds.length;i++){
             if(solutionNodeIds[i].id==params.nodes){
                 console.log("entering text");
-                $("#Solution").val(solutionNodeIds[i].text);
+                $("#Solution").val(enterLineBreaks(solutionNodeIds[i].text));
+                $("#SolutionTitle").val(solutionNodeIds[i].title);
                 if ($(".attributeTab").is(":checked")) {
                     $(".solution").show();
                     $(".attribute").hide();
@@ -105,6 +107,15 @@
                     $(".solutionTab").prop('checked', true);
                 }
             }
+        }
+
+        function enterLineBreaks(str){
+            //replace all instances of |break| with \r\n
+            while(str.split("|break|").length>1)
+            {
+                str = str.split("|break|").join("\r\n");
+            }
+            return str;
         }
     });
 

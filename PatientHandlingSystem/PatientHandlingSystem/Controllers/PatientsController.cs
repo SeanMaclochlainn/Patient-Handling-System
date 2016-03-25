@@ -253,7 +253,7 @@ namespace PatientHandlingSystem.Controllers
                 var patientAttribute = db.PatientsAttributes.Include(j=>j.Attribute).SingleOrDefault(i => i.PatientID == patient.ID && i.AttributeID == ca.SelectedAttributeValue.AttributeID);
 
                 //this is null if a new attribute has been added recently, and the patient hasn't been assigned an attribute value for this attribute
-                if (patientAttribute == null && !patientAttribute.Attribute.Numeric)
+                if (patientAttribute == null)
                 {
                     patientAttribute = new PatientAttribute { AttributeID = ca.SelectedAttributeValue.AttributeID, AttributeValueID = ca.SelectedAttributeValue.ID, PatientID = patient.ID };
                     db.PatientsAttributes.Add(patientAttribute);
