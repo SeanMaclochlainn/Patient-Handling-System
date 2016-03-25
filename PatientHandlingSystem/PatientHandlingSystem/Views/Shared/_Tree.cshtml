@@ -17,7 +17,7 @@
                 }
         else if(node.NodeValue == 0)
         {
-            @:nodes.add({ id: @node.ID, label: '@node.NodeText()', shape: 'box', color: 'red' });
+            @:nodes.add({ id: @node.ID, label: '@node.NodeText()', shape: 'circle', color: 'red' });
                 }
         else
         {
@@ -43,7 +43,7 @@
     var edges = new vis.DataSet();
 
 
-    @for (int j = 1; j < Model.Count(); j++)
+    @for (int j = 1; j < Model.Count(); j++) //starts at 1 because the root node doesn't have any edges. 
     {
         if(Model.ElementAt(j).Numeric)
         {

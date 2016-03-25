@@ -90,6 +90,7 @@ namespace PatientHandlingSystem.Controllers
                 if(node.SolutionNode)
                 {
                     treeRepository.DeleteSolutionNode(treeCreatorVM.Tree.ID, treeCreatorVM.ParentNodeID);
+                    treeRepository.Save();
                 }
                 else
                 {
