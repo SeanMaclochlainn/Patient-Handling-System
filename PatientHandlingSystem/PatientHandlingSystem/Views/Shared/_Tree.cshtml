@@ -92,13 +92,20 @@
 
     network.on("selectNode", function (params) {
         //Insert currently selected nodes id as a hidden element
-        $("<input type='hidden' id='ParentNodeID' name='ParentNodeID' value="+params.nodes+">").insertAfter("#button");
+        if($("#button").next("input") == []){
+            $("<input type='hidden' id='ParentNodeID' name='ParentNodeID' value="+params.nodes+">").insertAfter("#button");
+        }
+        else {
+            $("#button").next("input").remove();
+            $("<input type='hidden' id='ParentNodeID' name='ParentNodeID' value="+params.nodes+">").insertAfter("#button");
+        }
+        
 
     //enter the nodes text into the solution text area when it is clicked
         for(var i = 0;i<solutionNodeIds.length;i++){
             if(solutionNodeIds[i].id==params.nodes){
                 console.log("entering text");
-                $("#Solution").val(enterLineBreaks(solutionNodeIds[i].text));
+                $("#Solution").html(enterLineBreaks(solutionNodeIds[i].text));
                 $("#SolutionTitle").val(solutionNodeIds[i].title);
                 if ($(".attributeTab").is(":checked")) {
                     $(".solution").show();
