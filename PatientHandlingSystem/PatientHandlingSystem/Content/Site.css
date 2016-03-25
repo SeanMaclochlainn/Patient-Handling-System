@@ -31,3 +31,7 @@ textarea {
     font-weight:bold;
 }
 
+.multiLine {
+    white-space:pre-line;
+}
+
