@@ -47,7 +47,7 @@ namespace PatientHandlingSystem.Controllers
                 return HttpNotFound();
             }
             ViewBag.TreeName = tree.Name;
-            return View("ViewTree", "_TreeEditor", db.Nodes.Where(i=>i.TreeID == tree.ID).ToList());
+            return View("ViewTree", "_TreeEditor", db.Nodes.Where(i=>i.TreeID == tree.ID).OrderBy(i=>i.ID).ToList());
         }
 
         // GET: Trees/Create
@@ -68,7 +68,7 @@ namespace PatientHandlingSystem.Controllers
 
         public PartialViewResult UpdateTree(TreeEditorViewModel treeCreatorVM, string deleteButton)
         {
-            List<Node> originalNodes = db.Nodes.Where(i => i.TreeID == treeCreatorVM.Tree.ID).ToList(); ;
+            List<Node> originalNodes = db.Nodes.Where(i => i.TreeID == treeCreatorVM.Tree.ID).ToList();
 
             //check if a node is selected
             if(treeCreatorVM.ParentNodeID == null && deleteButton == "true")
@@ -106,7 +106,7 @@ namespace PatientHandlingSystem.Controllers
                 treeRepository.EnterAttributeNode(treeCreatorVM.ParentNodeID, treeCreatorVM.SelectedAttribute.ID, treeCreatorVM.Tree.ID, treeCreatorVM.SelectedAttribute.Numeric, treeCreatorVM.SelectedAttributeNumericValue.Value);
             }
 
-            List<Node> nodes = db.Nodes.Where(i => i.TreeID == treeCreatorVM.Tree.ID).ToList(); ;
+            List<Node> nodes = db.Nodes.Where(i => i.TreeID == treeCreatorVM.Tree.ID).OrderBy(j => j.ID).ToList();
 
             return PartialView("_Tree", nodes);
         }
