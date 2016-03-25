@@ -13,5 +13,6 @@ namespace PatientHandlingSystem.DAL
         void EnterAttributeNode(string parentNodeId, int selectedAttributeId, int treeId, Boolean selectedAttributeNumeric, string selectedAttributeNumericValue);
         void EnterSolutionNode(string parentNodeIdStr, int treeId, string solutionContent, string solutionTitle);
         TreeEditorViewModel GetTreeEditorViewModel(int treeId);
+        void Save();
     }
 }

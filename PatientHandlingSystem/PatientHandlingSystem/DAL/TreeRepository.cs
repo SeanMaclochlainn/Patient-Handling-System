@@ -172,11 +172,16 @@ namespace PatientHandlingSystem.Models
             {
                 Tree = db.Trees.Find(treeId),
                 Attributes = db.Attributes.ToList(),
-                Nodes = db.Nodes.Where(i => i.TreeID == treeId).ToList(),
+                Nodes = db.Nodes.Where(i => i.TreeID == treeId).OrderBy(j=>j.ID).ToList(),
                 EquipmentAttributes = db.EquipmentAttributes.ToList(),
                 Equipment = db.Equipment.ToList()
             };
             return treeCreator;
+        }
+
+        public void Save()
+        {
+            db.SaveChanges();
         }
     }
 }
