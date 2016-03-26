@@ -35,3 +35,6 @@ textarea {
     white-space:pre-line;
 }
 
+.dl-horizontal dt {
+    white-space:normal; /*for the details views*/
+}
