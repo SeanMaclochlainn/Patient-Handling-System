@@ -35,6 +35,13 @@
                             <button class="btn btn-default" id="button">Insert Node</button>
                         </div>
                     </div>
+
+                    @*the solution panel*@
+                    <div class="row solution top-buffer">
+                        <div class="col-md-12 form-group">
+                            @Html.EditorFor(i => i.SolutionTitle, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                    </div>
                     <div class="row solution top-buffer">
                         <div class="col-md-12 form-group">
                             @Html.TextAreaFor(i => i.Solution, new { @rows = "20", @placeholder = "Enter solution", @class = "form-control", style = "" })
@@ -45,6 +52,8 @@
                             <input type="submit" value="Insert Solution" class="btn btn-default">
                         </div>
                     </div>
+
+                    @*the delete node button*@
                     <div class="row top-buffer">
                         <div class="col-md-12">
                             <button class="btn btn-danger" id="button" name="deleteButton" value="true">Delete</button>
