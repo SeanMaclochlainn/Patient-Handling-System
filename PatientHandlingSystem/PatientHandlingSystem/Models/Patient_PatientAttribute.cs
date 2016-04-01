@@ -5,7 +5,7 @@ using System.Web;
 
 namespace PatientHandlingSystem.Models
 {
-    public class PatientAttribute
+    public class Patient_PatientAttribute
     {
         public int ID { get; set; }
         public int PatientID { get; set; }

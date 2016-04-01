@@ -499,7 +499,7 @@
     <Compile Include="Models\EquipmentAttributeValue.cs" />
     <Compile Include="Models\Node.cs" />
     <Compile Include="Models\Patient.cs" />
-    <Compile Include="Models\PatientAttribute.cs" />
+    <Compile Include="Models\Patient_PatientAttribute.cs" />
     <Compile Include="Models\Solution.cs" />
     <Compile Include="Models\Tree.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

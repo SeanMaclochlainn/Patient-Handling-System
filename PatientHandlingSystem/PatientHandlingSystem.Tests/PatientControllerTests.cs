@@ -84,7 +84,7 @@ namespace PatientHandlingSystem.Tests
 
         //    patientHandlingContext.Patients = GetQueryableMockDbSet(new List<Patient> { new Patient { ID = 1, FirstName = "test", LastName = "testlast" } });
 
-        //    patientHandlingContext.PatientsAttributes = GetQueryableMockDbSet(
+        //    patientHandlingContext.Patient_PatientAttributes = GetQueryableMockDbSet(
         //        new List<PatientAttribute>
         //        {
         //            new PatientAttribute { ID = 1, PatientID = 1, AttributeID = 1, AttributeValueID = 1, AttributeValue = patientHandlingContext.AttributeValues.Single(i => i.ID == 1) },
@@ -145,7 +145,7 @@ namespace PatientHandlingSystem.Tests
         //        }
         //    );
 
-        //    patientHandlingContext.PatientsAttributes = GetQueryableMockDbSet(
+        //    patientHandlingContext.Patient_PatientAttributes = GetQueryableMockDbSet(
         //        new List<PatientAttribute>
         //        {
         //            new PatientAttribute { ID = 1, PatientID = 1, AttributeID = 1, AttributeValueID = 1, AttributeValue = patientHandlingContext.AttributeValues.Single(i => i.ID == 1) },
@@ -210,7 +210,7 @@ namespace PatientHandlingSystem.Tests
         //    );
 
         //    //this doesn't work unless there is an initial value present otherwise it doesn't work
-        //    patientHandlingContext.PatientsAttributes = GetQueryableMockDbSet(
+        //    patientHandlingContext.Patient_PatientAttributes = GetQueryableMockDbSet(
         //        new List<PatientAttribute>
         //        {
         //            new PatientAttribute { ID = 1, AttributeID = 1, PatientID = 1, AttributeValueID = 1 },
@@ -251,8 +251,8 @@ namespace PatientHandlingSystem.Tests
         //    var result2 = ds.getAllPatientAttributeValues(patient.ID).ToList();
         //    Assert.AreEqual("testval", ds.getAllPatientAttributeValues(patient.ID).First().Value);
 
-        //    //assert that an instance of PatientsAttributes was added to the table for the patients first attribute
-        //    Assert.AreEqual(patient.ID, patientHandlingContext.PatientsAttributes.Single(i => i.AttributeID == 1 && i.AttributeValueID == 1).PatientID);
+        //    //assert that an instance of Patient_PatientAttributes was added to the table for the patients first attribute
+        //    Assert.AreEqual(patient.ID, patientHandlingContext.Patient_PatientAttributes.Single(i => i.AttributeID == 1 && i.AttributeValueID == 1).PatientID);
 
         //    //assert that the patients second (numeric) attribute's value is entered into the AttributeValue field
         //    //Assert.AreEqual("50", ds.getAllPatientAttributeValues(patient.ID).Single(i => i.AttributeID == 2).Value);
@@ -334,8 +334,8 @@ namespace PatientHandlingSystem.Tests
         //    var result2 = ds.getAllPatientAttributeValues(patient.ID).ToList();
         //    Assert.AreEqual("testval", ds.getAllPatientAttributeValues(patient.ID).First().Value);
 
-        //    //assert that an instance of PatientsAttributes was added to the table for the patients first attribute
-        //    Assert.AreEqual(patient.ID, mockContext.Object.PatientsAttributes.Single(i => i.AttributeID == 1 && i.AttributeValueID == 1).PatientID);
+        //    //assert that an instance of Patient_PatientAttributes was added to the table for the patients first attribute
+        //    Assert.AreEqual(patient.ID, mockContext.Object.Patient_PatientAttributes.Single(i => i.AttributeID == 1 && i.AttributeValueID == 1).PatientID);
 
         //    //assert that the patients second (numeric) attribute's value is entered into the AttributeValue field
         //    //Assert.AreEqual("50", ds.getAllPatientAttributeValues(patient.ID).Single(i => i.AttributeID == 2).Value);

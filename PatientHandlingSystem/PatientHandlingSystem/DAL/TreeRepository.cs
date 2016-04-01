@@ -17,20 +17,20 @@ namespace PatientHandlingSystem.Models
             db = context;
         }
 
-        public List<PatientAttribute> getAllRelevantPatientsAttributes(int patientId)//gets all the patientattributes for this patient, for every attribute possible
+        public List<Patient_PatientAttribute> getAllRelevantPatientsAttributes(int patientId)//gets all the patientattributes for this patient, for every attribute possible
         {
-            return db.PatientsAttributes.Where(i => i.PatientID == patientId).ToList();
+            return db.Patient_PatientAttributes.Where(i => i.PatientID == patientId).ToList();
         }
 
         public List<AttributeValue> getAllPatientAttributeValues(int patientId)
         {
             var attributeValues = new List<AttributeValue>();
-            var patientattrs = db.PatientsAttributes;
+            var patientattrs = db.Patient_PatientAttributes;
             //some weird bug in the database mocking is forcing me to us a for loop instead of a foreach loop here
-            for (int i = 0; i < db.PatientsAttributes.Count(); i++)
+            for (int i = 0; i < db.Patient_PatientAttributes.Count(); i++)
             {
                 var attrvals = db.AttributeValues.ToList();
-                var attributeValue = db.AttributeValues.Single(j => j.ID == db.PatientsAttributes.ElementAt(i).AttributeValueID);
+                var attributeValue = db.AttributeValues.Single(j => j.ID == db.Patient_PatientAttributes.ElementAt(i).AttributeValueID);
                 attributeValues.Add(attributeValue);
             }
             return attributeValues;
@@ -215,7 +215,7 @@ namespace PatientHandlingSystem.Models
         private Boolean checkBranch(Patient patient, Node parentNode, Node childNode)
         {
             var attribute = db.Attributes.Single(i => i.ID == parentNode.NodeValue);
-            var patientAttributeValue = db.PatientsAttributes.Single(i => i.PatientID == patient.ID && i.AttributeID == attribute.ID).AttributeValue;
+            var patientAttributeValue = db.Patient_PatientAttributes.Single(i => i.PatientID == patient.ID && i.AttributeID == attribute.ID).AttributeValue;
             int number1;
             int number2;
             switch (childNode.EdgeOperator)
