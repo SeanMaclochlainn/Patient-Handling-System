@@ -46,7 +46,7 @@ namespace PatientHandlingSystem.Controllers
                 return HttpNotFound();
             }
 
-            var attributeValues = db.AttributeValues.Where(i => i.AttributeID == patientAttribute.ID).Select(i=>i.Value).ToList();
+            var attributeValues = db.AttributeValues.Where(i => i.PatientAttributeID == patientAttribute.ID).Select(i=>i.Value).ToList();
 
             AttributeViewModel attributeVM = new AttributeViewModel
             {
@@ -95,7 +95,7 @@ namespace PatientHandlingSystem.Controllers
                 {
                     attributeValues.Add(new AttributeValue
                     {
-                        AttributeID = patientAttribute.ID,
+                        PatientAttributeID = patientAttribute.ID,
                         Value = i
                     });
                 }
@@ -130,7 +130,7 @@ namespace PatientHandlingSystem.Controllers
                 return HttpNotFound();
             }
 
-            var attributeValues = db.AttributeValues.Where(i => i.AttributeID == attribute.ID).ToList();
+            var attributeValues = db.AttributeValues.Where(i => i.PatientAttributeID == attribute.ID).ToList();
             var completeAttribute = new CompleteAttribute
             {
                 Attribute = attribute,
@@ -181,7 +181,7 @@ namespace PatientHandlingSystem.Controllers
         {
             PatientAttribute attribute = db.PatientAttributes.Find(id);
             var attributeValues = new List<AttributeValue>();
-            attributeValues.AddRange(db.AttributeValues.Where(i => i.AttributeID == attribute.ID).ToList());
+            attributeValues.AddRange(db.AttributeValues.Where(i => i.PatientAttributeID == attribute.ID).ToList());
 
             db.PatientAttributes.Remove(attribute);
             db.AttributeValues.RemoveRange(attributeValues);

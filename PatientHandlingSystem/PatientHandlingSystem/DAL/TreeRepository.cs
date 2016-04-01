@@ -215,7 +215,7 @@ namespace PatientHandlingSystem.Models
         private Boolean checkBranch(Patient patient, Node parentNode, Node childNode)
         {
             var patientAttribute = db.PatientAttributes.Single(i => i.ID == parentNode.NodeValue);
-            var patientAttributeValue = db.Patient_PatientAttributes.Single(i => i.PatientID == patient.ID && i.AttributeID == patientAttribute.ID).AttributeValue;
+            var patientAttributeValue = db.Patient_PatientAttributes.Single(i => i.PatientID == patient.ID && i.PatientAttributeID == patientAttribute.ID).AttributeValue;
             int number1;
             int number2;
             switch (childNode.EdgeOperator)

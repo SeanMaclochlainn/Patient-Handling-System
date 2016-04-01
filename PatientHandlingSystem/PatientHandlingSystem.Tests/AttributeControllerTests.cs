@@ -66,7 +66,7 @@ namespace PatientHandlingSystem.Tests
         public void TestAttributesDetailsMethod()
         {
             patientHandlingContext.PatientAttributes = GetQueryableMockDbSet(new List<Models.PatientAttribute> { new Models.PatientAttribute { ID = 1, Name = "Weight Bearing Capacity", Numeric = true } });
-            patientHandlingContext.AttributeValues = GetQueryableMockDbSet(new List<AttributeValue> { new AttributeValue { ID = 1, AttributeID = 1, Value = "test val" } });
+            patientHandlingContext.AttributeValues = GetQueryableMockDbSet(new List<AttributeValue> { new AttributeValue { ID = 1, PatientAttributeID = 1, Value = "test val" } });
 
             var controller = new AttributesController(patientHandlingContext); 
             var result = ((ViewResult)controller.Details(1)).Model;
@@ -96,7 +96,7 @@ namespace PatientHandlingSystem.Tests
 
             patientHandlingContext.PatientAttributes = GetQueryableMockDbSet(new List<Models.PatientAttribute> { new Models.PatientAttribute { ID = 1, Name = "Weight Bearing Capacity", Numeric = true } });
 
-            patientHandlingContext.AttributeValues = GetQueryableMockDbSet(new List<AttributeValue> { new AttributeValue { ID = 1, AttributeID = 1, Value = "test val" } });
+            patientHandlingContext.AttributeValues = GetQueryableMockDbSet(new List<AttributeValue> { new AttributeValue { ID = 1, PatientAttributeID = 1, Value = "test val" } });
 
             AttributeViewModel attributevm = new AttributeViewModel()
             {
@@ -124,7 +124,7 @@ namespace PatientHandlingSystem.Tests
 
             patientHandlingContext.PatientAttributes = GetQueryableMockDbSet(new List<Models.PatientAttribute> { new Models.PatientAttribute { ID = 1, Name = "Weight Bearing Capacity", Numeric = false } });
 
-            patientHandlingContext.AttributeValues = GetQueryableMockDbSet(new List<AttributeValue> { new AttributeValue { ID = 1, AttributeID = 1, Value = "test val" } });
+            patientHandlingContext.AttributeValues = GetQueryableMockDbSet(new List<AttributeValue> { new AttributeValue { ID = 1, PatientAttributeID = 1, Value = "test val" } });
 
             AttributeViewModel attributevm = new AttributeViewModel()
             {

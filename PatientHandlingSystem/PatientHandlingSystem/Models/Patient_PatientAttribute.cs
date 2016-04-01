@@ -9,7 +9,7 @@ namespace PatientHandlingSystem.Models
     {
         public int ID { get; set; }
         public int PatientID { get; set; }
-        public int AttributeID { get; set; }
+        public int PatientAttributeID { get; set; }
         public int AttributeValueID { get; set; }
 
         public virtual Patient Patient { get; set; }
