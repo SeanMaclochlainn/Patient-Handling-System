@@ -85,7 +85,7 @@ namespace PatientHandlingSystem.Tests
                 }, patientHandlingContext);
             var mock = new Mock<ITreeRepository>();
             mock.Setup(i => i.DeleteRegularNode(It.IsAny<int>(), It.IsAny<string>()));
-            mock.Setup(i => i.EnterSolutionNode(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<string>()));
+            mock.Setup(i => i.EnterSolutionNode(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>()));
 
             TreesController treesController = new TreesController(patientHandlingContext.Object, mock.Object);
 
@@ -139,7 +139,7 @@ namespace PatientHandlingSystem.Tests
             treesController.UpdateTree(treeEditorVM, null);
 
             //assert
-            mock.Verify(i => i.EnterSolutionNode(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<string>()), Times.Once);
+            mock.Verify(i => i.EnterSolutionNode(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once);
 
             //test for when an attribute node was entered
             //arrange

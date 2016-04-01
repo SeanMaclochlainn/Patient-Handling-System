@@ -66,6 +66,7 @@ namespace PatientHandlingSystem.Controllers
             return View("Create", "_TreeEditor", treeCreator);
         }
 
+        [ValidateInput(false)]
         public PartialViewResult UpdateTree(TreeEditorViewModel treeCreatorVM, string deleteButton)
         {
             List<Node> originalNodes = db.Nodes.Where(i => i.TreeID == treeCreatorVM.Tree.ID).OrderBy(j=>j.ID).ToList();

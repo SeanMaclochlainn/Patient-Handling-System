@@ -116,6 +116,7 @@ namespace PatientHandlingSystem.Controllers
         //this method is not unit tested because of the db.begintransaction part
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [ValidateInput(false)]
         public ActionResult Create(PatientViewModel patientVM)
         {
             var patient = new Patient
@@ -308,6 +309,77 @@ namespace PatientHandlingSystem.Controllers
             return RedirectToAction("Index");
         }
 
+        //public void HandlingPlanSet()
+        //{
+
+        //    //Document pdfDocument = new Document(PageSize.A4, 10f, 10f, 10f, 10f);
+        //    //PdfWriter.GetInstance(pdfDocument, Response.OutputStream);
+
+        //    //pdfDocument.Open();
+        //    //pdfDocument.Add()
+        //    //pdfDocument.Close();
+        //    MemoryStream msOutput = new MemoryStream();
+        //    TextReader reader = new StringReader("<ul>< li > fds </ li >< li > fsdf </ li ></ ul >");
+
+        //    // step 1: creation of a document-object
+        //    Document document = new Document(PageSize.A4, 30, 30, 30, 30);
+
+        //    // step 2:
+        //    // we create a writer that listens to the document
+        //    // and directs a XML-stream to a file
+        //    PdfWriter writer = PdfWriter.GetInstance(document, msOutput);
+
+        //    // step 3: we create a worker parse the document
+        //    //XMLWorker 
+        //    //HTMLWorker worker = new HTMLWorker(document);
+
+        //    //// step 4: we open document and start the worker on the document
+        //    //document.Open();
+        //    //worker.StartDocument();
+
+        //    //// step 5: parse the html into the document
+        //    //worker.Parse(reader);
+
+        //    //// step 6: close the document and the worker
+        //    //worker.EndDocument();
+        //    //worker.Close();
+        //    //document.Close();
+
+        //    //Response.ContentType = "application/pdf";
+        //    //Response.AppendHeader("content-disposition", "attachment;filename=Test.pdf");
+        //    //Response.Write(document);
+        //    //Response.Flush();
+        //    //Response.End();
+        //    //var model = new PdfExample
+        //    //{
+        //    //    Heading = "Heading",
+        //    //    Items = new List<BasketItem>
+        //    //    {
+        //    //        new BasketItem
+        //    //        {
+        //    //            Id = 1,
+        //    //            Description = "Item 1",
+        //    //            Price = 1.99m
+        //    //        },
+        //    //        new BasketItem
+        //    //        {
+        //    //            Id = 2,
+        //    //            Description = "Item 2",
+        //    //            Price = 2.99m
+        //    //        }
+        //    //    }
+        //    //};
+
+        //    return new PdfActionResult(model, (writer, document) =>
+        //    {
+        //        document.SetPageSize(new Rectangle(500f, 500f, 90));
+        //        document.NewPage();
+        //    })
+        //    {
+        //        FileDownloadName = "ElanWasHere.pdf"
+        //    };
+        //}
+
         public ActionResult HandlingPlan(int patientId, int treeId)
         {
             var patient = db.Patients.Single(i=>i.ID == patientId);
@@ -333,7 +405,8 @@ namespace PatientHandlingSystem.Controllers
                     j++;
                 }
             }
-            return View("Solution", db.Solutions.Single(i=>i.ID == selectedNode.NodeValue));
+            var solutionVM = new SolutionVM { Solution = db.Solutions.Single(i => i.ID == selectedNode.NodeValue), Patient = patient };
+            return View("Solution", "_Solution", solutionVM);
         }
 
         private Boolean checkBranch(Patient patient, Node parentNode, Node childNode)

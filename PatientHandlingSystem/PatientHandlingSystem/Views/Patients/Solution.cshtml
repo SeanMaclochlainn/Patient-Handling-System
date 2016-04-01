@@ -1,19 +1,22 @@
-﻿@model PatientHandlingSystem.Models.Solution
+﻿@model PatientHandlingSystem.ViewModels.SolutionVM
 
 <div>
-    <h4>Solution</h4>
+    @*<h4>Solution</h4>*@
     <hr />
-    <dl class="dl-horizontal">
+    <h1 class="text-center">@Model.Solution.Title</h1>
+    <p class="centerText">
+    @Html.Raw(Model.Solution.Content)
+    </p>
+    @*<dl >
         <dt>
-            Solution
+            <b>@Model.Title</b>
         </dt>
 
-        <dd class="multiLine">
-            @Model.Content
+        <dd class="multiLine text-center">
+            @Html.Raw(Model.Content)
         </dd>
 
-    </dl>
+    </dl>*@
 </div>
 <p>
-    @Html.ActionLink("Back to List", "Index")
 </p>

@@ -38,3 +38,8 @@ textarea {
 .dl-horizontal dt {
     white-space:normal; /*for the details views*/
 }
+
+.centerText {
+    margin:auto;
+    width:60%;
+}

@@ -29,7 +29,7 @@ namespace PatientHandlingSystem.Models
         }
         public string SolutionContent()
         {
-            return db.Solutions.Find(NodeValue).Content;
+            return db.Solutions.Find(NodeValue).Content.Replace("\r\n", string.Empty); ;
         }
         public string solutionNodeIds()
         {

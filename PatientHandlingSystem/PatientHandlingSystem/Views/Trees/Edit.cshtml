@@ -3,8 +3,17 @@
 @{
     ViewBag.Title = "Edit";
 }
-<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/jquery-1.10.2.js"></script>
 <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+@*<script src='//cdn.tinymce.com/4/tinymce.min.js'></script>*@
+<script src="~/Scripts/tinymce/tinymce.js"></script>
+<script>
+  tinymce.init({
+      selector: '#Solution',
+      width: 300,
+      height: 300,
+  });
+</script>
 
 <h2 class="text-center"><span id="title">@Model.Tree.Name</span> <button class="btn btn-sm" id="editName">Edit Name</button></h2>
 
@@ -98,8 +107,10 @@
     </div>
 </div>
 <script>
+
     $(document).ready(function () {
         //show or hide the attribute or solution tab depending on the radio button that is selected
+        
         $(".solution").hide();
         $(".equipment").hide();
         $("#selectionDiv").click(function () {
