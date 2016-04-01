@@ -10,49 +10,58 @@
     @Html.ActionLink("Create New", "Create")
 </p>
 <table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.FirstName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.LastName)
-        </th>
-        <th></th>
-        <th></th>
-    </tr>
-
-@for(int i=0;i<Model.Count();i++)
-{
-    <tr>
-        <td>
-            @Html.DisplayFor(model=>model.ElementAt(i).FirstName)
-        </td>
-        <td>
-            @Html.DisplayFor(model => model.ElementAt(i).LastName)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id = Model.ElementAt(i).ID }) |
-            @Html.ActionLink("Details", "Details", new { id = Model.ElementAt(i).ID }) |
-            @Html.ActionLink("Delete", "Delete", new { id = Model.ElementAt(i).ID }) 
-        </td>
-        <td>
-            
-            <div class="dropdown">
-                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-                    Handling Plan
-                    <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu">
-                    @foreach (var tree in Model.ElementAt(i).Trees)
-                    {
-                        <li>
-                            <a href="@Url.Action("HandlingPlan", new { patientid = Model.ElementAt(i).ID, treeid = tree.ID})">@tree.Name</a>
-                        </li>
-                    }
-                </ul>
-            </div>
-        </td>
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastName)
+            </th>
+            <th></th>
+            <th></th>
+            <th></th>
         </tr>
-}
+    </thead>
 
+    <tbody>
+    @for(int i=0;i<Model.Count();i++)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(model=>model.ElementAt(i).FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.ElementAt(i).LastName)
+            </td>
+        
+            <td>
+            
+                <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                        Handling Plan
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        @foreach (var tree in Model.ElementAt(i).Trees)
+                        {
+                            <li>
+                                <a href="@Url.Action("HandlingPlan", new { patientid = Model.ElementAt(i).ID, treeid = tree.ID})">@tree.Name</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </td>
+            <td>
+                <a href="@Url.Action("HandlingPlanSet", new { patientid = Model.ElementAt(i).ID })" class="btn btn-info" role="button">View All Handling Plans</a>
+
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = Model.ElementAt(i).ID }) |
+                @Html.ActionLink("Details", "Details", new { id = Model.ElementAt(i).ID }) |
+                @Html.ActionLink("Delete", "Delete", new { id = Model.ElementAt(i).ID })
+            </td>
+            </tr>
+    }
+</tbody>
 </table>

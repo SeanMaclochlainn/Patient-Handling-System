@@ -15,15 +15,21 @@ namespace PatientHandlingSystem.Controllers
     public class PatientsController : Controller
     {
         private PatientHandlingContext db;
+        private TreeRepository treeRepository;
+        private PatientRepository patientRepository;
 
         public PatientsController()
         {
             db = new PatientHandlingContext();
+            treeRepository = new TreeRepository(db);
+            patientRepository = new PatientRepository(db);
         }
 
         public PatientsController(PatientHandlingContext context)
         {
             db = context;
+            treeRepository = new TreeRepository(db);
+            patientRepository = new PatientRepository(db);
         }
         // GET: Patients
         public ActionResult Index()
@@ -309,157 +315,39 @@ namespace PatientHandlingSystem.Controllers
             return RedirectToAction("Index");
         }
 
-        //public void HandlingPlanSet()
-        //{
+        public ActionResult HandlingPlanSet(int patientId)
+        {
+            var patient = patientRepository.GetPatient(patientId);
 
-        //    //Document pdfDocument = new Document(PageSize.A4, 10f, 10f, 10f, 10f);
-        //    //PdfWriter.GetInstance(pdfDocument, Response.OutputStream);
+            SolutionsVM solutionsVM = new SolutionsVM
+            {
+                Patient = patient,
+                Solutions = new List<Solution>()
+            };
 
-        //    //pdfDocument.Open();
-        //    //pdfDocument.Add()
-        //    //pdfDocument.Close();
-        //    MemoryStream msOutput = new MemoryStream();
-        //    TextReader reader = new StringReader("<ul>< li > fds </ li >< li > fsdf </ li ></ ul >");
-
-        //    // step 1: creation of a document-object
-        //    Document document = new Document(PageSize.A4, 30, 30, 30, 30);
-
-        //    // step 2:
-        //    // we create a writer that listens to the document
-        //    // and directs a XML-stream to a file
-        //    PdfWriter writer = PdfWriter.GetInstance(document, msOutput);
-
-        //    // step 3: we create a worker parse the document
-        //    //XMLWorker 
-        //    //HTMLWorker worker = new HTMLWorker(document);
-
-        //    //// step 4: we open document and start the worker on the document
-        //    //document.Open();
-        //    //worker.StartDocument();
-
-        //    //// step 5: parse the html into the document
-        //    //worker.Parse(reader);
-
-        //    //// step 6: close the document and the worker
-        //    //worker.EndDocument();
-        //    //worker.Close();
-        //    //document.Close();
-
-        //    //Response.ContentType = "application/pdf";
-        //    //Response.AppendHeader("content-disposition", "attachment;filename=Test.pdf");
-        //    //Response.Write(document);
-        //    //Response.Flush();
-        //    //Response.End();
-        //    //var model = new PdfExample
-        //    //{
-        //    //    Heading = "Heading",
-        //    //    Items = new List<BasketItem>
-        //    //    {
-        //    //        new BasketItem
-        //    //        {
-        //    //            Id = 1,
-        //    //            Description = "Item 1",
-        //    //            Price = 1.99m
-        //    //        },
-        //    //        new BasketItem
-        //    //        {
-        //    //            Id = 2,
-        //    //            Description = "Item 2",
-        //    //            Price = 2.99m
-        //    //        }
-        //    //    }
-        //    //};
-
-        //    return new PdfActionResult(model, (writer, document) =>
-        //    {
-        //        document.SetPageSize(new Rectangle(500f, 500f, 90));
-        //        document.NewPage();
-        //    })
-        //    {
-        //        FileDownloadName = "ElanWasHere.pdf"
-        //    };
-        //}
+            foreach(var tree in db.Trees.ToList())
+            {
+                var solution = treeRepository.GetHandlingPlan(patientId, tree.ID);
+                solutionsVM.Solutions.Add(solution);
+            }
+            return View("SolutionSet",solutionsVM);
+        }
 
         public ActionResult HandlingPlan(int patientId, int treeId)
         {
-            var patient = db.Patients.Single(i=>i.ID == patientId);
-            var tree = db.Trees.Single(i=>i.ID == treeId);
+            var patient = patientRepository.GetPatient(patientId);
 
-            Node selectedNode = db.Nodes.Single(i => i.ParentID < 1 && i.TreeID == tree.ID); //the node with parentID of zero is the root node
+            List<Solution> solutions = new List<Solution>();
+            solutions.Add(treeRepository.GetHandlingPlan(patientId, treeId));
 
-            while (db.Nodes.Where(i => i.ParentID == selectedNode.ID).Count() > 0) //basically while the selected node has children
+            SolutionsVM solutionsVM = new SolutionsVM
             {
-                Boolean result = false;
-                List<Node> childNodes = db.Nodes.Where(i => i.ParentID == selectedNode.ID).ToList();
-                int j = 0;
-                while (result != true)
-                {
-                    if (j >= childNodes.Count)
-                        return View(new Solution { Content = "Error"}); // this is the case where the instance cannot be classified, this can happen occasionally with nominal data
-                    Node childNode = childNodes.ElementAt(j);
-                    result = checkBranch(patient, selectedNode, childNode);
-                    if (result == true)
-                    {
-                        selectedNode = childNodes.ElementAt(j);
-                    }
-                    j++;
-                }
-            }
-            var solutionVM = new SolutionVM { Solution = db.Solutions.Single(i => i.ID == selectedNode.NodeValue), Patient = patient };
-            return View("Solution", "_Solution", solutionVM);
+                Patient = patient,
+                Solutions = solutions
+            };
+            return View("SolutionSet", solutionsVM);
         }
 
-        private Boolean checkBranch(Patient patient, Node parentNode, Node childNode)
-        {
-            var attribute = db.Attributes.Single(i=>i.ID ==parentNode.NodeValue);
-            var patientAttributeValue = db.PatientsAttributes.Single(i => i.PatientID == patient.ID && i.AttributeID == attribute.ID).AttributeValue;
-            int number1;
-            int number2;
-            switch (childNode.EdgeOperator)
-            {
-                case "==":
-                    var edgeAttributeValue = db.AttributeValues.Single(i=>i.ID == childNode.EdgeValue);
-                    if (edgeAttributeValue.ID == patientAttributeValue.ID)
-                        return true;
-                    else
-                        return false;
-                case "<=":
-                    number1 = int.Parse(patientAttributeValue.Value);
-                    number2 = childNode.EdgeValue;
-
-                    if (number1 <= number2)
-                        return true;
-                    else
-                        return false;
-                case ">":
-                    number1 = int.Parse(patientAttributeValue.Value);
-                    number2 = childNode.EdgeValue;
-
-                    if (number1 > number2)
-                        return true;
-                    else
-                        return false;
-            }
-            return true;
-        }
-
-        public int AddPatient(Patient p)
-        {
-            db.Patients.Add(p);
-            db.SaveChanges();
-            var patient = db.Patients.Single(i => i.ID == p.ID);
-            return 1;
-        }
-
-        public Boolean testMethod(Node n)
-        {
-            if (n.ID == 1)
-            {
-                return true;
-            }
-            else
-                return false;
-        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)

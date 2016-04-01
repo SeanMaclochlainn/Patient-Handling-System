@@ -6,9 +6,9 @@ using System.Web;
 
 namespace PatientHandlingSystem.ViewModels
 {
-    public class SolutionVM
+    public class SolutionsVM
     {
         public Patient Patient { get; set; }
-        public Solution Solution { get; set; }
+        public List<Solution> Solutions { get; set; }
     }
 }

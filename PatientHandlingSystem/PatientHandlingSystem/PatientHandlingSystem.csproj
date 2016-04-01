@@ -484,8 +484,10 @@
     <Compile Include="Controllers\PatientsController.cs" />
     <Compile Include="Controllers\TreesController.cs" />
     <Compile Include="DAL\EquipmentRepository.cs" />
+    <Compile Include="DAL\IPatientRepository.cs" />
     <Compile Include="DAL\ITreeRepository.cs" />
     <Compile Include="DAL\PatientHandlingContext.cs" />
+    <Compile Include="DAL\PatientRepository.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -507,7 +509,7 @@
     <Compile Include="ViewModels\EquipmentViewModel.cs" />
     <Compile Include="ViewModels\PatientAndTreesViewModel.cs" />
     <Compile Include="ViewModels\PatientViewModel.cs" />
-    <Compile Include="ViewModels\SolutionVM.cs" />
+    <Compile Include="ViewModels\SolutionsVM.cs" />
     <Compile Include="ViewModels\TreeEditorViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -531,7 +533,6 @@
     <Content Include="Views\Trees\Index.cshtml" />
     <Content Include="Views\Shared\_Tree.cshtml" />
     <Content Include="Views\Patients\HandlingPlan.cshtml" />
-    <Content Include="Views\Patients\Solution.cshtml" />
     <Content Include="Views\Equipment\Create.cshtml" />
     <Content Include="Views\Equipment\Delete.cshtml" />
     <Content Include="Views\Equipment\Details.cshtml" />
@@ -602,7 +603,7 @@
     <Content Include="Scripts\tinymce\skins\lightgray\ToolTip.less" />
     <Content Include="Scripts\tinymce\skins\lightgray\Variables.less" />
     <Content Include="Scripts\tinymce\skins\lightgray\Window.less" />
-    <Content Include="Views\Shared\_Solution.cshtml" />
+    <Content Include="Views\Patients\SolutionSet.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

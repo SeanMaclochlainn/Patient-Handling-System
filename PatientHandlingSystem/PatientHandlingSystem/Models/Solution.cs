@@ -11,5 +11,7 @@ namespace PatientHandlingSystem.Models
         public string Content { get; set; }
         public int TreeID { get; set; }
         public string Title { get; set; }
+
+        public virtual Tree Tree { get; set; }
     }
 }

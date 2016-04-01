@@ -1,0 +1,38 @@
+﻿@model PatientHandlingSystem.ViewModels.SolutionsVM
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Patient Handling Plan</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
+    <script src="~/Scripts/modernizr-2.6.2.js"></script>
+</head>
+<body>
+    <div>
+        @*create counter so that page break isn't added after last solution*@ 
+        @{
+            int j = 1; 
+        }
+        @foreach (var solution in Model.Solutions)
+        {
+            <h3>@solution.Tree.Name<br /><small>Handling Plan for @Model.Patient.FirstName @Model.Patient.LastName</small></h3>
+            <br />
+            @Html.Raw(solution.Content)
+            if(j!=Model.Solutions.Count)
+            {
+                @:<div class="page-break"></div><br />
+            }
+            j++;
+        }
+    </div>
+
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+</body>
+</html>

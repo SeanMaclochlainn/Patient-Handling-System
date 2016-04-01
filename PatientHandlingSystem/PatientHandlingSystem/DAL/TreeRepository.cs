@@ -8,7 +8,7 @@ using System.Web;
 
 namespace PatientHandlingSystem.Models
 {
-    public class TreeRepository :ITreeRepository
+    public class TreeRepository : ITreeRepository
     {
         private PatientHandlingContext db;
 
@@ -27,7 +27,7 @@ namespace PatientHandlingSystem.Models
             var attributeValues = new List<AttributeValue>();
             var patientattrs = db.PatientsAttributes;
             //some weird bug in the database mocking is forcing me to us a for loop instead of a foreach loop here
-            for (int i=0; i<db.PatientsAttributes.Count();i++)
+            for (int i = 0; i < db.PatientsAttributes.Count(); i++)
             {
                 var attrvals = db.AttributeValues.ToList();
                 var attributeValue = db.AttributeValues.Single(j => j.ID == db.PatientsAttributes.ElementAt(i).AttributeValueID);
@@ -120,12 +120,12 @@ namespace PatientHandlingSystem.Models
             db.Entry(parentNode).State = EntityState.Modified;
             db.SaveChanges();
         }
-        
+
         public Boolean IsLeafNode(int nodeId, int treeId)
         {
             var selectedNode = db.Nodes.Find(nodeId);
             var nodes = db.Nodes.Where(i => i.TreeID == treeId).ToList();
-            foreach(var node in nodes)
+            foreach (var node in nodes)
             {
                 if (node.ParentID == selectedNode.ID)
                     return false;
@@ -141,12 +141,12 @@ namespace PatientHandlingSystem.Models
             var childNodes = db.Nodes.Where(i => i.ParentID == nodeId).ToList();
 
             //if there is only one parent node in the tree, delete all nodes, otherwise, delete the child nodes and make the parent node into a stub node
-            if(parentNode.ParentID == 0) 
+            if (parentNode.ParentID == 0)
             {
                 db.Nodes.Remove(parentNode);
                 db.Nodes.RemoveRange(childNodes);
             }
-            else 
+            else
             {
                 db.Nodes.RemoveRange(childNodes);
                 var node = db.Nodes.Single(i => i.ID == nodeId);
@@ -172,7 +172,7 @@ namespace PatientHandlingSystem.Models
             {
                 Tree = db.Trees.Find(treeId),
                 Attributes = db.Attributes.ToList(),
-                Nodes = db.Nodes.Where(i => i.TreeID == treeId).OrderBy(j=>j.ID).ToList(),
+                Nodes = db.Nodes.Where(i => i.TreeID == treeId).OrderBy(j => j.ID).ToList(),
                 EquipmentAttributes = db.EquipmentAttributes.ToList(),
                 Equipment = db.Equipment.ToList()
             };
@@ -183,5 +183,69 @@ namespace PatientHandlingSystem.Models
         {
             db.SaveChanges();
         }
+
+        public Solution GetHandlingPlan(int patientId, int treeId)
+        {
+            var patient = db.Patients.Single(i => i.ID == patientId);
+            var tree = db.Trees.Single(i => i.ID == treeId);
+
+            Node selectedNode = db.Nodes.Single(i => i.ParentID < 1 && i.TreeID == tree.ID); //the node with parentID of zero is the root node
+
+            while (db.Nodes.Where(i => i.ParentID == selectedNode.ID).Count() > 0) //basically while the selected node has children
+            {
+                Boolean result = false;
+                List<Node> childNodes = db.Nodes.Where(i => i.ParentID == selectedNode.ID).ToList();
+                int j = 0;
+                while (result != true)
+                {
+                    if (j >= childNodes.Count)
+                        return new Solution { Content = "Error" }; // this is the case where the instance cannot be classified, this can happen occasionally with nominal data
+                    Node childNode = childNodes.ElementAt(j);
+                    result = checkBranch(patient, selectedNode, childNode);
+                    if (result == true)
+                    {
+                        selectedNode = childNodes.ElementAt(j);
+                    }
+                    j++;
+                }
+            }
+            return db.Solutions.Single(i => i.ID == selectedNode.NodeValue);
+        }
+
+        private Boolean checkBranch(Patient patient, Node parentNode, Node childNode)
+        {
+            var attribute = db.Attributes.Single(i => i.ID == parentNode.NodeValue);
+            var patientAttributeValue = db.PatientsAttributes.Single(i => i.PatientID == patient.ID && i.AttributeID == attribute.ID).AttributeValue;
+            int number1;
+            int number2;
+            switch (childNode.EdgeOperator)
+            {
+                case "==":
+                    var edgeAttributeValue = db.AttributeValues.Single(i => i.ID == childNode.EdgeValue);
+                    if (edgeAttributeValue.ID == patientAttributeValue.ID)
+                        return true;
+                    else
+                        return false;
+                case "<=":
+                    number1 = int.Parse(patientAttributeValue.Value);
+                    number2 = childNode.EdgeValue;
+
+                    if (number1 <= number2)
+                        return true;
+                    else
+                        return false;
+                case ">":
+                    number1 = int.Parse(patientAttributeValue.Value);
+                    number2 = childNode.EdgeValue;
+
+                    if (number1 > number2)
+                        return true;
+                    else
+                        return false;
+            }
+            return true;
+        }
+
     }
+    
 }

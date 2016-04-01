@@ -1,4 +1,5 @@
-﻿using PatientHandlingSystem.ViewModels;
+﻿using PatientHandlingSystem.Models;
+using PatientHandlingSystem.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,5 +16,6 @@ namespace PatientHandlingSystem.DAL
         TreeEditorViewModel GetTreeEditorViewModel(int treeId);
         void Save();
         Boolean IsLeafNode(int nodeId, int treeId);
+        Solution GetHandlingPlan(int patientId, int treeId);
     }
 }
