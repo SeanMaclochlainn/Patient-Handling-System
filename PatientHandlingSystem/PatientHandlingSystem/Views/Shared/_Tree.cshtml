@@ -83,8 +83,7 @@
     var solutionNodeIds = [];
     @foreach (var node in Model.Where(i=>i.SolutionNode == true))
     {
-        //var nodeText = node.SolutionContent().Replace("\r\n", "|break|");
-        @:solutionNodeIds.push({id:@node.ID, text:'@Html.Raw(node.SolutionContent())', title: '@node.NodeText()'});
+        @:solutionNodeIds.push({id:@node.ID, text:"@Html.Raw(node.SolutionContent())", title: "@node.NodeText()"});
             }
 
     //remove any parent node ids that may still be there from previous ajax call
@@ -104,13 +103,10 @@
         //enter the nodes text into the solution text area when it is clicked
         for(var i = 0;i<solutionNodeIds.length;i++){
             if(solutionNodeIds[i].id==params.nodes){
-                //tinyMCE.execCommand('mceSetContent',false,enterLineBreaks(solutionNodeIds[i].text));
-                //tinyMCE.execCommand('mceSetContent',false,"");
                 var test = solutionNodeIds[i].text;
                 console.log("text: "+test);
                 tinyMCE.execCommand('mceSetContent',false,test);
 
-                //$("#Solution").html(enterLineBreaks(solutionNodeIds[i].text));
                 $("#SolutionTitle").val(solutionNodeIds[i].title);
                 if ($(".attributeTab").is(":checked")) {
                     $(".solution").show();
@@ -121,14 +117,6 @@
             }
         }
 
-        function enterLineBreaks(str){
-            //replace all instances of |break| with \r\n
-            while(str.split("|break|").length>1)
-            {
-                str = str.split("|break|").join("\r\n");
-            }
-            return str;
-        }
     });
 
 
