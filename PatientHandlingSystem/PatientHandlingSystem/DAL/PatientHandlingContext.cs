@@ -11,7 +11,7 @@ namespace PatientHandlingSystem.DAL
     public class PatientHandlingContext : DbContext
     {
         public virtual DbSet<Patient> Patients { get; set; }
-        public virtual DbSet<Models.Attribute> Attributes { get; set; }
+        public virtual DbSet<PatientAttribute> PatientAttributes { get; set; }
         public virtual DbSet<Patient_PatientAttribute> Patient_PatientAttributes { get; set; }
         public virtual DbSet<AttributeValue> AttributeValues { get; set; }
         public virtual DbSet<Node> Nodes { get; set; }

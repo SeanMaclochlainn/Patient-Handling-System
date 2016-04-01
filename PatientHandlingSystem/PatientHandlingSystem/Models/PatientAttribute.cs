@@ -6,7 +6,7 @@ using System.Web;
 
 namespace PatientHandlingSystem.Models
 {
-    public class Attribute
+    public class PatientAttribute
     {
         public int ID { get; set; }
 

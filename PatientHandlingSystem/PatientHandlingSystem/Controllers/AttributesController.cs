@@ -29,7 +29,7 @@ namespace PatientHandlingSystem.Controllers
         // GET: Attributes
         public ViewResult Index()
         {
-            return View(db.Attributes.ToList());
+            return View(db.PatientAttributes.ToList());
         }
 
         // GET: Attributes/Details/5
@@ -40,24 +40,23 @@ namespace PatientHandlingSystem.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            var attribute = db.Attributes.Single(i=>i.ID == id);
-            if (attribute == null)
+            var patientAttribute = db.PatientAttributes.Single(i=>i.ID == id);
+            if (patientAttribute == null)
             {
                 return HttpNotFound();
             }
 
-            var attributeValues = db.AttributeValues.Where(i => i.AttributeID == attribute.ID).Select(i=>i.Value).ToList();
+            var attributeValues = db.AttributeValues.Where(i => i.AttributeID == patientAttribute.ID).Select(i=>i.Value).ToList();
 
             AttributeViewModel attributeVM = new AttributeViewModel
             {
-                AttributeName = attribute.Name,
+                AttributeName = patientAttribute.Name,
                 AttributeValues = attributeValues,
-                Numeric = attribute.Numeric
+                Numeric = patientAttribute.Numeric
             };
             return View(attributeVM);
         }
 
-        // GET: Attributes/Create
         public ActionResult Create()
         {
             var attributeList = new List<string>();
@@ -69,14 +68,13 @@ namespace PatientHandlingSystem.Controllers
             return View(attribute);
         }
 
-        // POST: Attributes/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(AttributeViewModel attributevm)
         {
-            Models.Attribute attribute = new Models.Attribute
+            PatientAttribute patientAttribute = new PatientAttribute
             {
                 Name = attributevm.AttributeName, 
                 Numeric = attributevm.Numeric
@@ -84,12 +82,12 @@ namespace PatientHandlingSystem.Controllers
 
             if (ModelState.IsValid)
             {
-                db.Attributes.Add(attribute);
+                db.PatientAttributes.Add(patientAttribute);
                 db.SaveChanges();
             }
 
             //no attribute values are added if the attribute is numeric
-            if (!attribute.Numeric)
+            if (!patientAttribute.Numeric)
             {
                 var attributeValues = new List<AttributeValue>();
 
@@ -97,7 +95,7 @@ namespace PatientHandlingSystem.Controllers
                 {
                     attributeValues.Add(new AttributeValue
                     {
-                        AttributeID = attribute.ID,
+                        AttributeID = patientAttribute.ID,
                         Value = i
                     });
                 }
@@ -117,17 +115,16 @@ namespace PatientHandlingSystem.Controllers
                 
             
 
-            return View(attribute);
+            return View(patientAttribute);
         }
 
-        // GET: Attributes/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Models.Attribute attribute = db.Attributes.Find(id);
+            PatientAttribute attribute = db.PatientAttributes.Find(id);
             if (attribute == null)
             {
                 return HttpNotFound();
@@ -142,7 +139,6 @@ namespace PatientHandlingSystem.Controllers
             return View(completeAttribute);
         }
 
-        // POST: Attributes/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -171,23 +167,23 @@ namespace PatientHandlingSystem.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Models.Attribute attribute = db.Attributes.Find(id);
-            if (attribute == null)
+            PatientAttribute patientAttribute = db.PatientAttributes.Find(id);
+            if (patientAttribute == null)
             {
                 return HttpNotFound();
             }
-            return View(attribute);
+            return View(patientAttribute);
         }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Models.Attribute attribute = db.Attributes.Find(id);
+            PatientAttribute attribute = db.PatientAttributes.Find(id);
             var attributeValues = new List<AttributeValue>();
             attributeValues.AddRange(db.AttributeValues.Where(i => i.AttributeID == attribute.ID).ToList());
 
-            db.Attributes.Remove(attribute);
+            db.PatientAttributes.Remove(attribute);
             db.AttributeValues.RemoveRange(attributeValues);
             db.SaveChanges();
             return RedirectToAction("Index");

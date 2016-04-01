@@ -9,7 +9,7 @@ namespace PatientHandlingSystem.ViewModels
 {
     public class CompleteAttribute
     {
-        public Models.Attribute Attribute { get; set; }
+        public Models.PatientAttribute Attribute { get; set; }
         public List<AttributeValue> AttributeValues { get; set; }
         public AttributeValue SelectedAttributeValue { get; set; }
     }

@@ -60,7 +60,7 @@ namespace PatientHandlingSystem.Controllers
             var treeCreator = new TreeEditorViewModel
             {
                 Tree = tree,
-                Attributes = db.Attributes.ToList(),
+                Attributes = db.PatientAttributes.ToList(),
                 Nodes = new List<Node>()
             };
             return View("Create", "_TreeEditor", treeCreator);

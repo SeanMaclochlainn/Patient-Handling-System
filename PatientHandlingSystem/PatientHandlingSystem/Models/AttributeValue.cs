@@ -14,6 +14,6 @@ namespace PatientHandlingSystem.Models
         [DisplayName("Attribute Value")]
         public string Value { get; set; }
 
-        public virtual Attribute Attribute { get; set; }
+        public virtual PatientAttribute Attribute { get; set; }
     }
 }

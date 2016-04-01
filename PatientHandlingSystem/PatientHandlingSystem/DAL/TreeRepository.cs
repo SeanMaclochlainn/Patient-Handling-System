@@ -89,7 +89,7 @@ namespace PatientHandlingSystem.Models
             }
             else
             {
-                var attributeValues = db.Attributes.Find(selectedAttributeId).AttributeValues;
+                var attributeValues = db.PatientAttributes.Find(selectedAttributeId).AttributeValues;
                 foreach (var av in attributeValues)
                 {
                     var childNode = new Node
@@ -171,7 +171,7 @@ namespace PatientHandlingSystem.Models
             var treeCreator = new TreeEditorViewModel
             {
                 Tree = db.Trees.Find(treeId),
-                Attributes = db.Attributes.ToList(),
+                Attributes = db.PatientAttributes.ToList(),
                 Nodes = db.Nodes.Where(i => i.TreeID == treeId).OrderBy(j => j.ID).ToList(),
                 EquipmentAttributes = db.EquipmentAttributes.ToList(),
                 Equipment = db.Equipment.ToList()
@@ -214,8 +214,8 @@ namespace PatientHandlingSystem.Models
 
         private Boolean checkBranch(Patient patient, Node parentNode, Node childNode)
         {
-            var attribute = db.Attributes.Single(i => i.ID == parentNode.NodeValue);
-            var patientAttributeValue = db.Patient_PatientAttributes.Single(i => i.PatientID == patient.ID && i.AttributeID == attribute.ID).AttributeValue;
+            var patientAttribute = db.PatientAttributes.Single(i => i.ID == parentNode.NodeValue);
+            var patientAttributeValue = db.Patient_PatientAttributes.Single(i => i.PatientID == patient.ID && i.AttributeID == patientAttribute.ID).AttributeValue;
             int number1;
             int number2;
             switch (childNode.EdgeOperator)

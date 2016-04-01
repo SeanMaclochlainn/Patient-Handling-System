@@ -23,7 +23,7 @@ namespace PatientHandlingSystem.Models
         public string NodeText()
         {
             if (SolutionNode == false)
-                return db.Attributes.Any(i => i.ID == NodeValue) ? db.Attributes.Find(NodeValue).Name : "";
+                return db.PatientAttributes.Any(i => i.ID == NodeValue) ? db.PatientAttributes.Find(NodeValue).Name : "";
             else
                 return db.Solutions.Find(NodeValue).Title;//.Substring(0,10)+"...";
         }

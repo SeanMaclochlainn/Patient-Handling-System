@@ -62,7 +62,7 @@ namespace PatientHandlingSystem.Controllers
             }
 
             var completeAttributes = new List<CompleteAttribute>();
-            foreach (var i in db.Attributes.ToList())
+            foreach (var i in db.PatientAttributes.ToList())
             {
                 var patientAttribute = db.Patient_PatientAttributes.SingleOrDefault(j => j.AttributeID == i.ID && j.PatientID == patient.ID);
                 AttributeValue selectedAttributeValue = null;
@@ -92,7 +92,7 @@ namespace PatientHandlingSystem.Controllers
         public ActionResult Create()
         {
             var completeAttributes = new List<CompleteAttribute>();
-            foreach(var a in db.Attributes)
+            foreach(var a in db.PatientAttributes)
             {
                 var attributeValues = a.AttributeValues;
 
@@ -213,8 +213,8 @@ namespace PatientHandlingSystem.Controllers
 
             var completeAttributes = new List<CompleteAttribute>();
             var patientsAttributes = db.Patient_PatientAttributes.Where(i => i.PatientID == patient.ID).ToList();
-            var attributes = db.Attributes.ToList();
-            foreach(var a in attributes)
+            var patientAttributes = db.PatientAttributes.ToList();
+            foreach(var a in patientAttributes)
             {
                 var attributeValues = a.AttributeValues;
                 var selectedAttribute = db.Patient_PatientAttributes.SingleOrDefault(i => i.AttributeID == a.ID && i.PatientID == patient.ID);
