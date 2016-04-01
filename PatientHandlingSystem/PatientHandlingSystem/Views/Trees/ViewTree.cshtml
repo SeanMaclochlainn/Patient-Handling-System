@@ -88,24 +88,15 @@
     var solutionNodeIds = [];
     @foreach (var node in Model.Where(i=>i.SolutionNode == true))
     {
-        var nodeText = node.SolutionContent().Replace("\r\n", "|break|");
-        @:solutionNodeIds.push({id:@node.ID, text: '@nodeText', title:'@node.NodeText()'});
+        @:solutionNodeIds.push({id:@node.ID, text: "@Html.Raw(node.SolutionContent())", title:'@node.NodeText()'});
             }
 
     network.on("selectNode", function (params) {
         for(var i = 0;i<solutionNodeIds.length;i++){
             if(solutionNodeIds[i].id==params.nodes){
-                $("#solution").html(enterLineBreaks(solutionNodeIds[i].text));
+                $("#solution").html(solutionNodeIds[i].text);
                 $("#SolutionTitle").val(solutionNodeIds[i].title);
             }
-        }
-        function enterLineBreaks(str){
-            //replace all instances of |break| with \r\n
-            while(str.split("|break|").length>1)
-            {
-                str = str.split("|break|").join("<br />");
-            }
-            return str;
         }
     });
 </script>
