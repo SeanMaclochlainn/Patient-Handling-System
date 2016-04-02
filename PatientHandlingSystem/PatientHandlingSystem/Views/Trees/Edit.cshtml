@@ -28,8 +28,8 @@
                     <div class="row" id="selectionDiv">
                         <div class="col-md-12" style="font-weight:bold;">
                             @Html.RadioButtonFor(i => i.NodeType, "Solution", new { @class = "solutionTab" }) Solution
-                            @Html.RadioButtonFor(i => i.NodeType, "PatientAttribute", new { @class = "attributeTab", @checked = "checked" } ) Attribute
-                            @Html.RadioButtonFor(i=>i.NodeType, "Equipment", new { @class = "equipmentTab" }) Equipment
+                            @Html.RadioButtonFor(i => i.NodeType, "PatientAttribute", new { @class = "attributeTab", @checked = "checked" }) Attribute
+                            @Html.RadioButtonFor(i => i.NodeType, "Equipment", new { @class = "equipmentTab" }) Equipment
                         </div>
                     </div>
 
@@ -60,12 +60,12 @@
                     <div class="row equipment">
                         <div class="col-md-12">
                             @Html.HiddenFor(i => i.Tree.ID)
-                            @Html.DropDownListFor(i => Model.SelectedEquipment.ID, new SelectList(Model.Equipment, "ID", "Name"), htmlAttributes: new { @class = "form-control"})
+                            @Html.DropDownListFor(i => Model.SelectedEquipment.ID, new SelectList(Model.Equipment, "ID", "Name"), htmlAttributes: new { @class = "form-control" })
                         </div>
                     </div>
                     <div class="row equipment top-buffer equipmentAttributeLabel">
                         <div class="col-md-12">
-                        @Html.Label("Attribute")    
+                            @Html.Label("Attribute")
                         </div>
                     </div>
                     <div class="row equipment top-buffer">
@@ -77,7 +77,7 @@
                     @*the solution panel*@
                     <div class="row solution top-buffer">
                         <div class="col-md-12 form-group">
-                            @Html.EditorFor(i=>i.SolutionTitle, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.EditorFor(i => i.SolutionTitle, new { htmlAttributes = new { @class = "form-control" } })
                         </div>
                     </div>
                     <div class="row solution top-buffer">
@@ -178,9 +178,9 @@
             @:equipmentAttribute.equipmentId= '@attribute.EquipmentID';
             @:equipmentAttributes.push(equipmentAttribute);
         }
-        
+
         insertEquipmentAttributeDropDown($("#SelectedEquipment_ID").val(), equipmentAttributes);
-        
+
         $("#SelectedEquipment_ID").on('change', function(){
             insertEquipmentAttributeDropDown(this.value, equipmentAttributes);
         });

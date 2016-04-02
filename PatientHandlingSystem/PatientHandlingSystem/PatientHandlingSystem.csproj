@@ -532,7 +532,6 @@
     <Content Include="Views\Trees\Edit.cshtml" />
     <Content Include="Views\Trees\Index.cshtml" />
     <Content Include="Views\Shared\_Tree.cshtml" />
-    <Content Include="Views\Patients\HandlingPlan.cshtml" />
     <Content Include="Views\Equipment\Create.cshtml" />
     <Content Include="Views\Equipment\Delete.cshtml" />
     <Content Include="Views\Equipment\Details.cshtml" />
