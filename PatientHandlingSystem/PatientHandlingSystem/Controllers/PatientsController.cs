@@ -65,11 +65,11 @@ namespace PatientHandlingSystem.Controllers
             foreach (var i in db.PatientAttributes.ToList())
             {
                 var patientAttribute = db.Patient_PatientAttributes.SingleOrDefault(j => j.PatientAttributeID == i.ID && j.PatientID == patient.ID);
-                AttributeValue selectedAttributeValue = null;
+                PatientAttributeValue selectedAttributeValue = null;
                 if (patientAttribute != null)
-                    selectedAttributeValue = db.AttributeValues.Find(patientAttribute.AttributeValueID);
+                    selectedAttributeValue = db.PatientAttributeValues.Find(patientAttribute.AttributeValueID);
                 else
-                    selectedAttributeValue = new AttributeValue();
+                    selectedAttributeValue = new PatientAttributeValue();
                 var completeAttribute = new CompleteAttribute
                 {
                     Attribute = i,
@@ -97,13 +97,13 @@ namespace PatientHandlingSystem.Controllers
                 var attributeValues = a.AttributeValues;
 
                 if(!a.Numeric)
-                    attributeValues.Add(new AttributeValue { ID = 0, Value = "Select Attribute" });
+                    attributeValues.Add(new PatientAttributeValue { ID = 0, Value = "Select Attribute" });
 
                 var completeAttribute = new CompleteAttribute
                 {
                     Attribute = a,
                     AttributeValues = attributeValues,
-                    SelectedAttributeValue = new AttributeValue()
+                    SelectedAttributeValue = new PatientAttributeValue()
                 };
                 completeAttributes.Add(completeAttribute);
             }
@@ -152,8 +152,8 @@ namespace PatientHandlingSystem.Controllers
                             {
                                 //for numeric attributes, the attribute value assigned to the patient is contained in the AttributeValue table, and then also referenced
                                 //in the Patient_PatientAttributes table
-                                var attributeValue = new AttributeValue { PatientAttributeID = ca.Attribute.ID, Value = ca.SelectedAttributeValue.Value };
-                                db.AttributeValues.Add(attributeValue);
+                                var attributeValue = new PatientAttributeValue { PatientAttributeID = ca.Attribute.ID, Value = ca.SelectedAttributeValue.Value };
+                                db.PatientAttributeValues.Add(attributeValue);
                                 db.SaveChanges();
 
                                 patientAttribute = new Patient_PatientAttribute
@@ -218,15 +218,15 @@ namespace PatientHandlingSystem.Controllers
             {
                 var attributeValues = a.AttributeValues;
                 var selectedAttribute = db.Patient_PatientAttributes.SingleOrDefault(i => i.PatientAttributeID == a.ID && i.PatientID == patient.ID);
-                AttributeValue selectedAttributeValue = null;
+                PatientAttributeValue selectedAttributeValue = null;
                 if (selectedAttribute != null)
                 {
                     selectedAttributeValue = selectedAttribute.AttributeValue;
                 }
                 else
                 {
-                    selectedAttributeValue = new AttributeValue { ID = 0, Value = "Please Select Attribute", PatientAttributeID = a.ID };
-                    attributeValues.Add(new AttributeValue { Value = "Please Select Attribute", ID = 0, PatientAttributeID = a.ID });
+                    selectedAttributeValue = new PatientAttributeValue { ID = 0, Value = "Please Select Attribute", PatientAttributeID = a.ID };
+                    attributeValues.Add(new PatientAttributeValue { Value = "Please Select Attribute", ID = 0, PatientAttributeID = a.ID });
                 }
                 var completeAttribute = new CompleteAttribute
                 {

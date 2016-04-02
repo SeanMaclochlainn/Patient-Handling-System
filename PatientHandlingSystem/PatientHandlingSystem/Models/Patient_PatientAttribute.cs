@@ -14,6 +14,6 @@ namespace PatientHandlingSystem.Models
 
         public virtual Patient Patient { get; set; }
         public virtual PatientAttribute Attribute { get; set; }
-        public virtual AttributeValue AttributeValue { get; set; }
+        public virtual PatientAttributeValue AttributeValue { get; set; }
     }
 }

@@ -46,7 +46,7 @@ namespace PatientHandlingSystem.Controllers
                 return HttpNotFound();
             }
 
-            var attributeValues = db.AttributeValues.Where(i => i.PatientAttributeID == patientAttribute.ID).Select(i=>i.Value).ToList();
+            var attributeValues = db.PatientAttributeValues.Where(i => i.PatientAttributeID == patientAttribute.ID).Select(i=>i.Value).ToList();
 
             AttributeViewModel attributeVM = new AttributeViewModel
             {
@@ -89,11 +89,11 @@ namespace PatientHandlingSystem.Controllers
             //no attribute values are added if the attribute is numeric
             if (!patientAttribute.Numeric)
             {
-                var attributeValues = new List<AttributeValue>();
+                var attributeValues = new List<PatientAttributeValue>();
 
                 foreach (var i in attributevm.AttributeValues)
                 {
-                    attributeValues.Add(new AttributeValue
+                    attributeValues.Add(new PatientAttributeValue
                     {
                         PatientAttributeID = patientAttribute.ID,
                         Value = i
@@ -102,7 +102,7 @@ namespace PatientHandlingSystem.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    db.AttributeValues.AddRange(attributeValues);
+                    db.PatientAttributeValues.AddRange(attributeValues);
                     db.SaveChanges();
                     return RedirectToAction("Index");
                 }
@@ -130,7 +130,7 @@ namespace PatientHandlingSystem.Controllers
                 return HttpNotFound();
             }
 
-            var attributeValues = db.AttributeValues.Where(i => i.PatientAttributeID == attribute.ID).ToList();
+            var attributeValues = db.PatientAttributeValues.Where(i => i.PatientAttributeID == attribute.ID).ToList();
             var completeAttribute = new CompleteAttribute
             {
                 Attribute = attribute,
@@ -180,11 +180,11 @@ namespace PatientHandlingSystem.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             PatientAttribute attribute = db.PatientAttributes.Find(id);
-            var attributeValues = new List<AttributeValue>();
-            attributeValues.AddRange(db.AttributeValues.Where(i => i.PatientAttributeID == attribute.ID).ToList());
+            var attributeValues = new List<PatientAttributeValue>();
+            attributeValues.AddRange(db.PatientAttributeValues.Where(i => i.PatientAttributeID == attribute.ID).ToList());
 
             db.PatientAttributes.Remove(attribute);
-            db.AttributeValues.RemoveRange(attributeValues);
+            db.PatientAttributeValues.RemoveRange(attributeValues);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

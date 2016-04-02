@@ -66,7 +66,7 @@ namespace PatientHandlingSystem.Tests
         public void TestAttributesDetailsMethod()
         {
             patientHandlingContext.PatientAttributes = GetQueryableMockDbSet(new List<Models.PatientAttribute> { new Models.PatientAttribute { ID = 1, Name = "Weight Bearing Capacity", Numeric = true } });
-            patientHandlingContext.AttributeValues = GetQueryableMockDbSet(new List<AttributeValue> { new AttributeValue { ID = 1, PatientAttributeID = 1, Value = "test val" } });
+            patientHandlingContext.PatientAttributeValues = GetQueryableMockDbSet(new List<PatientAttributeValue> { new PatientAttributeValue { ID = 1, PatientAttributeID = 1, Value = "test val" } });
 
             var controller = new AttributesController(patientHandlingContext); 
             var result = ((ViewResult)controller.Details(1)).Model;
@@ -96,7 +96,7 @@ namespace PatientHandlingSystem.Tests
 
             patientHandlingContext.PatientAttributes = GetQueryableMockDbSet(new List<Models.PatientAttribute> { new Models.PatientAttribute { ID = 1, Name = "Weight Bearing Capacity", Numeric = true } });
 
-            patientHandlingContext.AttributeValues = GetQueryableMockDbSet(new List<AttributeValue> { new AttributeValue { ID = 1, PatientAttributeID = 1, Value = "test val" } });
+            patientHandlingContext.PatientAttributeValues = GetQueryableMockDbSet(new List<PatientAttributeValue> { new PatientAttributeValue { ID = 1, PatientAttributeID = 1, Value = "test val" } });
 
             AttributeViewModel attributevm = new AttributeViewModel()
             {
@@ -105,14 +105,14 @@ namespace PatientHandlingSystem.Tests
                 AttributeValues = new List<string>() { "test val", "test2 val" }
             };
             int preAttributeCount = patientHandlingContext.PatientAttributes.Count();
-            int preAttributeValuesCount = patientHandlingContext.AttributeValues.Count(); //there should not be any additional attributevalues added when creating a numeric attribute
+            int preAttributeValuesCount = patientHandlingContext.PatientAttributeValues.Count(); //there should not be any additional attributevalues added when creating a numeric attribute
             var result = attributeController.Create(attributevm);
 
             //checks that an attribute was added to the attributes table
             Assert.AreEqual(preAttributeCount + 1, patientHandlingContext.PatientAttributes.Count());
 
             //checks that there are no additional attribute values added upon creating a numeric attribute
-            Assert.AreEqual(preAttributeValuesCount, patientHandlingContext.AttributeValues.Count());
+            Assert.AreEqual(preAttributeValuesCount, patientHandlingContext.PatientAttributeValues.Count());
 
             Assert.AreEqual(true, patientHandlingContext.PatientAttributes.Single(i => i.ID == 1).Numeric, "Attribute added not numeric");
         }
@@ -124,7 +124,7 @@ namespace PatientHandlingSystem.Tests
 
             patientHandlingContext.PatientAttributes = GetQueryableMockDbSet(new List<Models.PatientAttribute> { new Models.PatientAttribute { ID = 1, Name = "Weight Bearing Capacity", Numeric = false } });
 
-            patientHandlingContext.AttributeValues = GetQueryableMockDbSet(new List<AttributeValue> { new AttributeValue { ID = 1, PatientAttributeID = 1, Value = "test val" } });
+            patientHandlingContext.PatientAttributeValues = GetQueryableMockDbSet(new List<PatientAttributeValue> { new PatientAttributeValue { ID = 1, PatientAttributeID = 1, Value = "test val" } });
 
             AttributeViewModel attributevm = new AttributeViewModel()
             {
@@ -133,14 +133,14 @@ namespace PatientHandlingSystem.Tests
                 AttributeValues = new List<string>() { "test val", "test2 val" }
             };
             int preAttributeCount = patientHandlingContext.PatientAttributes.Count();
-            int preAttributeValuesCount = patientHandlingContext.AttributeValues.Count();
+            int preAttributeValuesCount = patientHandlingContext.PatientAttributeValues.Count();
             var result = attributeController.Create(attributevm);
 
             //asserts an attribute was created
             Assert.AreEqual(preAttributeCount + 1, patientHandlingContext.PatientAttributes.Count());
 
             //asserts two attribute vales were added to the AttributeValues table
-            Assert.AreEqual(preAttributeValuesCount+2, patientHandlingContext.AttributeValues.Count());
+            Assert.AreEqual(preAttributeValuesCount+2, patientHandlingContext.PatientAttributeValues.Count());
         }
     }
 }

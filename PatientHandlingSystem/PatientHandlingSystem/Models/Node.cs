@@ -41,7 +41,7 @@ namespace PatientHandlingSystem.Models
         //}
         public string edgeText()
         {
-            return db.AttributeValues.Find(EdgeValue).Value;
+            return db.PatientAttributeValues.Find(EdgeValue).Value;
         }
 
         public virtual Tree Tree { get; set; }

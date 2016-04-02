@@ -11,7 +11,7 @@ namespace PatientHandlingSystem.ViewModels
         public Tree Tree { get; set; }
         public List<Models.PatientAttribute> Attributes { get; set; }
         public Models.PatientAttribute SelectedAttribute { get; set; }
-        public AttributeValue SelectedAttributeNumericValue { get; set; }
+        public PatientAttributeValue SelectedAttributeNumericValue { get; set; }
         public List<Equipment> Equipment { get; set; }
         public Equipment SelectedEquipment { get; set; }
         public List<EquipmentAttribute> EquipmentAttributes { get; set; }

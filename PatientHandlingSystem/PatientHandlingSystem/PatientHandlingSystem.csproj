@@ -492,7 +492,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\PatientAttribute.cs" />
-    <Compile Include="Models\AttributeValue.cs" />
+    <Compile Include="Models\PatientAttributeValue.cs" />
     <Compile Include="DAL\TreeRepository.cs" />
     <Compile Include="Models\Equipment.cs" />
     <Compile Include="Models\EquipmentAttribute.cs" />

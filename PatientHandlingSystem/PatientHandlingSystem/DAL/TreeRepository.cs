@@ -22,15 +22,15 @@ namespace PatientHandlingSystem.Models
             return db.Patient_PatientAttributes.Where(i => i.PatientID == patientId).ToList();
         }
 
-        public List<AttributeValue> getAllPatientAttributeValues(int patientId)
+        public List<PatientAttributeValue> getAllPatientAttributeValues(int patientId)
         {
-            var attributeValues = new List<AttributeValue>();
+            var attributeValues = new List<PatientAttributeValue>();
             var patientattrs = db.Patient_PatientAttributes;
             //some weird bug in the database mocking is forcing me to us a for loop instead of a foreach loop here
             for (int i = 0; i < db.Patient_PatientAttributes.Count(); i++)
             {
-                var attrvals = db.AttributeValues.ToList();
-                var attributeValue = db.AttributeValues.Single(j => j.ID == db.Patient_PatientAttributes.ElementAt(i).AttributeValueID);
+                var attrvals = db.PatientAttributeValues.ToList();
+                var attributeValue = db.PatientAttributeValues.Single(j => j.ID == db.Patient_PatientAttributes.ElementAt(i).AttributeValueID);
                 attributeValues.Add(attributeValue);
             }
             return attributeValues;
@@ -221,7 +221,7 @@ namespace PatientHandlingSystem.Models
             switch (childNode.EdgeOperator)
             {
                 case "==":
-                    var edgeAttributeValue = db.AttributeValues.Single(i => i.ID == childNode.EdgeValue);
+                    var edgeAttributeValue = db.PatientAttributeValues.Single(i => i.ID == childNode.EdgeValue);
                     if (edgeAttributeValue.ID == patientAttributeValue.ID)
                         return true;
                     else

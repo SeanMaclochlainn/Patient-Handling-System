@@ -58,24 +58,24 @@ namespace PatientHandlingSystem.Tests
             return mockContext;
         }
 
-        public static Mock<PatientHandlingContext> GetAttributeValueMockDbSet(List<AttributeValue> data, Mock<PatientHandlingContext> mockContext)
+        public static Mock<PatientHandlingContext> GetAttributeValueMockDbSet(List<PatientAttributeValue> data, Mock<PatientHandlingContext> mockContext)
         {
             var queryableData = data.AsQueryable();
-            var mockSet = new Mock<DbSet<AttributeValue>>();
+            var mockSet = new Mock<DbSet<PatientAttributeValue>>();
 
-            mockSet.As<IQueryable<AttributeValue>>().Setup(m => m.Provider).Returns(queryableData.Provider);
-            mockSet.As<IQueryable<AttributeValue>>().Setup(m => m.Expression).Returns(queryableData.Expression);
-            mockSet.As<IQueryable<AttributeValue>>().Setup(m => m.ElementType).Returns(queryableData.ElementType);
-            mockSet.As<IQueryable<AttributeValue>>().Setup(m => m.GetEnumerator()).Returns(data.GetEnumerator());
-            mockSet.Setup(i => i.Add(It.IsAny<AttributeValue>())).Callback<AttributeValue>(j => { data.Add(j); j.ID = data.Max(i => i.ID) + 1; });
-            mockSet.Setup(m => m.AddRange(It.IsAny<IEnumerable<AttributeValue>>())).Callback<IEnumerable<AttributeValue>>(data.AddRange);
-            mockSet.Setup(m => m.Remove(It.IsAny<AttributeValue>())).Callback<AttributeValue>(t => data.Remove(t));
-            mockSet.Setup(m => m.RemoveRange(It.IsAny<IEnumerable<AttributeValue>>())).Callback<IEnumerable<AttributeValue>>(ts =>
+            mockSet.As<IQueryable<PatientAttributeValue>>().Setup(m => m.Provider).Returns(queryableData.Provider);
+            mockSet.As<IQueryable<PatientAttributeValue>>().Setup(m => m.Expression).Returns(queryableData.Expression);
+            mockSet.As<IQueryable<PatientAttributeValue>>().Setup(m => m.ElementType).Returns(queryableData.ElementType);
+            mockSet.As<IQueryable<PatientAttributeValue>>().Setup(m => m.GetEnumerator()).Returns(data.GetEnumerator());
+            mockSet.Setup(i => i.Add(It.IsAny<PatientAttributeValue>())).Callback<PatientAttributeValue>(j => { data.Add(j); j.ID = data.Max(i => i.ID) + 1; });
+            mockSet.Setup(m => m.AddRange(It.IsAny<IEnumerable<PatientAttributeValue>>())).Callback<IEnumerable<PatientAttributeValue>>(data.AddRange);
+            mockSet.Setup(m => m.Remove(It.IsAny<PatientAttributeValue>())).Callback<PatientAttributeValue>(t => data.Remove(t));
+            mockSet.Setup(m => m.RemoveRange(It.IsAny<IEnumerable<PatientAttributeValue>>())).Callback<IEnumerable<PatientAttributeValue>>(ts =>
             {
                 foreach (var t in ts) { data.Remove(t); }
             });
 
-            mockContext.Setup(i => i.AttributeValues).Returns(mockSet.Object);
+            mockContext.Setup(i => i.PatientAttributeValues).Returns(mockSet.Object);
 
             return mockContext;
         }
