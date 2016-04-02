@@ -272,36 +272,50 @@ namespace PatientHandlingSystem.Models
 
         private Boolean checkBranch(Patient patient, Node parentNode, Node childNode)
         {
-            var patientAttribute = db.PatientAttributes.Single(i => i.ID == parentNode.NodeValue);
-            var patientAttributeValue = db.Patient_PatientAttributes.Single(i => i.PatientID == patient.ID && i.PatientAttributeID == patientAttribute.ID).PatientAttributeValue;
-            int number1;
-            int number2;
-            switch (childNode.EdgeOperator)
+            if (parentNode.PatientAttributeNode)
             {
-                case "==":
-                    var edgeAttributeValue = db.PatientAttributeValues.Single(i => i.ID == childNode.EdgeValue);
-                    if (edgeAttributeValue.ID == patientAttributeValue.ID)
-                        return true;
-                    else
-                        return false;
-                case "<=":
-                    number1 = int.Parse(patientAttributeValue.Value);
-                    number2 = childNode.EdgeValue;
+                var patientAttribute = db.PatientAttributes.Single(i => i.ID == parentNode.NodeValue);
+                var patientsPatientAttributeValue = db.Patient_PatientAttributes.Single(i => i.PatientID == patient.ID && i.PatientAttributeID == patientAttribute.ID).PatientAttributeValue;
+                int number1;
+                int number2;
+                switch (childNode.EdgeOperator)
+                {
+                    case "==":
+                        var edgePatientAttributeValue = db.PatientAttributeValues.Single(i => i.ID == childNode.EdgeValue);
+                        if (edgePatientAttributeValue.ID == patientsPatientAttributeValue.ID)
+                            return true;
+                        else
+                            return false;
+                    case "<=":
+                        number1 = int.Parse(patientsPatientAttributeValue.Value);
+                        number2 = childNode.EdgeValue;
 
-                    if (number1 <= number2)
-                        return true;
-                    else
-                        return false;
-                case ">":
-                    number1 = int.Parse(patientAttributeValue.Value);
-                    number2 = childNode.EdgeValue;
+                        if (number1 <= number2)
+                            return true;
+                        else
+                            return false;
+                    case ">":
+                        number1 = int.Parse(patientsPatientAttributeValue.Value);
+                        number2 = childNode.EdgeValue;
 
-                    if (number1 > number2)
-                        return true;
-                    else
-                        return false;
+                        if (number1 > number2)
+                            return true;
+                        else
+                            return false;
+                }
             }
-            return true;
+            else //node is an equipment node
+            {
+                var equipment = db.Equipment.Find(parentNode.NodeValue);
+                var equipmentAttribute = db.EquipmentAttributes.Find(parentNode.SecondaryNodeValue);
+                var edgeValue = childNode.EdgeValue;
+
+                if (edgeValue == equipmentAttribute.CurrentEquipmentAttributeValueID)
+                    return true;
+                else
+                    return false;
+            }
+            return false; //this should never be executed
         }
 
     }

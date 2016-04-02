@@ -13,9 +13,9 @@ namespace PatientHandlingSystem.Models
 
         public int ID { get; set; }
         public int ParentID { get; set; }
-        public int NodeValue { get; set; } //contains either the AttributeID or the SolutionID
-        public int? SecondaryNodeValue { get; set; } //this is only used for equipment attribute ids, so when there is an equipment node
-        public int EdgeValue { get; set; } //contains the AttributeValueID or the numeric value of the edge pointing to this node, if the current node is numeric
+        public int NodeValue { get; set; } //contains either the AttributeID, SolutionID or EquipmentID
+        public int? SecondaryNodeValue { get; set; } //this is only used for equipment attribute ids, so is only used when there is an equipment node
+        public int EdgeValue { get; set; } //contains the Patient/EquipmentAttributeValueID or the numeric value of the edge pointing to this node, if the current node is numeric
         public string EdgeOperator { get; set; }
         public int TreeID { get; set; }
         public Boolean SolutionNode { get; set; }

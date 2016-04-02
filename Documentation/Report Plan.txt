@@ -20,6 +20,7 @@ creating decision tree interface
 deployment issues
 integrating unit tests
 handling numeric attributes
+--could explain scripting the databases to see if there were any differences between them
 
 chapter 4
 Describe the whole product, complete with screenshots and stuff. 

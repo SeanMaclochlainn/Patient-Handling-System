@@ -6,6 +6,11 @@
 <link href="~/Content/vis.min.css" rel="stylesheet" />
 @Html.ValidationSummary()
 <div id="mynetwork" class="treeEditor" style="height:600px;"></div>
+
+
+
+
+
 <script type="text/javascript">
     var i;
     var nodes = new vis.DataSet();
@@ -30,9 +35,7 @@
     }
 
 
-    function previewSolution(fullText){
-        return fullText.substring(0,10)+"...";
-    }
+
     function insertLineBreaks(nodeText){
         if(nodeText.charAt(10) == ' '){
             return nodeText.slice(0,10)+'\n'+nodeText.slice(11,nodeText.length-1);
@@ -53,11 +56,11 @@
         {
             var edgeText = Model.ElementAt(j).EdgeOperator+Model.ElementAt(j).EdgeValue;
             @:edges.add({from: @Model.ElementAt(j).ParentID, to: @Model.ElementAt(j).ID, label: '@Html.Raw(edgeText)', color: '#3280EA', arrows:'to' });
-                    }
+        }
         else
         {
             @:edges.add({from: @Model.ElementAt(j).ParentID, to: @Model.ElementAt(j).ID, label: '@Model.ElementAt(j).edgeText()', color: '#3280EA', arrows:'to' });
-                    }
+        }
     }
     // create a network
     var container = document.getElementById('mynetwork');

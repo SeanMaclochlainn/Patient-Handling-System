@@ -19,21 +19,23 @@
         if(node.SolutionNode)
         {
             @:nodes.add({ id: @node.ID, label: '@node.NodeText()', shape: 'box', color: 'green' });
-                }
-        else if(node.NodeValue == 0)
+        }
+        else if(node.NodeValue == 0) //leaf node (one that isn't a solution node)
         {
-            @:nodes.add({ id: @node.ID, label: '@node.NodeText()', shape: 'box', color: 'red' });
-                }
-        else
+            @:nodes.add({ id: @node.ID, label: 'Select', shape: 'circle', color: 'red' });
+        }
+        else if(node.PatientAttributeNode)//patient attribute node
         {
             @:nodes.add({ id: @node.ID, label: '@node.NodeText()', shape: 'box', color: '#3280EA' });
-                }
+        }
+        else //equipment attribute node
+        {
+            @:nodes.add({ id: @node.ID, label: '@node.NodeText()', shape: 'box', color: '#ff9900' });
+        }
     }
 
 
-    function previewSolution(fullText){
-        return fullText.replace("_break_", "\n").substring(0,10)+"...";
-    }
+
     function insertLineBreaks(nodeText){
         if(nodeText.charAt(10) == ' '){
             return nodeText.slice(0,10)+'\n'+nodeText.slice(11,nodeText.length-1);
@@ -48,7 +50,7 @@
     var edges = new vis.DataSet();
 
 
-    @for (int j = 1; j < Model.Count(); j++)
+    @for (int j = 1; j < Model.Count(); j++) //starts at 1 because the root node doesn't have any edges.
     {
         if(Model.ElementAt(j).Numeric)
         {
@@ -89,7 +91,7 @@
     @foreach (var node in Model.Where(i=>i.SolutionNode == true))
     {
         @:solutionNodeIds.push({id:@node.ID, text: "@Html.Raw(node.SolutionContent())", title:'@node.NodeText()'});
-            }
+                }
 
     network.on("selectNode", function (params) {
         for(var i = 0;i<solutionNodeIds.length;i++){
