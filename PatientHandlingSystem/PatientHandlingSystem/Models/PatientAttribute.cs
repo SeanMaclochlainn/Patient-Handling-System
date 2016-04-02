@@ -14,6 +14,6 @@ namespace PatientHandlingSystem.Models
         public string Name { get; set; }
         public Boolean Numeric { get; set; }
 
-        public virtual List<PatientAttributeValue> AttributeValues { get; set; }
+        public virtual List<PatientAttributeValue> PatientAttributeValues { get; set; }
     }
 }

@@ -10,10 +10,10 @@ namespace PatientHandlingSystem.Models
         public int ID { get; set; }
         public int PatientID { get; set; }
         public int PatientAttributeID { get; set; }
-        public int AttributeValueID { get; set; }
+        public int PatientAttributeValueID { get; set; }
 
         public virtual Patient Patient { get; set; }
-        public virtual PatientAttribute Attribute { get; set; }
-        public virtual PatientAttributeValue AttributeValue { get; set; }
+        public virtual PatientAttribute PatientAttribute { get; set; }
+        public virtual PatientAttributeValue PatientAttributeValue { get; set; }
     }
 }

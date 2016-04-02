@@ -30,7 +30,7 @@ namespace PatientHandlingSystem.Models
             for (int i = 0; i < db.Patient_PatientAttributes.Count(); i++)
             {
                 var attrvals = db.PatientAttributeValues.ToList();
-                var attributeValue = db.PatientAttributeValues.Single(j => j.ID == db.Patient_PatientAttributes.ElementAt(i).AttributeValueID);
+                var attributeValue = db.PatientAttributeValues.Single(j => j.ID == db.Patient_PatientAttributes.ElementAt(i).PatientAttributeValueID);
                 attributeValues.Add(attributeValue);
             }
             return attributeValues;
@@ -89,7 +89,7 @@ namespace PatientHandlingSystem.Models
             }
             else
             {
-                var attributeValues = db.PatientAttributes.Find(selectedAttributeId).AttributeValues;
+                var attributeValues = db.PatientAttributes.Find(selectedAttributeId).PatientAttributeValues;
                 foreach (var av in attributeValues)
                 {
                     var childNode = new Node
@@ -215,7 +215,7 @@ namespace PatientHandlingSystem.Models
         private Boolean checkBranch(Patient patient, Node parentNode, Node childNode)
         {
             var patientAttribute = db.PatientAttributes.Single(i => i.ID == parentNode.NodeValue);
-            var patientAttributeValue = db.Patient_PatientAttributes.Single(i => i.PatientID == patient.ID && i.PatientAttributeID == patientAttribute.ID).AttributeValue;
+            var patientAttributeValue = db.Patient_PatientAttributes.Single(i => i.PatientID == patient.ID && i.PatientAttributeID == patientAttribute.ID).PatientAttributeValue;
             int number1;
             int number2;
             switch (childNode.EdgeOperator)
