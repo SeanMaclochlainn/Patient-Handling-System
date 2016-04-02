@@ -257,7 +257,7 @@ namespace PatientHandlingSystem.Models
                 while (result != true)
                 {
                     if (j >= childNodes.Count)
-                        return new Solution { Content = "Error" }; // this is the case where the instance cannot be classified, this can happen occasionally with nominal data
+                        return new Solution { Content = "There was an error while parsing the decision tree", Title = "Error", Tree = new Tree { Name = "Error"} }; // this is the case where the instance cannot be classified, this can happen occasionally with nominal data
                     Node childNode = childNodes.ElementAt(j);
                     result = checkBranch(patient, selectedNode, childNode);
                     if (result == true)
@@ -267,7 +267,10 @@ namespace PatientHandlingSystem.Models
                     j++;
                 }
             }
-            return db.Solutions.Single(i => i.ID == selectedNode.NodeValue);
+            if (db.Solutions.Any(i => i.ID == selectedNode.NodeValue))
+                return db.Solutions.Single(i => i.ID == selectedNode.NodeValue);
+            else
+                return new Solution { Content = "There was an error while parsing the decision tree", Title = "Error", Tree = new Tree { Name = "Error" } };
         }
 
         private Boolean checkBranch(Patient patient, Node parentNode, Node childNode)
