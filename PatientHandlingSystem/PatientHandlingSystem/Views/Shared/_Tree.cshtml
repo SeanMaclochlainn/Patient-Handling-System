@@ -14,15 +14,19 @@
         if(node.SolutionNode)
         {
             @:nodes.add({ id: @node.ID, label: '@node.NodeText()', shape: 'box', color: 'green' });
-                        }
-        else if(node.NodeValue == 0)
+        }
+        else if(node.NodeValue == 0) //leaf node (one that isn't a solution node)
         {
-            @:nodes.add({ id: @node.ID, label: '@node.NodeText()', shape: 'circle', color: 'red' });
-                        }
-        else
+            @:nodes.add({ id: @node.ID, label: 'Select', shape: 'circle', color: 'red' });
+        }
+        else if(node.PatientAttributeNode)//patient attribute node
         {
             @:nodes.add({ id: @node.ID, label: '@node.NodeText()', shape: 'box', color: '#3280EA' });
-                        }
+        }
+        else //equipment attribute node
+        {
+            @:nodes.add({ id: @node.ID, label: '@node.NodeText()', shape: 'box', color: '#ff9900' });
+        }
     }
 
 
@@ -49,11 +53,11 @@
         {
             var edgeText = Model.ElementAt(j).EdgeOperator+Model.ElementAt(j).EdgeValue;
             @:edges.add({from: @Model.ElementAt(j).ParentID, to: @Model.ElementAt(j).ID, label: '@Html.Raw(edgeText)', color: '#3280EA', arrows:'to' });
-                }
+                    }
         else
         {
             @:edges.add({from: @Model.ElementAt(j).ParentID, to: @Model.ElementAt(j).ID, label: '@Model.ElementAt(j).edgeText()', color: '#3280EA', arrows:'to' });
-                }
+                    }
     }
     // create a network
     var container = document.getElementById('mynetwork');
@@ -84,7 +88,7 @@
     @foreach (var node in Model.Where(i=>i.SolutionNode == true))
     {
         @:solutionNodeIds.push({id:@node.ID, text:"@Html.Raw(node.SolutionContent())", title: "@node.NodeText()"});
-            }
+                }
 
     //remove any parent node ids that may still be there from previous ajax call
     $("[name='ParentNodeID']").remove();

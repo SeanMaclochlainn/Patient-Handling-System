@@ -32,10 +32,11 @@ Describe the whole product, complete with screenshots and stuff.
 ---mention code refactoring, such as renaming stuff, seperating data layer from logic layer, 
 ---mention source control was useful with packages and renaming stuff
 ---mention prduct management, i.e. keeping track of requirements using excel spreadsheet
----software used: text-compare.com, notepad++
+---software used: text-compare.com (when comparing create and edit views, which had to be similar), notepad++
 
 chapter 5. 
 
 How close application is ready for production, i.e. account management, email system, bascically requirements that are left to be completed
 what this means for the company or whatever 
+--maybe say you could have implemented source control better by using branches
 conclusion

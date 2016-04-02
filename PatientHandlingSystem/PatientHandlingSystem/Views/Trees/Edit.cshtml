@@ -29,7 +29,7 @@
                         <div class="col-md-12" style="font-weight:bold;">
                             @Html.RadioButtonFor(i => i.NodeType, "Solution", new { @class = "solutionTab" }) Solution
                             @Html.RadioButtonFor(i => i.NodeType, "PatientAttribute", new { @class = "attributeTab", @checked = "checked" } ) Attribute
-                            @Html.RadioButtonFor(i=>i.NodeType, "EquipmentAttribute", new { @class = "equipmentTab" }) Equipment
+                            @Html.RadioButtonFor(i=>i.NodeType, "Equipment", new { @class = "equipmentTab" }) Equipment
                         </div>
                     </div>
 
@@ -60,12 +60,17 @@
                     <div class="row equipment">
                         <div class="col-md-12">
                             @Html.HiddenFor(i => i.Tree.ID)
-                            @Html.DropDownListFor(i => Model.SelectedEquipment, new SelectList(Model.Equipment, "ID", "Name"), htmlAttributes: new { @class = "form-control"})
+                            @Html.DropDownListFor(i => Model.SelectedEquipment.ID, new SelectList(Model.Equipment, "ID", "Name"), htmlAttributes: new { @class = "form-control"})
+                        </div>
+                    </div>
+                    <div class="row equipment top-buffer equipmentAttributeLabel">
+                        <div class="col-md-12">
+                        @Html.Label("Attribute")    
                         </div>
                     </div>
                     <div class="row equipment top-buffer">
                         <div class="col-md-12">
-                        @Html.Label("Attribute")    
+                            <button class="btn btn-default">Insert Equipment Node</button>
                         </div>
                     </div>
 
@@ -174,9 +179,9 @@
             @:equipmentAttributes.push(equipmentAttribute);
         }
         
-        insertEquipmentAttributeDropDown($("#SelectedEquipment").val(), equipmentAttributes);
+        insertEquipmentAttributeDropDown($("#SelectedEquipment_ID").val(), equipmentAttributes);
         
-        $("#SelectedEquipment").on('change', function(){
+        $("#SelectedEquipment_ID").on('change', function(){
             insertEquipmentAttributeDropDown(this.value, equipmentAttributes);
         });
 
@@ -189,18 +194,18 @@
                     selectedEquipmentAttributes.push(selectedEquipmentAttribute);
                 }
             }
-            var optionsString;
+            var optionsString = "";
             for(var i=0; i<selectedEquipmentAttributes.length; i++){
                 optionsString +="<option value='"+selectedEquipmentAttributes[i].id+"'>"+selectedEquipmentAttributes[i].name+"</option>";
             }
 
             //string containing the options for the dropdownlist
-            $(".equipment").last().html(
+            $(".equipmentAttributeLabel").last().html(
             "<div class='col-md-1'>"+
             "<label for='Attribute'>Attribute</label>"+    
             "</div>"+
             "<div class='col-md-12'>"+
-                "<select class='form-control' id='SelectedEquipmentAttribute' name='SelectedEquipmentAttribute'>"+
+                "<select class='form-control' id='SelectedEquipmentAttribute_ID' name='SelectedEquipmentAttribute.ID'>"+
                     optionsString+
                 "</select>"+
             "</div>"

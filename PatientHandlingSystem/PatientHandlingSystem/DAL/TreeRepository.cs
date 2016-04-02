@@ -35,7 +35,39 @@ namespace PatientHandlingSystem.Models
             }
             return attributeValues;
         }
+        public void EnterEquipmentNode(string parentNodeId, int selectedEquipmentId, int selectedEquipmentAttributeId, int treeId)
+        {
+            int parentID = int.Parse(parentNodeId);
+           
+            var parentNode = db.Nodes.Find(parentID);
+            parentNode.NodeValue = selectedEquipmentId;
+            parentNode.SecondaryNodeValue = selectedEquipmentAttributeId;
+            parentNode.EquipmentNode = true;
+            parentNode.PatientAttributeNode = false;
+            parentNode.SolutionNode = false;
+            db.Entry(parentNode).State = EntityState.Modified;
+            db.SaveChanges();
 
+            var nodesToAdd = new List<Node>();
+
+            var equipmentAttributeValues = db.EquipmentAttributes.Find(selectedEquipmentAttributeId).EquipmentAttributeValues;
+            foreach (var av in equipmentAttributeValues)
+            {
+                var childNode = new Node
+                {
+                    ParentID = parentNode.ID,
+                    TreeID = treeId,
+                    EdgeOperator = "==",
+                    EdgeValue = av.ID,
+                    Numeric = false
+                };
+                nodesToAdd.Add(childNode);
+            }
+        
+            db.Nodes.AddRange(nodesToAdd);
+            db.SaveChanges();
+
+        }
         //Tree Methods
         public void EnterAttributeNode(string parentNodeId, int selectedAttributeId, int treeId, Boolean selectedAttributeNumeric, string selectedAttributeNumericValue)
         {
@@ -52,7 +84,10 @@ namespace PatientHandlingSystem.Models
                 {
                     NodeValue = selectedAttributeId,
                     ParentID = parentID,
-                    TreeID = treeId
+                    TreeID = treeId, 
+                    PatientAttributeNode = true,
+                    EquipmentNode = false, 
+                    SolutionNode = false
                 };
                 db.Nodes.Add(parentNode);
                 db.SaveChanges();
@@ -61,6 +96,9 @@ namespace PatientHandlingSystem.Models
             {
                 parentNode = db.Nodes.Find(parentID);
                 parentNode.NodeValue = selectedAttributeId;
+                parentNode.PatientAttributeNode = true;
+                parentNode.SolutionNode = false;
+                parentNode.EquipmentNode = false;
                 db.Entry(parentNode).State = EntityState.Modified;
                 db.SaveChanges();
             }
@@ -106,6 +144,8 @@ namespace PatientHandlingSystem.Models
             db.Nodes.AddRange(nodesToAdd);
             db.SaveChanges();
         }
+
+        
 
         public void EnterSolutionNode(string parentNodeIdStr, int treeId, string solutionContent, string solutionTitle)
         {
@@ -161,6 +201,7 @@ namespace PatientHandlingSystem.Models
         {
             int nodeId = int.Parse(nodeIdStr);
             var node = db.Nodes.Single(i => i.ID == nodeId);
+
             node.SolutionNode = false;
             node.NodeValue = 0;
             db.Entry(node).State = EntityState.Modified;

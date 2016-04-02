@@ -101,6 +101,10 @@ namespace PatientHandlingSystem.Controllers
             {
                 treeRepository.EnterSolutionNode(treeCreatorVM.ParentNodeID, treeCreatorVM.Tree.ID, treeCreatorVM.Solution, treeCreatorVM.SolutionTitle);
             }
+            else if(treeCreatorVM.NodeType == "Equipment")
+            {
+                treeRepository.EnterEquipmentNode(treeCreatorVM.ParentNodeID, treeCreatorVM.SelectedEquipment.ID, treeCreatorVM.SelectedEquipmentAttribute.ID, treeCreatorVM.Tree.ID);
+            }
             else //when user is trying to input a regular node, numeric or otherwise
             {
                 treeRepository.EnterAttributeNode(treeCreatorVM.ParentNodeID, treeCreatorVM.SelectedPatientAttribute.ID, treeCreatorVM.Tree.ID, treeCreatorVM.SelectedPatientAttribute.Numeric, treeCreatorVM.SelectedPatientAttributeNumericValue.Value);
