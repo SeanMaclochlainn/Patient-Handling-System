@@ -5,20 +5,35 @@
 }
 <script src="~/Scripts/jquery-1.10.2.min.js"></script>
 <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+<script src="~/Scripts/tinymce/tinymce.js"></script>
+<script>
+  tinymce.init({
+      selector: '#Solution',
+      width: 300,
+      height: 300,
+  });
+</script>
 
 <h2 class="text-center">Create Tree</h2>
+
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-3">
             @using (Ajax.BeginForm("UpdateTree", "Trees", new AjaxOptions { HttpMethod = "POST", InsertionMode = InsertionMode.Replace, UpdateTargetId = "treeDiv" }))
             {
                 <div class="container">
+
+                    @*Display a selection panel for choosing which divs (equipment/pattient attribute/solution) to show/hide *@
                     <div class="row" id="selectionDiv">
                         <div class="col-md-12" style="font-weight:bold;">
                             @Html.RadioButtonFor(i => i.NodeType, "Solution", new { @class = "solutionTab" }) Solution
                             @Html.RadioButtonFor(i => i.NodeType, "PatientAttribute", new { @class = "attributeTab" }) Attribute
+                            @*@Html.RadioButtonFor(i=>i.NodeType, "EquipmentAttribute", new { @class = "equipmentTab" }) Equipment*@
                         </div>
                     </div>
+
+                    @*The patient attribute panel*@
                     <div class="row attribute top-buffer">
                         <div class="col-md-12">
                             @Html.HiddenFor(i => i.Tree.ID)
@@ -35,6 +50,29 @@
                             <button class="btn btn-default" id="button">Insert Node</button>
                         </div>
                     </div>
+
+                    @*The equipment panel*@
+                    <div class="row equipment top-buffer">
+                        <div class="col-md-12">
+                            @Html.Label("Equipment")
+                        </div>
+                    </div>
+                    <div class="row equipment">
+                        <div class="col-md-12">
+                            @Html.DropDownListFor(i => Model.SelectedEquipment, new SelectList(Model.Equipment, "ID", "Name"), htmlAttributes: new { @class = "form-control" })
+                        </div>
+                    </div>
+                    @*<div class="row equipment top-buffer">
+            <div class="col-md-12">
+            @Html.Label("Attribute")
+            </div>
+        </div>
+        <div class="row equipment">
+            <div class="col-md-12">
+                @Html.HiddenFor(i=>i.Tree.ID)
+                @Html.DropDownListFor(i=>Model.SelectedEquipmentAttribute, new SelectList(Model.EquipmentAttributes, "ID", "Name"), htmlAttributes: new { @class = "form-control" })
+            </div>
+        </div>*@
 
                     @*the solution panel*@
                     <div class="row solution top-buffer">
@@ -67,58 +105,103 @@
         </div>
     </div>
 </div>
+<script>
+    $(document).ready(function () {
+        //show or hide the attribute or solution tab depending on the radio button that is selected
+        $(".solution").hide();
+        $(".equipment").hide();
+        $("#selectionDiv").click(function () {
+            if ($(".attributeTab").is(":checked")) {
+                $(".attribute").show();
+                $(".solution").hide();
+                $(".equipment").hide();
+            }
+            else if ($(".solutionTab").is(":checked")) {
+                $(".solution").show();
+                $(".attribute").hide();
+                $(".numericInput").hide();
+                $(".equipment").hide();
+            }
+            else {
+                $(".equipment").show();
+                $(".solution").hide();
+                $(".attribute").hide();
+                $(".numericInput").hide();
+            }
+        });
 
-    <script>
-        $(document).ready(function () {
-            //show or hide the attribute or solution tab depending on the radio button that is selected
-            $(".solution").hide();
-            $("#selectionDiv").click(function () {
-                if ($(".attributeTab").is(":checked")) {
-                    $(".attribute").show();
-                    $(".solution").hide();
-                    //console.log("attribute");
-                }
-                if ($(".solutionTab").is(":checked")) {
-                    $(".solution").show();
-                    $(".attribute").hide();
-                    $(".numericInput").hide();
-                    //console.log("solution");
-                }
-            });
-
-        //add all numeric ids to an array
-            var numericIds = [];
-            @foreach (var a in Model.PatientAttributes)
+    //add all numeric ids to an array
+        var numericIds = [];
+        @foreach (var a in Model.PatientAttributes)
+        {
+            if(a.Numeric)
             {
-                if(a.Numeric)
-                {
-                    @:numericIds.push(@a.ID);
+                @:numericIds.push(@a.ID);
+            }
+        }
+
+
+        $(".numericInput").hide();
+
+    //when a different dropdownlist selection is made, check to see if it is a numeric attribute, and if it is, display the numeric input box
+        $("#SelectedAttribute_ID").change(function () {
+            var numericAttribute = false;
+            for (var i = 0; i < numericIds.length; i++) {
+                if (numericIds[i] == $(this).val()) {
+                    console.log("numeric");
+                    $(".numericInput").show();
+                    $(this).after("<input id='SelectedAttribute_Numeric' name='SelectedAttribute.Numeric' type='hidden' value='true' />");
+                    numericAttribute = true;
                 }
             }
-
-
-            $(".numericInput").hide();
-
-        //when a different dropdownlist selection is made, check to see if it is a numeric attribute, and if it is, display the numeric input box
-            $("#SelectedAttribute_ID").change(function () {
-                var numericAttribute = false;
-                for (var i = 0; i < numericIds.length; i++) {
-                    if (numericIds[i] == $(this).val()) {
-                        console.log("numeric");
-                        $(".numericInput").show();
-                        $(this).after("<input id='SelectedAttribute_Numeric' name='SelectedAttribute.Numeric' type='hidden' value='true' />");
-                        numericAttribute = true;
-                    }
-                }
-                    if(numericAttribute == false) {
-                        $(".numericInput").hide();
-                        $("#SelectedAttribute_Numeric").remove();
-                    }
+            if(numericAttribute == false) {
+                $(".numericInput").hide();
+                $("#SelectedAttribute_Numeric").remove();
+            }
                 
-            });
-
-        //enter and post the tree name
-            var tree_Name = prompt("Enter tree name");
-            $.post("/Trees/AddTreeName", { "treeName": tree_Name });
         });
-    </script>
+
+    //enter and post the tree name
+        var tree_Name = prompt("Enter tree name");
+        $.post("/Trees/AddTreeName", { "treeName": tree_Name });
+    });
+
+
+
+        //populate the attribute drop down list when the equipment drop down list changes
+        var equipmentAttributes = [];
+        @foreach(var attribute in Model.EquipmentAttributes)
+        {
+            @:var equipmentAttribute = { id: 0, name: "", equipmentId: 0 };
+            @:equipmentAttribute.id = @attribute.ID;
+            @:equipmentAttribute.name = '@attribute.Name';
+            @:equipmentAttribute.equipmentId= '@attribute.EquipmentID';
+            @:equipmentAttributes.push(equipmentAttribute);
+        }
+
+        $("#SelectedEquipment").on('change', function(){
+            //alert(this.value);
+            
+            //string containing the options for the dropdownlist
+            
+            $(".equipment").last().after(
+                "<div class='row equipment top-buffer'>"+
+            "<div class='col-md-1'>"+
+            "<label for='Attribute'>Attribute</label>"+    
+            "</div>"+
+        "</div>"+
+        "<div class='row equipment'>"+
+            "<div class='col-md-12'>"+
+                "<input id='Tree_ID' name='Tree.ID' type='hidden' value='@Model.Tree.ID' />"+
+                "<select class='form-control' id='SelectedEquipmentAttribute' name='SelectedEquipmentAttribute'>"+
+                    "<option value='7'>Available</option>"+
+                    "<option value='8'>Available</option>"+
+                    "<option value='9'>Extends to Floor</option>"+
+                "</select>"+
+            "</div>"+
+        "</div>"
+                );
+        
+        })
+
+</script>
