@@ -32,15 +32,18 @@ namespace PatientHandlingSystem.Models
             else
                 return db.Solutions.Find(NodeValue).Title;//.Substring(0,10)+"...";
         }
+
         public string SolutionContent()
         {
             return db.Solutions.Find(NodeValue).Content.Replace("\r\n", string.Empty); ;
         }
+
         public string edgeText()
         {
-            if (PatientAttributeNode) 
+            var parentNode = db.Nodes.Find(ParentID);
+            if (parentNode.PatientAttributeNode) 
                 return db.PatientAttributeValues.Find(EdgeValue).Value;
-            else //node is an equipment attribute 
+            else //parent node is an equipment node
                 return db.EquipmentAttributeValues.Find(EdgeValue).Name;
         }
 
