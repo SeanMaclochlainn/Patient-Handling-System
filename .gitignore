@@ -233,4 +233,5 @@ _Pvt_Extensions
 .fake/
 
 #Client Files
-Patient Handling Algorithms.docx
+Client Documentation/*
+

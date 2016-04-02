@@ -50,20 +50,10 @@ namespace PatientHandlingSystem.Controllers
             return View("ViewTree", "_TreeEditor", db.Nodes.Where(i=>i.TreeID == tree.ID).OrderBy(i=>i.ID).ToList());
         }
 
-        // GET: Trees/Create
         public ActionResult Create()
         {
-            var tree = new Tree { Name = "" };
-            db.Trees.Add(tree);
-            db.SaveChanges();
-
-            var treeCreator = new TreeEditorViewModel
-            {
-                Tree = tree,
-                PatientAttributes = db.PatientAttributes.ToList(),
-                Nodes = new List<Node>()
-            };
-            return View("Create", "_TreeEditor", treeCreator);
+            var treeEditorVM = treeRepository.CreateTreeEditorViewModel();
+            return View("Create", "_TreeEditor", treeEditorVM);
         }
 
         [ValidateInput(false)]

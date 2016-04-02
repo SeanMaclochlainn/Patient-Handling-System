@@ -28,8 +28,8 @@
                     <div class="row" id="selectionDiv">
                         <div class="col-md-12" style="font-weight:bold;">
                             @Html.RadioButtonFor(i => i.NodeType, "Solution", new { @class = "solutionTab" }) Solution
-                            @Html.RadioButtonFor(i => i.NodeType, "PatientAttribute", new { @class = "attributeTab" }) Attribute
-                            @*@Html.RadioButtonFor(i=>i.NodeType, "EquipmentAttribute", new { @class = "equipmentTab" }) Equipment*@
+                            @Html.RadioButtonFor(i => i.NodeType, "PatientAttribute", new { @class = "attributeTab", @checked = "checked" }) Attribute
+                            @Html.RadioButtonFor(i => i.NodeType, "EquipmentAttribute", new { @class = "equipmentTab" }) Equipment
                         </div>
                     </div>
 
@@ -47,7 +47,7 @@
                     </div>
                     <div class="row attribute top-buffer">
                         <div class="col-md-12">
-                            <button class="btn btn-default" id="button">Insert Node</button>
+                            <button class="btn btn-default">Insert Node</button>
                         </div>
                     </div>
 
@@ -59,20 +59,15 @@
                     </div>
                     <div class="row equipment">
                         <div class="col-md-12">
+                            @Html.HiddenFor(i => i.Tree.ID)
                             @Html.DropDownListFor(i => Model.SelectedEquipment, new SelectList(Model.Equipment, "ID", "Name"), htmlAttributes: new { @class = "form-control" })
                         </div>
                     </div>
-                    @*<div class="row equipment top-buffer">
-            <div class="col-md-12">
-            @Html.Label("Attribute")
-            </div>
-        </div>
-        <div class="row equipment">
-            <div class="col-md-12">
-                @Html.HiddenFor(i=>i.Tree.ID)
-                @Html.DropDownListFor(i=>Model.SelectedEquipmentAttribute, new SelectList(Model.EquipmentAttributes, "ID", "Name"), htmlAttributes: new { @class = "form-control" })
-            </div>
-        </div>*@
+                    <div class="row equipment top-buffer">
+                        <div class="col-md-12">
+                            @Html.Label("Attribute")
+                        </div>
+                    </div>
 
                     @*the solution panel*@
                     <div class="row solution top-buffer">
@@ -158,13 +153,13 @@
                 $(".numericInput").hide();
                 $("#SelectedAttribute_Numeric").remove();
             }
-                
+
         });
 
     //enter and post the tree name
         var tree_Name = prompt("Enter tree name");
         $.post("/Trees/AddTreeName", { "treeName": tree_Name });
-    });
+    
 
 
 
@@ -179,29 +174,38 @@
             @:equipmentAttributes.push(equipmentAttribute);
         }
 
+        insertEquipmentAttributeDropDown($("#SelectedEquipment").val(), equipmentAttributes);
+
         $("#SelectedEquipment").on('change', function(){
-            //alert(this.value);
-            
+            insertEquipmentAttributeDropDown(this.value, equipmentAttributes);
+        });
+
+        //takes the id of the currently selected equipment attribute and the list of equipment attributes (objects containing their text and ids)
+        function insertEquipmentAttributeDropDown(equipmentAttributeValue, equipmentAttributes){
+            var selectedEquipmentAttributes = [];
+            for(var i=0; i<equipmentAttributes.length; i++){
+                if(equipmentAttributes[i].equipmentId == equipmentAttributeValue){
+                    selectedEquipmentAttribute = {id: equipmentAttributes[i].id, name:equipmentAttributes[i].name };
+                    selectedEquipmentAttributes.push(selectedEquipmentAttribute);
+                }
+            }
+            var optionsString;
+            for(var i=0; i<selectedEquipmentAttributes.length; i++){
+                optionsString +="<option value='"+selectedEquipmentAttributes[i].id+"'>"+selectedEquipmentAttributes[i].name+"</option>";
+            }
+
             //string containing the options for the dropdownlist
-            
-            $(".equipment").last().after(
-                "<div class='row equipment top-buffer'>"+
+            $(".equipment").last().html(
             "<div class='col-md-1'>"+
             "<label for='Attribute'>Attribute</label>"+    
             "</div>"+
-        "</div>"+
-        "<div class='row equipment'>"+
             "<div class='col-md-12'>"+
-                "<input id='Tree_ID' name='Tree.ID' type='hidden' value='@Model.Tree.ID' />"+
                 "<select class='form-control' id='SelectedEquipmentAttribute' name='SelectedEquipmentAttribute'>"+
-                    "<option value='7'>Available</option>"+
-                    "<option value='8'>Available</option>"+
-                    "<option value='9'>Extends to Floor</option>"+
+                    optionsString+
                 "</select>"+
-            "</div>"+
-        "</div>"
-                );
-        
-        })
+            "</div>"
+            );
+        };
+    });
 
 </script>

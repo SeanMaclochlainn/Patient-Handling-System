@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Express 14 for Web
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PatientHandlingSystem", "PatientHandlingSystem\PatientHandlingSystem.csproj", "{32E24195-9318-4E9F-9030-1EF2DF50AA3B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PatientHandlingSystem.Tests", "PatientHandlingSystem.Tests\PatientHandlingSystem.Tests.csproj", "{19E0EF8B-FBAC-430D-9956-252D246EE05A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{32E24195-9318-4E9F-9030-1EF2DF50AA3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32E24195-9318-4E9F-9030-1EF2DF50AA3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32E24195-9318-4E9F-9030-1EF2DF50AA3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32E24195-9318-4E9F-9030-1EF2DF50AA3B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19E0EF8B-FBAC-430D-9956-252D246EE05A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19E0EF8B-FBAC-430D-9956-252D246EE05A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19E0EF8B-FBAC-430D-9956-252D246EE05A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19E0EF8B-FBAC-430D-9956-252D246EE05A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

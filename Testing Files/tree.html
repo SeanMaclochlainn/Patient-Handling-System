@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create - Patient Handling System</title>
+	<script src="C:/Users/Sean/Documents/GitHub/Patient-Handling-System/PatientHandlingSystem/PatientHandlingSystem/Scripts/vis.min.js"></script>
+<link href="C:/Users/Sean/Documents/GitHub/Patient-Handling-System/PatientHandlingSystem/PatientHandlingSystem/Content/vis.min.css" rel="stylesheet" />
+</head>
+<body>
+    
+
+    <div class="container body-content">
+        
+<script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+<h2>Create</h2>
+
+<div id="treeDiv" style="width:900px;height:600px;">
+
+</div>
+
+
+
+
+
+<script type="text/javascript">
+//; stand by for assistance. \nDuring any patient transferring task, if any caregiver is required to \nlift more than 35 lbs of a patients weight, \nthen the patient should be considered to \nbe fully dependent.
+    var i;
+    var nodes = new vis.DataSet();
+        nodes.add({ id: 3971, label: func("add"), shape: 'box', color:'#3280EA' });
+        nodes.add({ id: 3972, label: 'Injured', shape: 'box', color:'#3280EA' });
+        nodes.add({ id: 3973, label: 'Assistance \nAbility ', shape: 'box', color:'#3280EA' });
+        nodes.add({ id: 3974, label: 'Assistance \nAbility ', shape: 'box', color:'#3280EA' });
+        nodes.add({ id: 3975, label: 'Bear Weight \nand Ambulate', shape: 'box', color:'#3280EA' });
+        nodes.add({ id: 3976, label: 'fdsafsdaf ...', shape: 'box', color:'green' });
+        nodes.add({ id: 3977, label: '', shape: 'box', color:'#3280EA' });
+        nodes.add({ id: 3978, label: '', shape: 'box', color:'#3280EA' });
+        nodes.add({ id: 3979, label: '', shape: 'box', color:'#3280EA' });
+        nodes.add({ id: 3980, label: '', shape: 'box', color:'#3280EA' });
+        nodes.add({ id: 3981, label: '', shape: 'box', color:'#3280EA' });
+        nodes.add({ id: 3982, label: '', shape: 'box', color:'#3280EA' });
+        nodes.add({ id: 3983, label: '', shape: 'box', color:'#3280EA' });
+        nodes.add({ id: 3984, label: '', shape: 'box', color:'#3280EA' });
+        nodes.add({ id: 3985, label: '', shape: 'box', color:'#3280EA' });
+		
+		function func(t){
+        return "test \n function"+t;
+    }
+    var edges = new vis.DataSet();
+
+        edges.add({from: 3971, to: 3972, label: 'Full', color: '#3280EA', arrows:'to' });
+        edges.add({from: 3971, to: 3973, label: 'Partial', color: '#3280EA' });
+        edges.add({from: 3971, to: 3974, label: 'None', color: '#3280EA' });
+        edges.add({from: 3972, to: 3975, label: 'Yes', color: '#3280EA' });
+        edges.add({from: 3972, to: 3976, label: 'No', color: '#3280EA' });
+        edges.add({from: 3973, to: 3977, label: 'Yes', color: '#3280EA' });
+        edges.add({from: 3973, to: 3978, label: 'No', color: '#3280EA' });
+        edges.add({from: 3973, to: 3979, label: 'Partially', color: '#3280EA' });
+        edges.add({from: 3974, to: 3980, label: 'Full', color: '#3280EA' });
+        edges.add({from: 3974, to: 3981, label: 'Partial', color: '#3280EA' });
+        edges.add({from: 3974, to: 3982, label: 'None', color: '#3280EA' });
+        edges.add({from: 3975, to: 3983, label: 'Yes', color: '#3280EA' });
+        edges.add({from: 3975, to: 3984, label: 'No', color: '#3280EA' });
+        edges.add({from: 3975, to: 3985, label: 'Partially', color: '#3280EA' });
+    // create a network
+    var container = document.getElementById('treeDiv');
+
+    // provide the data in the vis format
+    var data = {
+        nodes: nodes,
+        edges: edges
+    };
+    var options = {
+		
+        layout: {
+            hierarchical: {
+				//enabled: true
+                direction: 'UD',//'DU',   // UD, DU, LR, RL
+                sortMethod: 'directed', // hubsize, directed
+				blockShifting: false,
+				edgeMinimization: false
+            }
+        },
+		physics: {
+			enabled:false
+		},
+		configure: {
+          filter: function (option, path) {
+              if (path.indexOf('hierarchical') !== -1) {
+                  return true;
+              }
+              return false;
+          },
+          showButton:false
+        }
+		//physics: {
+         //   enabled: true,
+          //  hierarchicalRepulsion: {
+           //     centralGravity: 0.0,
+            //    springLength: 100,
+             //   springConstant: 0.01,
+              //  nodeDistance: 170,
+               // damping: 0.09
+            //},
+       // }
+    };
+
+    // initialize network
+    var network = new vis.Network(container, data, options);
+
+    network.on("selectNode", function (params) {
+        console.log('selectNode Event:', params);
+        $("<input type='hidden' id='ParentNodeID' name='ParentNodeID' value="+params.nodes+">").insertAfter("#button");
+    });
+
+	
+</script>
+     
+
+   
+<!-- Visual Studio Browser Link -->
+<script type="application/json" id="__browserLink_initializationData">
+    {"appName":"Chrome","requestId":"594325d076e847a0ab0cc38148fc990a"}
+</script>
+<!-- End Browser Link -->
+
+</body>
+</html>

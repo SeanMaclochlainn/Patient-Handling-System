@@ -179,6 +179,23 @@ namespace PatientHandlingSystem.Models
             return treeCreator;
         }
 
+        public TreeEditorViewModel CreateTreeEditorViewModel()
+        {
+            var tree = new Tree { Name = "" };
+            db.Trees.Add(tree);
+            db.SaveChanges();
+
+            var treeCreator = new TreeEditorViewModel
+            {
+                Tree = tree,
+                PatientAttributes = db.PatientAttributes.ToList(),
+                Nodes = new List<Node>(),
+                EquipmentAttributes = db.EquipmentAttributes.ToList(), 
+                Equipment = db.Equipment.ToList()
+            };
+            return treeCreator;
+        }
+
         public void Save()
         {
             db.SaveChanges();
