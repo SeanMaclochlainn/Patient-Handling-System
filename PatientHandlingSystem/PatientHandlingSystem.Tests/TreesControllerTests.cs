@@ -144,8 +144,8 @@ namespace PatientHandlingSystem.Tests
             //test for when an attribute node was entered
             //arrange
             treeEditorVM.NodeType = "Solution";
-            treeEditorVM.SelectedAttribute = new Models.PatientAttribute();
-            treeEditorVM.SelectedAttributeNumericValue = new PatientAttributeValue();
+            treeEditorVM.SelectedPatientAttribute = new Models.PatientAttribute();
+            treeEditorVM.SelectedPatientAttributeNumericValue = new PatientAttributeValue();
 
             //act
             treesController.UpdateTree(treeEditorVM, null);

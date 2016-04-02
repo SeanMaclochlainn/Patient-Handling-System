@@ -171,7 +171,7 @@ namespace PatientHandlingSystem.Models
             var treeCreator = new TreeEditorViewModel
             {
                 Tree = db.Trees.Find(treeId),
-                Attributes = db.PatientAttributes.ToList(),
+                PatientAttributes = db.PatientAttributes.ToList(),
                 Nodes = db.Nodes.Where(i => i.TreeID == treeId).OrderBy(j => j.ID).ToList(),
                 EquipmentAttributes = db.EquipmentAttributes.ToList(),
                 Equipment = db.Equipment.ToList()

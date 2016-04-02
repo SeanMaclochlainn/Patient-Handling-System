@@ -72,9 +72,9 @@ namespace PatientHandlingSystem.Controllers
                     selectedAttributeValue = new PatientAttributeValue();
                 var completeAttribute = new CompleteAttribute
                 {
-                    Attribute = i,
-                    AttributeValues = i.PatientAttributeValues,
-                    SelectedAttributeValue = selectedAttributeValue
+                    PatientAttribute = i,
+                    PatientAttributeValues = i.PatientAttributeValues,
+                    SelectedPatientAttributeValue = selectedAttributeValue
                 };
 
                 completeAttributes.Add(completeAttribute);
@@ -101,9 +101,9 @@ namespace PatientHandlingSystem.Controllers
 
                 var completeAttribute = new CompleteAttribute
                 {
-                    Attribute = a,
-                    AttributeValues = attributeValues,
-                    SelectedAttributeValue = new PatientAttributeValue()
+                    PatientAttribute = a,
+                    PatientAttributeValues = attributeValues,
+                    SelectedPatientAttributeValue = new PatientAttributeValue()
                 };
                 completeAttributes.Add(completeAttribute);
             }
@@ -148,17 +148,17 @@ namespace PatientHandlingSystem.Controllers
                         {
                             Patient_PatientAttribute patientAttribute = null;
 
-                            if (ca.Attribute.Numeric)
+                            if (ca.PatientAttribute.Numeric)
                             {
                                 //for numeric attributes, the attribute value assigned to the patient is contained in the AttributeValue table, and then also referenced
                                 //in the Patient_PatientAttributes table
-                                var attributeValue = new PatientAttributeValue { PatientAttributeID = ca.Attribute.ID, Value = ca.SelectedAttributeValue.Value };
+                                var attributeValue = new PatientAttributeValue { PatientAttributeID = ca.PatientAttribute.ID, Value = ca.SelectedPatientAttributeValue.Value };
                                 db.PatientAttributeValues.Add(attributeValue);
                                 db.SaveChanges();
 
                                 patientAttribute = new Patient_PatientAttribute
                                 {
-                                    PatientAttributeID = ca.Attribute.ID,
+                                    PatientAttributeID = ca.PatientAttribute.ID,
                                     PatientAttributeValueID = attributeValue.ID,
                                     PatientID = patient.ID
                                 };
@@ -167,8 +167,8 @@ namespace PatientHandlingSystem.Controllers
                             {
                                 patientAttribute = new Patient_PatientAttribute
                                 {
-                                    PatientAttributeID = ca.Attribute.ID,
-                                    PatientAttributeValueID = ca.SelectedAttributeValue.ID,
+                                    PatientAttributeID = ca.PatientAttribute.ID,
+                                    PatientAttributeValueID = ca.SelectedPatientAttributeValue.ID,
                                     PatientID = patient.ID
                                 };
                             }
@@ -230,9 +230,9 @@ namespace PatientHandlingSystem.Controllers
                 }
                 var completeAttribute = new CompleteAttribute
                 {
-                    Attribute = a,
-                    AttributeValues = attributeValues,
-                    SelectedAttributeValue = selectedAttributeValue
+                    PatientAttribute = a,
+                    PatientAttributeValues = attributeValues,
+                    SelectedPatientAttributeValue = selectedAttributeValue
                 };
                 completeAttributes.Add(completeAttribute);
             }
@@ -257,12 +257,12 @@ namespace PatientHandlingSystem.Controllers
             patient.LastName = patientVM.Patient.LastName;
             foreach(var ca in patientVM.CompleteAttributes)
             {
-                var patientAttribute = db.Patient_PatientAttributes.Include(j=>j.PatientAttribute).SingleOrDefault(i => i.PatientID == patient.ID && i.PatientAttributeID == ca.SelectedAttributeValue.PatientAttributeID);
+                var patientAttribute = db.Patient_PatientAttributes.Include(j=>j.PatientAttribute).SingleOrDefault(i => i.PatientID == patient.ID && i.PatientAttributeID == ca.SelectedPatientAttributeValue.PatientAttributeID);
 
                 //this is null if a new attribute has been added recently, and the patient hasn't been assigned an attribute value for this attribute
                 if (patientAttribute == null)
                 {
-                    patientAttribute = new Patient_PatientAttribute { PatientAttributeID = ca.SelectedAttributeValue.PatientAttributeID, PatientAttributeValueID = ca.SelectedAttributeValue.ID, PatientID = patient.ID };
+                    patientAttribute = new Patient_PatientAttribute { PatientAttributeID = ca.SelectedPatientAttributeValue.PatientAttributeID, PatientAttributeValueID = ca.SelectedPatientAttributeValue.ID, PatientID = patient.ID };
                     db.Patient_PatientAttributes.Add(patientAttribute);
                     db.SaveChanges();
                 }
@@ -270,12 +270,12 @@ namespace PatientHandlingSystem.Controllers
                 {
                     if(patientAttribute.PatientAttribute.Numeric)
                     {
-                        patientAttribute.PatientAttributeValue.Value = ca.SelectedAttributeValue.Value;
+                        patientAttribute.PatientAttributeValue.Value = ca.SelectedPatientAttributeValue.Value;
                         db.Entry(patientAttribute).State = EntityState.Modified;
                     }
                     else
                     {
-                        patientAttribute.PatientAttributeValueID = ca.SelectedAttributeValue.ID;
+                        patientAttribute.PatientAttributeValueID = ca.SelectedPatientAttributeValue.ID;
                         db.Entry(patientAttribute).State = EntityState.Modified;
                     }
                 }

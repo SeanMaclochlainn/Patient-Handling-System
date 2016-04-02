@@ -9,9 +9,9 @@ namespace PatientHandlingSystem.ViewModels
     public class TreeEditorViewModel
     {
         public Tree Tree { get; set; }
-        public List<Models.PatientAttribute> Attributes { get; set; }
-        public Models.PatientAttribute SelectedAttribute { get; set; }
-        public PatientAttributeValue SelectedAttributeNumericValue { get; set; }
+        public List<PatientAttribute> PatientAttributes { get; set; }
+        public PatientAttribute SelectedPatientAttribute { get; set; }
+        public PatientAttributeValue SelectedPatientAttributeNumericValue { get; set; }
         public List<Equipment> Equipment { get; set; }
         public Equipment SelectedEquipment { get; set; }
         public List<EquipmentAttribute> EquipmentAttributes { get; set; }

@@ -60,7 +60,7 @@ namespace PatientHandlingSystem.Controllers
             var treeCreator = new TreeEditorViewModel
             {
                 Tree = tree,
-                Attributes = db.PatientAttributes.ToList(),
+                PatientAttributes = db.PatientAttributes.ToList(),
                 Nodes = new List<Node>()
             };
             return View("Create", "_TreeEditor", treeCreator);
@@ -113,7 +113,7 @@ namespace PatientHandlingSystem.Controllers
             }
             else //when user is trying to input a regular node, numeric or otherwise
             {
-                treeRepository.EnterAttributeNode(treeCreatorVM.ParentNodeID, treeCreatorVM.SelectedAttribute.ID, treeCreatorVM.Tree.ID, treeCreatorVM.SelectedAttribute.Numeric, treeCreatorVM.SelectedAttributeNumericValue.Value);
+                treeRepository.EnterAttributeNode(treeCreatorVM.ParentNodeID, treeCreatorVM.SelectedPatientAttribute.ID, treeCreatorVM.Tree.ID, treeCreatorVM.SelectedPatientAttribute.Numeric, treeCreatorVM.SelectedPatientAttributeNumericValue.Value);
             }
 
             List<Node> nodes = db.Nodes.Where(i => i.TreeID == treeCreatorVM.Tree.ID).OrderBy(j => j.ID).ToList();

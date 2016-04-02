@@ -35,21 +35,21 @@
         @for (int i = 0; i < Model.CompleteAttributes.Count; i++)
         {
             <div class="form-group">
-                @if (Model.CompleteAttributes[i].Attribute.Numeric)
+                @if (Model.CompleteAttributes[i].PatientAttribute.Numeric)
                 {
-                    @Html.LabelFor(model => model.CompleteAttributes[i].Attribute.Name, Model.CompleteAttributes[i].Attribute.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                    @Html.LabelFor(model => model.CompleteAttributes[i].PatientAttribute.Name, Model.CompleteAttributes[i].PatientAttribute.Name, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-1">
-                        @Html.HiddenFor(model => model.CompleteAttributes[i].SelectedAttributeValue.AttributeID)
-                        @Html.HiddenFor(x => x.CompleteAttributes[i].Attribute.ID)
-                        @Html.HiddenFor(x => x.CompleteAttributes[i].Attribute.Numeric)
+                        @Html.HiddenFor(model => model.CompleteAttributes[i].SelectedAttributeValue.PatientAttributeID)
+                        @Html.HiddenFor(x => x.CompleteAttributes[i].PatientAttribute.ID)
+                        @Html.HiddenFor(x => x.CompleteAttributes[i].PatientAttribute.Numeric)
                         @Html.EditorFor(model => model.CompleteAttributes[i].SelectedAttributeValue.Value, new { htmlAttributes = new { @class = "form-control" } })
                     </div>
                 }
                 else
                 {
-                    @Html.LabelFor(model => model.CompleteAttributes[i].Attribute.Name, Model.CompleteAttributes[i].Attribute.Name, htmlAttributes: new { style = "padding-top:0px", @class = "control-label col-md-2" })
+                    @Html.LabelFor(model => model.CompleteAttributes[i].PatientAttribute.Name, Model.CompleteAttributes[i].PatientAttribute.Name, htmlAttributes: new { style = "padding-top:0px", @class = "control-label col-md-2" })
                     <div class="col-md-10">
-                        @Html.HiddenFor(model => model.CompleteAttributes[i].SelectedAttributeValue.AttributeID)
+                        @Html.HiddenFor(model => model.CompleteAttributes[i].SelectedAttributeValue.PatientAttributeID)
                         @Html.DropDownListFor(model => model.CompleteAttributes[i].SelectedAttributeValue.ID, new SelectList(Model.CompleteAttributes[i].AttributeValues, "ID", "Value", Model.CompleteAttributes[i].SelectedAttributeValue.ID), new { @class = "form-control" })
                         @Html.ValidationMessageFor(model => model.CompleteAttributes[i].SelectedAttributeValue.ID, "", new { @class = "text-danger" })
                     </div>

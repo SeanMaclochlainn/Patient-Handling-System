@@ -133,8 +133,8 @@ namespace PatientHandlingSystem.Controllers
             var attributeValues = db.PatientAttributeValues.Where(i => i.PatientAttributeID == attribute.ID).ToList();
             var completeAttribute = new CompleteAttribute
             {
-                Attribute = attribute,
-                AttributeValues = attributeValues
+                PatientAttribute = attribute,
+                PatientAttributeValues = attributeValues
             };
             return View(completeAttribute);
         }
@@ -145,9 +145,9 @@ namespace PatientHandlingSystem.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(CompleteAttribute completeAttribute)
         {
-            var attribute = completeAttribute.Attribute;
+            var attribute = completeAttribute.PatientAttribute;
 
-            foreach(var av in completeAttribute.AttributeValues)
+            foreach(var av in completeAttribute.PatientAttributeValues)
             {
                 db.Entry(av).State = EntityState.Modified;
             }

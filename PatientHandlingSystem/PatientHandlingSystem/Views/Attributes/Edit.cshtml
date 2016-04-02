@@ -14,25 +14,25 @@
         <h4>Attribute</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.Attribute.ID)
+        @Html.HiddenFor(model => model.PatientAttribute.ID)
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Attribute.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.PatientAttribute.Name, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Attribute.Name, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Attribute.Name, "", new { @class = "text-danger" })
+                @Html.EditorFor(model => model.PatientAttribute.Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.PatientAttribute.Name, "", new { @class = "text-danger" })
             </div>
         </div>
         <br />
-        @for (int i = 0; i < Model.AttributeValues.Count; i++)
+        @for (int i = 0; i < Model.PatientAttributeValues.Count; i++)
         {
             <div class="form-group">
-                @Html.LabelFor(model => model.AttributeValues[i].Value, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.LabelFor(model => model.PatientAttributeValues[i].Value, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
-                    @Html.HiddenFor(model => model.AttributeValues[i].ID)
-                    @Html.HiddenFor(model => model.AttributeValues[i].AttributeID)
-                    @Html.EditorFor(model => model.AttributeValues[i].Value, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.AttributeValues[i].Value, "", new { @class = "text-danger" })
+                    @Html.HiddenFor(model => model.PatientAttributeValues[i].ID)
+                    @Html.HiddenFor(model => model.PatientAttributeValues[i].PatientAttributeID)
+                    @Html.EditorFor(model => model.PatientAttributeValues[i].Value, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.PatientAttributeValues[i].Value, "", new { @class = "text-danger" })
                 </div>
             </div>
         }
