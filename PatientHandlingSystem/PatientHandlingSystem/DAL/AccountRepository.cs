@@ -18,15 +18,17 @@ namespace PatientHandlingSystem.DAL
             db = context;
         }
 
-        public UserVM GetRegisterViewModel()
+        public RegisterVM GetRegisterViewModel()
         {
             var roleProvider = new SimpleRoleProvider(Roles.Provider);
-            return new UserVM { Roles = roleProvider.GetAllRoles().ToList() };
+            var userVM = new RegisterVM();
+            userVM.Roles = roleProvider.GetAllRoles().ToList();
+            return userVM;
         }
 
         public void RegisterUser(string emailAddress, string password, string firstName, string lastName, string userType)
         {
-            WebSecurity.CreateUserAndAccount(emailAddress, emailAddress, new { FirstName = emailAddress, LastName = lastName });
+            WebSecurity.CreateUserAndAccount(emailAddress, password, new { FirstName = firstName, LastName = lastName });
             var roleProvider = new SimpleRoleProvider(Roles.Provider);
             roleProvider.AddUsersToRoles(new string[] { emailAddress }, new string[] { userType });
         }
@@ -52,9 +54,6 @@ namespace PatientHandlingSystem.DAL
         public void DeletUser(int userId)
         {
             var user = db.Users.Find(userId);
-
-            //var membershipProvider = new SimpleMembershipProvider(Membership.Provider);
-            //membershipProvider.DeleteAccount(user.EmailAddress);
             
             var roleProvider = new SimpleRoleProvider(Roles.Provider);
             roleProvider.RemoveUsersFromRoles(new[] { user.EmailAddress }, roleProvider.GetRolesForUser(user.EmailAddress));

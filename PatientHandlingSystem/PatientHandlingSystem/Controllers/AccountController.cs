@@ -33,10 +33,23 @@ namespace PatientHandlingSystem.Controllers
         }
 
         [HttpPost]
-        public ActionResult Register(UserVM user)
+        public ActionResult Register(RegisterVM user)
         {
-            accountRepository.RegisterUser(user.EmailAddress, user.Password, user.FirstName, user.LastName, user.SelectedRole);
-            return RedirectToAction("Users");
+            if (ModelState.IsValid)
+            {
+                if(WebSecurity.UserExists(user.EmailAddress))
+                {
+                    ModelState.AddModelError("", "User name already in use");
+                }
+                else
+                {
+                    accountRepository.RegisterUser(user.EmailAddress, user.Password, user.FirstName, user.LastName, user.SelectedRole);
+                    return RedirectToAction("Users");
+                }
+            }
+
+            var registerVM = accountRepository.GetRegisterViewModel();
+            return View(registerVM);   
         }
 
         public ActionResult Login()
@@ -45,15 +58,23 @@ namespace PatientHandlingSystem.Controllers
         }
 
         [HttpPost]
-        public ActionResult Login(UserVM user)
+        public ActionResult Login(LoginVM user)
         {
-            if(WebSecurity.Login(user.EmailAddress, user.Password))
+            if (ModelState.IsValid)
             {
-                return RedirectToAction("Index", "Patients");
+                if (WebSecurity.Login(user.EmailAddress, user.Password))
+                {
+                    return RedirectToAction("Index", "Patients");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "The email address or password entered is incorrect");
+                    return View();
+                }
             }
             else
             {
-                return View();
+                return View(user);
             }
         }
 
