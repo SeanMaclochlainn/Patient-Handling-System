@@ -13,6 +13,7 @@ using System.Diagnostics;
 
 namespace PatientHandlingSystem.Controllers
 {
+    [Authorize(Roles = "Administrator")]
     public class TreesController : Controller
     {
         private PatientHandlingContext db;

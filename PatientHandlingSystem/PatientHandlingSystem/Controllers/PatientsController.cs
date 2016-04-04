@@ -90,6 +90,7 @@ namespace PatientHandlingSystem.Controllers
             return View(patientVM);
         }
 
+        [Authorize(Roles = "Administrator")]
         public ActionResult Create()
         {
             var completeAttributes = new List<CompleteAttribute>();
@@ -290,7 +291,7 @@ namespace PatientHandlingSystem.Controllers
             return View(patient);
         }
 
-        // GET: Patients/Delete/5
+        [Authorize(Roles = "Administrator")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
