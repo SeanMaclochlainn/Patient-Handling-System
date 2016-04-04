@@ -36,7 +36,7 @@ namespace PatientHandlingSystem.Controllers
         public ActionResult Register(UserVM user)
         {
             accountRepository.RegisterUser(user.EmailAddress, user.Password, user.FirstName, user.LastName, user.SelectedRole);
-            return RedirectToAction("Users", "Users");
+            return RedirectToAction("Users");
         }
 
         public ActionResult Login()
@@ -81,6 +81,19 @@ namespace PatientHandlingSystem.Controllers
         {
             db.Entry(user).State = EntityState.Modified;
             db.SaveChanges();
+            return RedirectToAction("Users");
+        }
+
+        public ActionResult DeleteUser(int id)
+        {
+            var user = accountRepository.GetUser(id);
+            return View(user);
+        }
+
+        [HttpPost, ActionName("DeleteUser")]
+        public ActionResult DeleteConfirmed(int id)
+        {
+            accountRepository.DeletUser(id);
             return RedirectToAction("Users");
         }
 

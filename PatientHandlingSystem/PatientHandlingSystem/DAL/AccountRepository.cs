@@ -48,5 +48,20 @@ namespace PatientHandlingSystem.DAL
         {
             return db.Users.Find(userId);
         }
+
+        public void DeletUser(int userId)
+        {
+            var user = db.Users.Find(userId);
+
+            //var membershipProvider = new SimpleMembershipProvider(Membership.Provider);
+            //membershipProvider.DeleteAccount(user.EmailAddress);
+            
+            var roleProvider = new SimpleRoleProvider(Roles.Provider);
+            roleProvider.RemoveUsersFromRoles(new[] { user.EmailAddress }, roleProvider.GetRolesForUser(user.EmailAddress));
+            ((SimpleMembershipProvider)Membership.Provider).DeleteAccount(user.EmailAddress); // deletes record from webpages_Membership table
+
+            Membership.DeleteUser(user.EmailAddress, true);
+            
+        }
     }
 }
