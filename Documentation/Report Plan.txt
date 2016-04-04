@@ -34,6 +34,7 @@ Describe the whole product, complete with screenshots and stuff.
 ---mention source control was useful with packages and renaming stuff
 ---mention prduct management, i.e. keeping track of requirements using excel spreadsheet
 ---software used: text-compare.com (when comparing create and edit views, which had to be similar), notepad++
+---describe learning about naming things, how you should keep the names as similar to what you would use to clients
 
 chapter 5. 
 
