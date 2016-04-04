@@ -1,4 +1,5 @@
-﻿using PatientHandlingSystem.ViewModels;
+﻿using PatientHandlingSystem.Models;
+using PatientHandlingSystem.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,10 +38,15 @@ namespace PatientHandlingSystem.DAL
             foreach (var user in db.Users.ToList())
             {
                 string[] roles = roleProvider.GetRolesForUser(user.EmailAddress);
-                var userVM = new UserVM { FirstName = user.FirstName, LastName = user.LastName, EmailAddress = user.EmailAddress, SelectedRole = roles[0] };
+                var userVM = new UserVM { FirstName = user.FirstName, LastName = user.LastName, EmailAddress = user.EmailAddress, SelectedRole = roles[0], ID = user.ID };
                 userVMs.Add(userVM);
             }
             return userVMs;
+        }
+
+        public User GetUser(int userId)
+        {
+            return db.Users.Find(userId);
         }
     }
 }

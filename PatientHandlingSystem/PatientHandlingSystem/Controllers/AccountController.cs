@@ -70,6 +70,20 @@ namespace PatientHandlingSystem.Controllers
             return View(usersVM);
         }
 
+        public ActionResult EditUser(int id)
+        {
+            var user = accountRepository.GetUser(id);
+            return View(user);
+        }
+
+        [HttpPost]
+        public ActionResult EditUser(User user)
+        {
+            db.Entry(user).State = EntityState.Modified;
+            db.SaveChanges();
+            return RedirectToAction("Users");
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
