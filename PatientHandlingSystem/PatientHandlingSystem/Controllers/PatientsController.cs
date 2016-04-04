@@ -12,6 +12,7 @@ using PatientHandlingSystem.ViewModels;
 
 namespace PatientHandlingSystem.Controllers
 {
+    [Authorize]
     public class PatientsController : Controller
     {
         private PatientHandlingContext db;
