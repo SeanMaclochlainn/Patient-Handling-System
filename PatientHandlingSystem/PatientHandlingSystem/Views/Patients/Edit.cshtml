@@ -39,19 +39,19 @@
                 {
                     @Html.LabelFor(model => model.CompleteAttributes[i].PatientAttribute.Name, Model.CompleteAttributes[i].PatientAttribute.Name, htmlAttributes: new { @class = "control-label col-md-2" })
                     <div class="col-md-1">
-                        @Html.HiddenFor(model => model.CompleteAttributes[i].SelectedAttributeValue.PatientAttributeID)
+                        @Html.HiddenFor(model => model.CompleteAttributes[i].SelectedPatientAttributeValue.PatientAttributeID)
                         @Html.HiddenFor(x => x.CompleteAttributes[i].PatientAttribute.ID)
                         @Html.HiddenFor(x => x.CompleteAttributes[i].PatientAttribute.Numeric)
-                        @Html.EditorFor(model => model.CompleteAttributes[i].SelectedAttributeValue.Value, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.EditorFor(model => model.CompleteAttributes[i].SelectedPatientAttributeValue.Value, new { htmlAttributes = new { @class = "form-control" } })
                     </div>
                 }
                 else
                 {
                     @Html.LabelFor(model => model.CompleteAttributes[i].PatientAttribute.Name, Model.CompleteAttributes[i].PatientAttribute.Name, htmlAttributes: new { style = "padding-top:0px", @class = "control-label col-md-2" })
                     <div class="col-md-10">
-                        @Html.HiddenFor(model => model.CompleteAttributes[i].SelectedAttributeValue.PatientAttributeID)
-                        @Html.DropDownListFor(model => model.CompleteAttributes[i].SelectedAttributeValue.ID, new SelectList(Model.CompleteAttributes[i].AttributeValues, "ID", "Value", Model.CompleteAttributes[i].SelectedAttributeValue.ID), new { @class = "form-control" })
-                        @Html.ValidationMessageFor(model => model.CompleteAttributes[i].SelectedAttributeValue.ID, "", new { @class = "text-danger" })
+                        @Html.HiddenFor(model => model.CompleteAttributes[i].SelectedPatientAttributeValue.PatientAttributeID)
+                        @Html.DropDownListFor(model => model.CompleteAttributes[i].SelectedPatientAttributeValue.ID, new SelectList(Model.CompleteAttributes[i].PatientAttributeValues, "ID", "Value", Model.CompleteAttributes[i].SelectedPatientAttributeValue.ID), new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.CompleteAttributes[i].SelectedPatientAttributeValue.ID, "", new { @class = "text-danger" })
                     </div>
                 }
             </div>
