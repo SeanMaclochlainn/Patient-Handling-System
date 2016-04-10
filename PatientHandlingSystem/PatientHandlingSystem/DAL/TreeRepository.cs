@@ -191,6 +191,9 @@ namespace PatientHandlingSystem.Models
                 db.Nodes.RemoveRange(childNodes);
                 var node = db.Nodes.Single(i => i.ID == nodeId);
                 node.NodeValue = 0;
+                node.PatientAttributeNode = false;
+                node.EquipmentNode = false;
+                node.SolutionNode = false;
                 db.Entry(node).State = EntityState.Modified;
             }
             db.SaveChanges();
@@ -203,6 +206,8 @@ namespace PatientHandlingSystem.Models
             var node = db.Nodes.Single(i => i.ID == nodeId);
 
             node.SolutionNode = false;
+            node.PatientAttributeNode = false;
+            node.EquipmentNode = false;
             node.NodeValue = 0;
             db.Entry(node).State = EntityState.Modified;
         }
