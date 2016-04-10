@@ -150,6 +150,7 @@ namespace PatientHandlingSystem.Models
         public void EnterSolutionNode(string parentNodeIdStr, int treeId, string solutionContent, string solutionTitle)
         {
             int parentNodeId = int.Parse(parentNodeIdStr);
+            solutionContent = solutionContent.Replace("\"", "");
             Solution solution = new Solution { Content = solutionContent, TreeID = treeId, Title = solutionTitle };
             db.Solutions.Add(solution);
             db.SaveChanges();
