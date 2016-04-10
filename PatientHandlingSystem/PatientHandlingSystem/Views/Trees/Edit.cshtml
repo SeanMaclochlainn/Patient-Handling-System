@@ -11,6 +11,7 @@
       selector: '#Solution',
       width: 300,
       height: 300,
+      plugins: ['link image']
   });
 </script>
 
@@ -144,13 +145,13 @@
         $(".numericInput").hide();
 
     //when a different dropdownlist selection is made, check to see if it is a numeric attribute, and if it is, display the numeric input box
-        $("#SelectedAttribute_ID").change(function () {
+        $("#SelectedPatientAttribute_ID").change(function () {
             var numericAttribute = false;
             for (var i = 0; i < numericIds.length; i++) {
                 if (numericIds[i] == $(this).val()) {
                     console.log("numeric");
                     $(".numericInput").show();
-                    $(this).after("<input id='SelectedAttribute_Numeric' name='SelectedAttribute.Numeric' type='hidden' value='true' />");
+                    $(this).after("<input id='SelectedPatientAttribute_Numeric' name='SelectedPatientAttribute.Numeric' type='hidden' value='true' />");
                     numericAttribute = true;
                 }
             }

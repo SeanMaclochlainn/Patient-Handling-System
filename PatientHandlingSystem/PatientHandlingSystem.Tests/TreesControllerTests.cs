@@ -74,7 +74,7 @@ namespace PatientHandlingSystem.Tests
         //}
 
         [TestMethod]
-        public void UpadateTreeController()
+        public void UpdateTreeController()
         {
             //set up context and dataservice instance
             patientHandlingContext = MockDatabase.GetNodeMockDbSet(new List<Node> {

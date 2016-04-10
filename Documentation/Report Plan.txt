@@ -12,6 +12,15 @@ benefits of application vs manual approach
 
 chapter 2
 describe about things learned on work placement that were implemented here - product backlog type document (with priorities), commiting each item to source control, having production and uat databases, weekly reviews with manager,  etc 
+Could also give a refresher here about technologies proposed in the definition document
+
+Using source control
+Using a product backlog 
+Weekly meetings
+Overall architechture, i.e. database server, web server, addition of more servers. 
+Slightly similar format to zingtree for the design 
+
+
 
 chapter 3 technical issues.
 designing database
@@ -20,14 +29,30 @@ creating decision tree interface
 deployment issues
 integrating unit tests
 handling numeric attributes
+using bootstrap
+***refactoring
+***say how the images could be hosted in database in a different part of the application
 --could explain scripting the databases to see if there were any differences between them
 
 chapter 4
-Describe the whole product, complete with screenshots and stuff. 
+Describe the whole product, complete with screenshots and stuff.
+Patients creation and deletion
+Attributes creation and deletion
+Equipment creation and deletion
+Tree creation and deletion
+Patient handling plan iteration
+User creation and deletion and different user roles
+Bootstrap design
+	**cross browser compatibility
+	**how many features were integrated compared to what was anticipated - referring to the definition document in the process
+	**how well the project was built, i.e. how many bugs it contains and overall flexitility
+	validation
 	detail deployment
 	success of tree editor approach
 	discuss how it could be used in a real life scenario
 	describe how flexible it is to change
+	how successful various things were, from source control, to using asp.net to, to anything suggested in the definition document
+	
 ---Can mention fact that if there is a typo in an attribute, it can be edited without affecting any other attributes
 ---Can mention that when something looks good clients and users are more likely to think it is done well or whatever
 ---mention code refactoring, such as renaming stuff, seperating data layer from logic layer, 
@@ -37,8 +62,23 @@ Describe the whole product, complete with screenshots and stuff.
 ---describe learning about naming things, how you should keep the names as similar to what you would use to clients
 
 chapter 5. 
-
+**How the application could be used in a day to day environment.
 How close application is ready for production, i.e. account management, email system, bascically requirements that are left to be completed
 what this means for the company or whatever 
+Things that could have been improved upon - product backlog maintained better, sold the project a bit more when demoing, ensure can handle all use cases, books as opposed to online sources, refactor early and often
+future development work left on application
 --maybe say you could have implemented source control better by using branches
 conclusion
+
+Much was learned about the development lifecycle during the course of this project. Aside from the fact that there was only one developer for the project, it closely simulated what developing an application would be like in real life conditions. Some of the things that could have been improved upon are as follows:
+•	The importance of maintaining a product backlog
+
+
+Remaining
+Proofreading 
+Bind
+Decide on figures under images or not
+acknowledgement page
+Front page
+Ensuring screenshots are looking good
+Displaying the trees section figures, also remove todo from section
