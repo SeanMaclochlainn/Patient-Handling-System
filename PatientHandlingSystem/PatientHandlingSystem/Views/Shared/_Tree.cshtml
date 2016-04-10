@@ -110,14 +110,20 @@
         //enter the nodes text into the solution text area when it is clicked
         for(var i = 0;i<solutionNodeIds.length;i++){
             if(solutionNodeIds[i].id==params.nodes){
-                var test = solutionNodeIds[i].text;
-                tinyMCE.execCommand('mceSetContent',false,test);
+                var text = solutionNodeIds[i].text;
+                tinyMCE.execCommand('mceSetContent',false,text);
 
                 $("#SolutionTitle").val(solutionNodeIds[i].title);
                 if ($(".attributeTab").is(":checked")) {
                     $(".solution").show();
                     $(".attribute").hide();
                     $(".attributeTab").prop('checked', false);
+                    $(".solutionTab").prop('checked', true);
+                }
+                else if($(".equipmentTab").is(":checked")) {
+                    $(".solution").show();
+                    $(".equipment").hide();
+                    $(".equipmentTab").prop('checked', false);
                     $(".solutionTab").prop('checked', true);
                 }
             }
