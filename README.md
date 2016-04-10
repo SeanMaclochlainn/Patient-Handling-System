@@ -9,6 +9,5 @@ The rest of the application consists mainly of CRUD operations for patients, pat
 The decision tree editor is soon to be compatible with equipment attributes as nodes.
 
 Application link: http://patienthandlingapp.azurewebsites.net/  
-Sample account: 
-E-mail: test@gmail.com
-Password: testtest
+Demo Video: https://www.youtube.com/watch?v=A9aYzt15FiI
+
